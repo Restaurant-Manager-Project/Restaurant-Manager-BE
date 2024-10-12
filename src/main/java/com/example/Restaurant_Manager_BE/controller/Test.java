@@ -1,8 +1,8 @@
-package com.example.Restaurant_Manager_BE.Api;
+package com.example.Restaurant_Manager_BE.controller;
 
 
-import com.example.Restaurant_Manager_BE.Model.ProductsModel;
-import com.example.Restaurant_Manager_BE.Service.ProductsService;
+import com.example.Restaurant_Manager_BE.model.ProductsModel;
+import com.example.Restaurant_Manager_BE.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

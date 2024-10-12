@@ -1,9 +1,9 @@
-package com.example.Restaurant_Manager_BE.Service.impl;
+package com.example.Restaurant_Manager_BE.service.impl;
 
-import com.example.Restaurant_Manager_BE.Entity.ProductEntity;
-import com.example.Restaurant_Manager_BE.Model.ProductsModel;
-import com.example.Restaurant_Manager_BE.Repository.ProductsRepository;
-import com.example.Restaurant_Manager_BE.Service.ProductsService;
+import com.example.Restaurant_Manager_BE.entity.ProductEntity;
+import com.example.Restaurant_Manager_BE.model.ProductsModel;
+import com.example.Restaurant_Manager_BE.repository.ProductsRepository;
+import com.example.Restaurant_Manager_BE.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
