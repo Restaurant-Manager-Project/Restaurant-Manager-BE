@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ProductsService {
     public List<ProductsModel> getAll();
+    public List<ProductsModel> getByName(String name);
 }

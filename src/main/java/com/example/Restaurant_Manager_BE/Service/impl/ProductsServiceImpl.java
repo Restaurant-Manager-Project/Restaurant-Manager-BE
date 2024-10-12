@@ -32,4 +32,21 @@ public class ProductsServiceImpl implements ProductsService {
         return productsModelList;
 
     }
+
+    @Override
+    public List<ProductsModel> getByName(String name) {
+        List<ProductEntity> productEntityList = productsRepository.findByNameContaining(name);
+        List<ProductsModel> productsModelList = new ArrayList<>();
+
+        for (ProductEntity x : productEntityList) {
+            ProductsModel product = new ProductsModel();
+            product.setId(x.getId());
+            product.setName(x.getName());
+            product.setImg(x.getImg());
+            product.setDescription(x.getDescription());
+            productsModelList.add(product);
+        }
+
+        return productsModelList;
+    }
 }
