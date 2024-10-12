@@ -1,6 +1,6 @@
-package com.example.Restaurant_Manager_BE.Repository;
+package com.example.Restaurant_Manager_BE.repository;
 
-import com.example.Restaurant_Manager_BE.Entity.ProductEntity;
+import com.example.Restaurant_Manager_BE.entity.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
