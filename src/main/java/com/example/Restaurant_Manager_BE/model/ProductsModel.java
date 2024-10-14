@@ -6,6 +6,8 @@ public class ProductsModel {
     private String name;
     private String description;
     private String img;
+    private Long price;
+    private String category_name;
 
     public Long getId() {
         return id;
@@ -37,5 +39,21 @@ public class ProductsModel {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public String getCategory_name() {
+        return category_name;
+    }
+
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
     }
 }
