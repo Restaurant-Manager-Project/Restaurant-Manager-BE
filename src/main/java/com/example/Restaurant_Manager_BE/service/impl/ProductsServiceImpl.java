@@ -26,6 +26,8 @@ public class ProductsServiceImpl implements ProductsService {
             product.setName(x.getName());
             product.setImg(x.getImg());
             product.setDescription(x.getDescription());
+            product.setCategory_name(x.getCategory().getName());
+
             productsModelList.add(product);
         }
 
@@ -48,5 +50,10 @@ public class ProductsServiceImpl implements ProductsService {
         }
 
         return productsModelList;
+    }
+
+    public void test() {
+        List<ProductEntity> list = productsRepository.getProduct();
+        System.out.println("aa");
     }
 }

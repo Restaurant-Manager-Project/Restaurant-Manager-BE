@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class Test {
+public class ProductController {
     @Autowired
     ProductsService productsService;
 
 
-    @CrossOrigin(origins = "*")
+
+
     @GetMapping("/api/products/")
     public List<ProductsModel> test() {
         return productsService.getAll();
@@ -22,5 +23,10 @@ public class Test {
     @GetMapping("/api/products")
     public List<ProductsModel> test1(@RequestParam(name="name") String name) {
         return productsService.getByName(name);
+    }
+
+    @GetMapping("/api/products/123")
+    public void test2() {
+        productsService.test();
     }
 }
