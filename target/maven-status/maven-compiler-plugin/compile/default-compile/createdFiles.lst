@@ -15,3 +15,4 @@ com\example\Restaurant_Manager_BE\repository\custom\impl\ProductsRepositoryCusto
 com\example\Restaurant_Manager_BE\entity\DetailsProductEntity.class
 com\example\Restaurant_Manager_BE\repository\custom\ProductsRepositoryCustom.class
 com\example\Restaurant_Manager_BE\model\ProductsModel.class
+com\example\Restaurant_Manager_BE\config\WebConfig.class
