@@ -26,13 +26,15 @@ public class ImportEntity {
 
     @Column(name = "date_create")
     private Date date_create;
-
+    
 
     @Column(name = "total")
     private Long total;
 
     @Column(name = "is_deleted")
     private Boolean is_deleted;
+
+
 
 
 }

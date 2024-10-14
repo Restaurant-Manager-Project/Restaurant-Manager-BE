@@ -20,9 +20,6 @@ public class DetailsProductEntity {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "sell_price")
-    private Long sell_price;
-
     @Column(name = "import_price")
     private Long import_price;
 

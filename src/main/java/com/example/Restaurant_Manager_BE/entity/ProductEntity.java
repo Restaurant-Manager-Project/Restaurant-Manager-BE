@@ -18,7 +18,8 @@ public class ProductEntity {
     @Column(name = "description")
     private String description;
 
-
+    @Column(name = "price")
+    private Long price;
     @Column(name = "quantity")
     private Integer quantity;
     @Column(name = "is_deleted")
@@ -30,6 +31,15 @@ public class ProductEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
 
     public Long getId() {
         return id;
@@ -81,10 +91,6 @@ public class ProductEntity {
 
     public List<DetailsProductEntity> getDetailsProductList() {
         return detailsProductList;
-    }
-
-    public void setDetailsProductList(List<DetailsProductEntity> detailsProductList) {
-        this.detailsProductList = detailsProductList;
     }
 
     public CategoryEntity getCategory() {
