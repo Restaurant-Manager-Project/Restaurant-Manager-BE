@@ -36,9 +36,7 @@ public class OrdersServiceImpl implements OrdersService {
             orderEntity.setTotal(orderModel.getTotal());
             orderEntity.setIs_deleted(false);
 
-            Long client_id = Long.parseLong(orderModel.getClient_id());
-            ClientEntity clientEntity = clientRepository.findById(client_id).get();
-            orderEntity.setClient(clientEntity);
+
 
             orderRepository.save(orderEntity);
 

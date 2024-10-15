@@ -21,6 +21,4 @@ public class ClientEntity {
     @Column(name = "is_deleted")
     private Boolean is_deleted;
 
-    @OneToMany(mappedBy = "client")
-    private List<OrderEntity> orderList;
 }

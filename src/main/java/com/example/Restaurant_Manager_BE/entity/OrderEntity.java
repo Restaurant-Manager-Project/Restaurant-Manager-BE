@@ -22,8 +22,9 @@ public class OrderEntity {
     private List<DetailsOrderEntity> detailsOrderList;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
-    private ClientEntity client;
+    @JoinColumn(name = "table_id")
+    private TableEntity table;
+
 
     public List<DetailsOrderEntity> getDetailsOrderList() {
         return detailsOrderList;
@@ -65,11 +66,5 @@ public class OrderEntity {
         this.is_deleted = is_deleted;
     }
 
-    public ClientEntity getClient() {
-        return client;
-    }
 
-    public void setClient(ClientEntity client) {
-        this.client = client;
-    }
 }
