@@ -8,6 +8,7 @@ import com.example.Restaurant_Manager_BE.service.OrdersService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +27,8 @@ public class OrderController {
         MessageRespone messageRespone = ordersService.createOrder(orderModel);
         return messageRespone;
     }
-    @Operation(summary = "Thêm danh sách chi tiết", description = "Thêm danh sách chi tiết cho {order_id}. Khi order thêm món")
-    @PostMapping("/api/{order_id}/order")
+    @Operation(summary = "Xem danh sách chi tiết của order", description = "Xem danh sách chi tiết của {order_id}")
+    @GetMapping("/api/{order_id}/details")
     public void detailsProduct(@RequestBody Map<String, String> params) {
 
     }

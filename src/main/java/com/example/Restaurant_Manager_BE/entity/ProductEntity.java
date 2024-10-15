@@ -28,6 +28,8 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product")
     private List<DetailsProductEntity> detailsProductList;
 
+    @OneToMany(mappedBy = "product")
+    private List<DetailsOrderEntity> detailsOrderList;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;

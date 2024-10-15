@@ -3,6 +3,7 @@ package com.example.Restaurant_Manager_BE.entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -17,9 +18,20 @@ public class OrderEntity {
     @Column(name = "is_deleted")
     private Boolean is_deleted;
 
+    @OneToMany(mappedBy = "order")
+    private List<DetailsOrderEntity> detailsOrderList;
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private ClientEntity client;
+
+    public List<DetailsOrderEntity> getDetailsOrderList() {
+        return detailsOrderList;
+    }
+
+    public void setDetailsOrderList(List<DetailsOrderEntity> detailsOrderList) {
+        this.detailsOrderList = detailsOrderList;
+    }
 
     public Long getId() {
         return id;
