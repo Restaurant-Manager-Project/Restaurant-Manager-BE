@@ -7,20 +7,19 @@ import java.util.List;
 
 public class OrderModel {
 
-    private String client_id;
+    private Long table_id;
     private Date date_create;
     private Long total;
     @JsonProperty("details_list")
     private List<DetailsProductModel> detailsProductModelList;
 
 
-
-    public String getClient_id() {
-        return client_id;
+    public Long getTable_id() {
+        return table_id;
     }
 
-    public void setClient_id(String client_id) {
-        this.client_id = client_id;
+    public void setTable_id(Long table_id) {
+        this.table_id = table_id;
     }
 
     public Date getDate_create() {
