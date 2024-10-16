@@ -23,7 +23,6 @@ public class OrderController {
     @Operation(summary = "Thêm order", description = "Tạo order gồm các chi tiết món ăn khi gọi món")
     @PostMapping("/api/order")
     public MessageRespone orderProduct(@RequestBody OrderModel orderModel) {
-
         MessageRespone messageRespone = ordersService.createOrder(orderModel);
         return messageRespone;
     }

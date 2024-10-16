@@ -11,13 +11,13 @@ public class TablesRepositoryCustomImpl implements TablesRepositoryCustom {
     @Override
     public boolean updateById(TableEntity table) {
 
-        StringBuilder a = new StringBuilder("UPDATE tables t SET t.table_name = :name, t.status_id = :status_id, t.is_deleted = :is_deleted, t.password = :password WHERE t.table_id = :id");
+        StringBuilder a = new StringBuilder("UPDATE tables t SET t.table_name = :name, t.status_id = :status_id, t.is_deleted = :is_deleted, t.direction = :direction WHERE t.table_id = :id");
 
         int result = entityManager.createQuery(a.toString())
                     .setParameter("name", table.getName())
                     .setParameter("status_id", table.getStatusTable().getId())
                     .setParameter("is_deleted", table.getIs_deleted())
-                    .setParameter("password", table.getPassword())
+                    .setParameter("direction", table.getDirection())
                     .setParameter("id", table.getId())
                     .executeUpdate();
         return result > 0;

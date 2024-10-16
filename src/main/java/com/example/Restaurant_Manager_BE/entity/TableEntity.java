@@ -17,8 +17,8 @@ public class TableEntity {
     @Column(name = "is_deleted")
     private Boolean is_deleted;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "direction")
+    private String direction;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
@@ -52,12 +52,12 @@ public class TableEntity {
         this.is_deleted = is_deleted;
     }
 
-    public String getPassword() {
-        return password;
+    public String getDirection() {
+        return direction;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 
     public StatusTableEntity getStatusTable() {
