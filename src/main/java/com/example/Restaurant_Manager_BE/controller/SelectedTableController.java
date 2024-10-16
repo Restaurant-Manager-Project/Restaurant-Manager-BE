@@ -15,16 +15,12 @@ public class SelectedTableController {
     private TablesService tablesService;
     @GetMapping("/selectedTable/{code}")
     public MessageRespone selectedTable(@PathVariable String code) {
-        String password = QRcode.decoding(code);
-        return tablesService.findTableByPassword(password);
+        return tablesService.findTableByPassword(code);
     }
 
     @PostMapping("/selectedTable/")
     public void test() {
-        String password = QRcode.generatePassword(10);
-        String encode = QRcode.encoding(password);
-
-        String decode = QRcode.decoding(encode);
+        String password = QRcode.generatePassword(25);
         System.out.println("zzzzz");
     }
 }

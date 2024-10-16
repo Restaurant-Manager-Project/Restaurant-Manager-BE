@@ -25,6 +25,13 @@ public class OrderEntity {
     @JoinColumn(name = "table_id")
     private TableEntity table;
 
+    public TableEntity getTable() {
+        return table;
+    }
+
+    public void setTable(TableEntity table) {
+        this.table = table;
+    }
 
     public List<DetailsOrderEntity> getDetailsOrderList() {
         return detailsOrderList;

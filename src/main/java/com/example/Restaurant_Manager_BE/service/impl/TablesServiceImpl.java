@@ -22,8 +22,8 @@ public class TablesServiceImpl implements TablesService {
         TableEntity tableEntity = tablesRepository.findById(tablesModel.getId()).get();
         tableEntity.setName(tablesModel.getName());
         tableEntity.setIs_deleted(tablesModel.getIs_deleted());
-        String str = QRcode.generatePassword(10);
-        tableEntity.setPassword(QRcode.encoding(str));
+        String str = QRcode.generatePassword(25);
+        tableEntity.setPassword(str);
         StatusTableEntity statusTableEntity = statusTableRepository.findById(tablesModel.getId()).get();
         tablesRepository.save(tableEntity);
     }

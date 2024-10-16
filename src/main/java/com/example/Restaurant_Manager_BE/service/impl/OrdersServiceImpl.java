@@ -1,16 +1,10 @@
 package com.example.Restaurant_Manager_BE.service.impl;
 
-import com.example.Restaurant_Manager_BE.entity.ClientEntity;
-import com.example.Restaurant_Manager_BE.entity.DetailsOrderEntity;
-import com.example.Restaurant_Manager_BE.entity.OrderEntity;
-import com.example.Restaurant_Manager_BE.entity.ProductEntity;
+import com.example.Restaurant_Manager_BE.entity.*;
 import com.example.Restaurant_Manager_BE.exception.MessageRespone;
 import com.example.Restaurant_Manager_BE.model.DetailsProductModel;
 import com.example.Restaurant_Manager_BE.model.OrderModel;
-import com.example.Restaurant_Manager_BE.repository.ClientRepository;
-import com.example.Restaurant_Manager_BE.repository.DetailsOrderRepository;
-import com.example.Restaurant_Manager_BE.repository.OrderRepository;
-import com.example.Restaurant_Manager_BE.repository.ProductsRepository;
+import com.example.Restaurant_Manager_BE.repository.*;
 import com.example.Restaurant_Manager_BE.service.DetailsOrderService;
 import com.example.Restaurant_Manager_BE.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +21,8 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private DetailsOrderRepository detailsOrderRepository;
 
+    @Autowired
+    private TablesRepository tablesRepository;
     @Override
     public MessageRespone createOrder(OrderModel orderModel) {
         MessageRespone messageRespone = new MessageRespone(404,"Order is null");
@@ -34,6 +30,8 @@ public class OrdersServiceImpl implements OrdersService {
             OrderEntity orderEntity = new OrderEntity();
             orderEntity.setDate_create(orderModel.getDate_create());
             orderEntity.setTotal(orderModel.getTotal());
+            TableEntity tableEntity = tablesRepository.findById(orderModel.getTable_id()).get();
+            orderEntity.setTable(tableEntity);
             orderEntity.setIs_deleted(false);
 
 
