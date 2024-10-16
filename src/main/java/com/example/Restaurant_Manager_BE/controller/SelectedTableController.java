@@ -4,10 +4,7 @@ import com.example.Restaurant_Manager_BE.exception.MessageRespone;
 import com.example.Restaurant_Manager_BE.service.TablesService;
 import com.example.Restaurant_Manager_BE.util.QRcode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class SelectedTableController {
@@ -15,12 +12,19 @@ public class SelectedTableController {
     private TablesService tablesService;
     @GetMapping("/selectedTable/{code}")
     public MessageRespone selectedTable(@PathVariable String code) {
-        return tablesService.findTableByPassword(code);
+        MessageRespone messageRespone = tablesService.findByDirection(code);
+        if (messageRespone.getCode() == 200) {
+            tablesService.generateDirection(Long.parseLong(messageRespone.getMessage()));
+        }
+
+        return messageRespone;
     }
 
-    @PostMapping("/selectedTable/")
-    public void test() {
-        String password = QRcode.generatePassword(25);
-        System.out.println("zzzzz");
+    @GetMapping("/generateQRCode/{id}")
+    public MessageRespone test(@PathVariable Long id) {
+        MessageRespone messageRespone = tablesService.generateQRCode(id);
+        return messageRespone;
     }
+
+
 }

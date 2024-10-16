@@ -6,7 +6,10 @@ import com.example.Restaurant_Manager_BE.model.TablesModel;
 import java.util.List;
 
 public interface TablesService {
-    void updateTable(TablesModel tablesModel);
-    MessageRespone findTableByPassword(String password);
+
+    MessageRespone findByDirection(String direction);
+    MessageRespone generateDirection(Long id);
+
+    MessageRespone generateQRCode(Long id);
 
 }

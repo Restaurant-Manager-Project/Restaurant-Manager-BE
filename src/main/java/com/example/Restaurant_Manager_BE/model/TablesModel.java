@@ -1,8 +1,8 @@
 package com.example.Restaurant_Manager_BE.model;
 
 public class TablesModel {
-    private String name;
     private Long id;
+    private String name;
     private String status_name;
     private Long status_id;
     private Boolean is_deleted;

@@ -4,7 +4,8 @@ import java.security.SecureRandom;
 
 
 public class QRcode {
-    //function generate password randomly
+    private static String linkQR = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=";
+    private static String domain = "http://localhost:8080/selectedTable/";
     public static String generatePassword(int length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         SecureRandom random = new SecureRandom();
@@ -16,6 +17,10 @@ public class QRcode {
         }
 
         return password.toString();
+    }
+
+    public static String generateQR(String code) {
+        return linkQR + domain + code;
     }
     //encode string :
 //    public static String encoding(String str){

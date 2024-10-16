@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface TablesRepository extends JpaRepository<TableEntity, Long>, TablesRepositoryCustom {
 
 
-    TableEntity findByPassword(String password);
+    TableEntity findByDirection(String deirection);
 }
