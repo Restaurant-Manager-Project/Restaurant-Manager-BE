@@ -5,7 +5,7 @@ import com.example.Restaurant_Manager_BE.exception.MessageResponse;
 import com.example.Restaurant_Manager_BE.model.OrderModel;
 
 public interface OrdersService {
-    MessageResponse createOrder(OrderModel orderModel);
+    boolean createOrder(OrderModel orderModel);
     MessageResponse updateOrder(OrderEntity orderEntity);
 
 }

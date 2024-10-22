@@ -1,11 +1,12 @@
 package com.example.Restaurant_Manager_BE.service;
 import com.example.Restaurant_Manager_BE.exception.MessageResponse;
+import com.example.Restaurant_Manager_BE.model.TablesModel;
+
 
 public interface TablesService {
 
-    MessageResponse findByDirection(String direction);
-    MessageResponse generateDirection(Long id);
+    TablesModel findByDirection(String direction);
 
-    MessageResponse generateQRCode(Long id);
+    String generateQRCode(Long id);
 
 }

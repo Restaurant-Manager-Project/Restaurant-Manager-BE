@@ -6,6 +6,7 @@ import com.example.Restaurant_Manager_BE.model.DetailsProductModel;
 import com.example.Restaurant_Manager_BE.model.OrderModel;
 import com.example.Restaurant_Manager_BE.repository.*;
 import com.example.Restaurant_Manager_BE.service.OrdersService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,46 +23,44 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
     private TablesRepository tablesRepository;
+
+    private ModelMapper modelMapper = new ModelMapper();
     @Override
-    public MessageResponse createOrder(OrderModel orderModel) {
-        MessageResponse messageRespone = new MessageResponse(404,"Order is null");
-        if (orderModel != null) {
-            OrderEntity orderEntity = new OrderEntity();
-            orderEntity.setDateCreate(orderModel.getDateCreate());
-            orderEntity.setTotal(orderModel.getTotal());
-            TableEntity tableEntity = tablesRepository.findById(orderModel.getTableId()).get();
-            orderEntity.setTable(tableEntity);
-            orderEntity.setIsDeleted(false);
+    public boolean createOrder(OrderModel orderModel) {
+//        OrderEntity orderEntity = new OrderEntity();
+//        orderEntity.setDateCreate(orderModel.getDateCreate());
+//        orderEntity.setTotal(orderModel.getTotal());
+//        TableEntity tableEntity = tablesRepository.findById(orderModel.getTableId()).get();
+//        orderEntity.setTable(tableEntity);
+//        orderEntity.setIsDeleted(false);
+//
+////        orderRepository.save(orderEntity);
+//
+//        for (DetailsProductModel x : orderModel.getDetailsProductModelList()) {
+//            DetailsOrderEntity detailsOrder = new DetailsOrderEntity();
+//            ProductEntity product = productsRepository.findById(x.getProductId()).get();
+//            detailsOrder.setProduct(product);
+//            detailsOrder.setOrder(orderEntity);
+//            detailsOrder.setQuantity(x.getQuantity());
+//            detailsOrder.setPrice(x.getPrice());
+//            detailsOrder.setIsDeleted(false);
+//            detailsOrderRepository.save(detailsOrder);
+//        }
+        OrderEntity orderEntity = modelMapper.map(orderModel, OrderEntity.class);
+        System.out.println("cccc");
 
 
-
-            orderRepository.save(orderEntity);
-
-
-
-            for (DetailsProductModel x : orderModel.getDetailsProductModelList()) {
-                DetailsOrderEntity detailsOrder = new DetailsOrderEntity();
-                ProductEntity product = productsRepository.findById(x.getProductId()).get();
-                detailsOrder.setProduct(product);
-                detailsOrder.setOrder(orderEntity);
-                detailsOrder.setQuantity(x.getQuantity());
-                detailsOrder.setPrice(x.getPrice());
-                detailsOrder.setIsDeleted(false);
-                detailsOrderRepository.save(detailsOrder);
-            }
-
-            messageRespone = new MessageResponse(200,"Create order success");
-        }
-        return messageRespone;
+        return true;
     }
 
 
     @Override
     public MessageResponse updateOrder(OrderEntity orderEntity) {
-        MessageResponse messageRespone = new MessageResponse(404,"Order is null");
-        if (orderEntity != null) {
-
-        }
-        return messageRespone;
+//        MessageResponse messageRespone = new MessageResponse(404,"Order is null");
+//        if (orderEntity != null) {
+//
+//        }
+//        return messageRespone;
+        return null;
     }
 }

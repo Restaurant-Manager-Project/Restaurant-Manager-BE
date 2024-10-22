@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 public class TablesModel {
     private Long id;
     private String name;
+    private String statusId;
     private String statusName;
-    private Long statusId;
-    private Boolean isDeleted;
-
 }

@@ -1,7 +1,9 @@
 package com.example.Restaurant_Manager_BE.controller;
 
 
+import com.example.Restaurant_Manager_BE.exception.ErrorCode;
 import com.example.Restaurant_Manager_BE.exception.MessageResponse;
+import com.example.Restaurant_Manager_BE.exception.custom.BussinessException;
 import com.example.Restaurant_Manager_BE.model.OrderModel;
 import com.example.Restaurant_Manager_BE.service.OrdersService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,9 +21,15 @@ public class OrderController {
     private OrdersService ordersService;
     @Operation(summary = "Thêm order", description = "Tạo order gồm các chi tiết món ăn khi gọi món")
     @PostMapping("/api/order")
-    public MessageResponse orderProduct(@RequestBody OrderModel orderModel) {
-        MessageResponse messageRespone = ordersService.createOrder(orderModel);
-        return messageRespone;
+    public MessageResponse<OrderModel> orderProduct(@RequestBody OrderModel orderModel) {
+        if (orderModel == null) {
+            throw new BussinessException(ErrorCode.EMPTY_INPUT_VALUE);
+        }
+        ordersService.createOrder(orderModel);
+        MessageResponse<OrderModel> messageResponse = new MessageResponse<>();
+        messageResponse.setMessage("Create order success");
+
+        return messageResponse;
     }
     @Operation(summary = "Xem danh sách chi tiết của order", description = "Xem danh sách chi tiết của {order_id}")
     @GetMapping("/api/{order_id}/details")
