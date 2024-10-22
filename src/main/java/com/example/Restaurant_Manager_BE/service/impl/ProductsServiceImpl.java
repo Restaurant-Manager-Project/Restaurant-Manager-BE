@@ -27,7 +27,7 @@ public class ProductsServiceImpl implements ProductsService {
             product.setName(x.getName());
             product.setImg(x.getImg());
             product.setDescription(x.getDescription());
-            product.setCategory_name(x.getCategory().getName());
+            product.setCategoryName(x.getCategory().getName());
             product.setPrice(x.getPrice());
             productsModelList.add(product);
         }
@@ -59,7 +59,7 @@ public class ProductsServiceImpl implements ProductsService {
         ProductEntity productEntity = productsRepository.findById(id).get();
         ModelMapper modelMapper = new ModelMapper();
         ProductsModel product = modelMapper.map(productEntity, ProductsModel.class);
-        product.setCategory_name(productEntity.getCategory().getName());
+        product.setCategoryName(productEntity.getCategory().getName());
         return product;
     }
     public void test() {

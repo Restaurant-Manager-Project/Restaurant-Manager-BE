@@ -16,7 +16,7 @@ public class TablesRepositoryCustomImpl implements TablesRepositoryCustom {
         int result = entityManager.createQuery(a.toString())
                     .setParameter("name", table.getName())
                     .setParameter("status_id", table.getStatusTable().getId())
-                    .setParameter("is_deleted", table.getIs_deleted())
+                    .setParameter("is_deleted", table.getIsDeleted())
                     .setParameter("direction", table.getDirection())
                     .setParameter("id", table.getId())
                     .executeUpdate();

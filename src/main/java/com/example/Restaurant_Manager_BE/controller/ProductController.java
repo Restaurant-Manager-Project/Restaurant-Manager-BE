@@ -20,15 +20,15 @@ public class ProductController {
 
 
     @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn")
-    @GetMapping("/api/products/")
+    @GetMapping("/api/products")
     public List<ProductsModel> getAllProducts() {
         return productsService.getAll();
     }
 
     @Operation(summary = "Tìm kiếm món ăn theo tiêu chí", description = "Tìm kiếm món ăn theo tiêu chí cụ thể {name, price, ...}")
 
-    @GetMapping("/api/products")
-    public List<ProductsModel> findProducts(@RequestParam Map<String, String> params) {
+    @GetMapping("/api/products/search")
+        public List<ProductsModel> findProducts(@RequestParam Map<String, String> params) {
         if (params.containsKey("name")) {
             return productsService.getByName(params.get("name"));
         } else if (params.containsKey("id")) {

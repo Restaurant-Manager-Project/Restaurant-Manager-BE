@@ -2,9 +2,15 @@ package com.example.Restaurant_Manager_BE.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "accounts")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AccountEntity {
     @Id
     private String username;
@@ -16,44 +22,8 @@ public class AccountEntity {
     private RoleEntity role;
 
     @Column(name = "is_deleted")
-    private Boolean is_deleted;
+    private Boolean isDeleted;
 
     @OneToOne(mappedBy = "account")
     private EmployeeEntity employee;
-
-    public EmployeeEntity getEmployee() {
-        return employee;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public RoleEntity getRole() {
-        return role;
-    }
-
-    public void setRole(RoleEntity role) {
-        this.role = role;
-    }
-
-    public Boolean getIs_deleted() {
-        return is_deleted;
-    }
-
-    public void setIs_deleted(Boolean is_deleted) {
-        this.is_deleted = is_deleted;
-    }
 }
