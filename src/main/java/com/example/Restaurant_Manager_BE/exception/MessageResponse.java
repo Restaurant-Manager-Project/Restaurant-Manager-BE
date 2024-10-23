@@ -6,16 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageResponse<T> {
+public class MessageResponse {
 
     private boolean success = true;
     private int code = 200;
     private String message;
-    private T result;
+    private Object result;
 
 
 }

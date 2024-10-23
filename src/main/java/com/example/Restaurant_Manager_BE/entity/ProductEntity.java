@@ -27,7 +27,7 @@ public class ProductEntity {
     @Column(name = "price")
     private Long price;
     @Column(name = "quantity")
-    private Integer quantity;
+    private Long quantity;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 

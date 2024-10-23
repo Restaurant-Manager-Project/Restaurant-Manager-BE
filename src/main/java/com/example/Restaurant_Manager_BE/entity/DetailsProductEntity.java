@@ -25,7 +25,7 @@ public class DetailsProductEntity {
     private ImportEntity importBill;
 
     @Column(name = "quantity")
-    private Integer quantity;
+    private Long quantity;
 
     @Column(name = "import_price")
     private Long importPrice;

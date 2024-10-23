@@ -23,8 +23,10 @@ public class OrderEntity {
     private Date dateCreate;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
+    @Column(name = "direction_table")
+    private String directionTable;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<DetailsOrderEntity> detailsOrderList;
 
     @ManyToOne

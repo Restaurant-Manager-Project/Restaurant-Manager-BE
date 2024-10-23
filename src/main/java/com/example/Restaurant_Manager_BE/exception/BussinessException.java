@@ -1,4 +1,4 @@
-package com.example.Restaurant_Manager_BE.exception.custom;
+package com.example.Restaurant_Manager_BE.exception;
 
 import com.example.Restaurant_Manager_BE.exception.ErrorCode;
 

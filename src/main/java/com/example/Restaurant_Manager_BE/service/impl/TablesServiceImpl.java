@@ -1,7 +1,7 @@
 package com.example.Restaurant_Manager_BE.service.impl;
 import com.example.Restaurant_Manager_BE.entity.TableEntity;
 import com.example.Restaurant_Manager_BE.exception.ErrorCode;
-import com.example.Restaurant_Manager_BE.exception.custom.BussinessException;
+import com.example.Restaurant_Manager_BE.exception.BussinessException;
 import com.example.Restaurant_Manager_BE.model.TablesModel;
 import com.example.Restaurant_Manager_BE.repository.StatusTableRepository;
 import com.example.Restaurant_Manager_BE.repository.TablesRepository;
@@ -31,7 +31,6 @@ public class TablesServiceImpl implements TablesService {
         TablesModel tableModel = modelMapper.map(tableEntity, TablesModel.class);
         tableModel.setStatusName(tableEntity.getStatusTable().getName());
 
-        generateDirection(tableEntity.getId());
         return tableModel;
     }
 

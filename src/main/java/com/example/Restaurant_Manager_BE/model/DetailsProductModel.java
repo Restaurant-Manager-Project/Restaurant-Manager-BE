@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 public class DetailsProductModel {
 
     private Long productId;
-    private Long orderId;
     private Long price;
     private Integer quantity;
 

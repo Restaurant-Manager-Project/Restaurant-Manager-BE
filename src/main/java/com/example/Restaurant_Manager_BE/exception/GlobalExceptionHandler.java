@@ -1,6 +1,5 @@
 package com.example.Restaurant_Manager_BE.exception;
 
-import com.example.Restaurant_Manager_BE.exception.custom.BussinessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

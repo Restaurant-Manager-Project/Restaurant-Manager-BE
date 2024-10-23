@@ -14,8 +14,10 @@ import java.util.List;
 public class OrderModel {
 
     private Long tableId;
+    private Long orderId;
     private Date dateCreate;
     private Long total;
+    private String directionTable;
     @JsonProperty("detailList")
     private List<DetailsProductModel> detailsProductModelList;
 

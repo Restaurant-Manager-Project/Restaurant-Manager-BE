@@ -10,57 +10,59 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
     private ProductsRepository productsRepository;
-    @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
-    private DetailsOrderRepository detailsOrderRepository;
+
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private TablesRepository tablesRepository;
 
-    private ModelMapper modelMapper = new ModelMapper();
     @Override
     public boolean createOrder(OrderModel orderModel) {
-//        OrderEntity orderEntity = new OrderEntity();
-//        orderEntity.setDateCreate(orderModel.getDateCreate());
-//        orderEntity.setTotal(orderModel.getTotal());
-//        TableEntity tableEntity = tablesRepository.findById(orderModel.getTableId()).get();
-//        orderEntity.setTable(tableEntity);
-//        orderEntity.setIsDeleted(false);
-//
-////        orderRepository.save(orderEntity);
-//
-//        for (DetailsProductModel x : orderModel.getDetailsProductModelList()) {
-//            DetailsOrderEntity detailsOrder = new DetailsOrderEntity();
-//            ProductEntity product = productsRepository.findById(x.getProductId()).get();
-//            detailsOrder.setProduct(product);
-//            detailsOrder.setOrder(orderEntity);
-//            detailsOrder.setQuantity(x.getQuantity());
-//            detailsOrder.setPrice(x.getPrice());
-//            detailsOrder.setIsDeleted(false);
-//            detailsOrderRepository.save(detailsOrder);
-//        }
-        OrderEntity orderEntity = modelMapper.map(orderModel, OrderEntity.class);
-        System.out.println("cccc");
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setDateCreate(orderModel.getDateCreate());
+        orderEntity.setTotal(orderModel.getTotal());
+        TableEntity tableEntity = tablesRepository.findById(orderModel.getTableId()).get();
+        orderEntity.setTable(tableEntity);
+        orderEntity.setDirectionTable(orderModel.getDirectionTable());
+        orderEntity.setIsDeleted(false);
 
 
+        List<DetailsOrderEntity> detailsOrderEntityList = new ArrayList<>();
+        for (DetailsProductModel x : orderModel.getDetailsProductModelList()) {
+            DetailsOrderEntity detailsOrder = new DetailsOrderEntity();
+            ProductEntity product = productsRepository.findById(x.getProductId()).get();
+            detailsOrder.setProduct(product);
+            detailsOrder.setOrder(orderEntity);
+            detailsOrder.setQuantity(x.getQuantity());
+            detailsOrder.setPrice(x.getPrice());
+            detailsOrder.setIsDeleted(false);
+            detailsOrderEntityList.add(detailsOrder);
+        }
+        orderEntity.setDetailsOrderList(detailsOrderEntityList);
+        orderRepository.save(orderEntity);
         return true;
     }
 
-
     @Override
-    public MessageResponse updateOrder(OrderEntity orderEntity) {
-//        MessageResponse messageRespone = new MessageResponse(404,"Order is null");
-//        if (orderEntity != null) {
-//
-//        }
-//        return messageRespone;
-        return null;
+    public List<OrderModel> getOrdersByDirection(String direction) {
+        List<OrderEntity> orderList = orderRepository.findByDirectionTable(direction);
+        List<OrderModel> orderModelList = new ArrayList<>();
+
+        for (OrderEntity x : orderList) {
+            OrderModel orderModel = modelMapper.map(x, OrderModel.class);
+            orderModelList.add(orderModel);
+        }
+
+        return orderModelList;
+
     }
 }

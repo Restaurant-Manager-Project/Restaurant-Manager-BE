@@ -22,13 +22,7 @@ public class ProductsServiceImpl implements ProductsService {
         List<ProductsModel> productsModelList = new ArrayList<>();
 
         for (ProductEntity x : productEntityList) {
-            ProductsModel product = new ProductsModel();
-            product.setId(x.getId());
-            product.setName(x.getName());
-            product.setImg(x.getImg());
-            product.setDescription(x.getDescription());
-            product.setCategoryName(x.getCategory().getName());
-            product.setPrice(x.getPrice());
+            ProductsModel product = new ModelMapper().map(x, ProductsModel.class);
             productsModelList.add(product);
         }
 
@@ -42,12 +36,7 @@ public class ProductsServiceImpl implements ProductsService {
         List<ProductsModel> productsModelList = new ArrayList<>();
 
         for (ProductEntity x : productEntityList) {
-            ProductsModel product = new ProductsModel();
-            product.setId(x.getId());
-            product.setName(x.getName());
-            product.setImg(x.getImg());
-            product.setDescription(x.getDescription());
-            product.setPrice(x.getPrice());
+            ProductsModel product = new ModelMapper().map(x, ProductsModel.class);
             productsModelList.add(product);
         }
 
@@ -62,8 +51,5 @@ public class ProductsServiceImpl implements ProductsService {
         product.setCategoryName(productEntity.getCategory().getName());
         return product;
     }
-    public void test() {
-        List<ProductEntity> list = productsRepository.getProduct();
-        System.out.println("aa");
-    }
+
 }
