@@ -2,12 +2,18 @@ package com.example.Restaurant_Manager_BE.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "imports")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ImportEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +31,14 @@ public class ImportEntity {
     private SupplierEntity supplier;
 
     @Column(name = "date_create")
-    private Date date_create;
+    private Date dateCreate;
     
 
     @Column(name = "total")
     private Long total;
 
     @Column(name = "is_deleted")
-    private Boolean is_deleted;
+    private Boolean isDeleted;
 
 
 

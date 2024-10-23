@@ -2,8 +2,15 @@ package com.example.Restaurant_Manager_BE.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "details_product")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DetailsProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,13 +25,13 @@ public class DetailsProductEntity {
     private ImportEntity importBill;
 
     @Column(name = "quantity")
-    private Integer quantity;
+    private Long quantity;
 
     @Column(name = "import_price")
-    private Long import_price;
+    private Long importPrice;
 
     @Column(name = "is_deleted")
-    private Boolean is_deleted;
+    private Boolean isDeleted;
 
 
 }

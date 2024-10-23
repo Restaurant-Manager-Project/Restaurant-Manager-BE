@@ -1,15 +1,11 @@
 package com.example.Restaurant_Manager_BE.service;
-import com.example.Restaurant_Manager_BE.exception.MessageRespone;
-import com.example.Restaurant_Manager_BE.model.ProductsModel;
+import com.example.Restaurant_Manager_BE.exception.MessageResponse;
 import com.example.Restaurant_Manager_BE.model.TablesModel;
 
-import java.util.List;
 
 public interface TablesService {
+    TablesModel findByDirection(String direction);
 
-    MessageRespone findByDirection(String direction);
-    MessageRespone generateDirection(Long id);
-
-    MessageRespone generateQRCode(Long id);
+    String generateQRCode(Long id);
 
 }

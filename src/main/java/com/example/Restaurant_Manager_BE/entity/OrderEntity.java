@@ -1,12 +1,18 @@
 package com.example.Restaurant_Manager_BE.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,64 +20,20 @@ public class OrderEntity {
     @Column(name = "total")
     private Long total;
     @Column(name = "date_create")
-    private Date date_create;
+    private Date dateCreate;
     @Column(name = "is_deleted")
-    private Boolean is_deleted;
+    private Boolean isDeleted;
+    @Column(name = "direction_table")
+    private String directionTable;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<DetailsOrderEntity> detailsOrderList;
 
     @ManyToOne
     @JoinColumn(name = "table_id")
     private TableEntity table;
 
-    public TableEntity getTable() {
-        return table;
-    }
 
-    public void setTable(TableEntity table) {
-        this.table = table;
-    }
-
-    public List<DetailsOrderEntity> getDetailsOrderList() {
-        return detailsOrderList;
-    }
-
-    public void setDetailsOrderList(List<DetailsOrderEntity> detailsOrderList) {
-        this.detailsOrderList = detailsOrderList;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getTotal() {
-        return total;
-    }
-
-    public void setTotal(Long total) {
-        this.total = total;
-    }
-
-    public Date getDate_create() {
-        return date_create;
-    }
-
-    public void setDate_create(Date date_create) {
-        this.date_create = date_create;
-    }
-
-    public Boolean getIs_deleted() {
-        return is_deleted;
-    }
-
-    public void setIs_deleted(Boolean is_deleted) {
-        this.is_deleted = is_deleted;
-    }
 
 
 }

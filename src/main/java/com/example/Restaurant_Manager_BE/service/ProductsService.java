@@ -9,5 +9,4 @@ public interface ProductsService {
     public List<ProductsModel> getByName(String name);
 
     public ProductsModel getById(Long id);
-    void test();
 }
