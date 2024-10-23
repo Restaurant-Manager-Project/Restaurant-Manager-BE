@@ -30,9 +30,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ResponseEntity<APIResponse> createOrder(OrderDTO orderDTO) {
-
         TableEntity tableEntity = tableRepository.findById(orderDTO.getTableId()).get();
-
         OrderEntity orderEntity = OrderEntity.builder()
                 .dateCreate(orderDTO.getDateCreate())
                 .total(orderDTO.getTotal())
@@ -40,21 +38,20 @@ public class OrderServiceImpl implements OrderService {
                 .isDeleted(false)
                 .table(tableEntity)
                 .build();
-
         List<DetailsOrderEntity> detailsOrderEntityList = new ArrayList<>();
         for (DetailsProductDTO x : orderDTO.getDetailsProductDTOList()) {
-            DetailsOrderEntity detailsOrder = new DetailsOrderEntity();
             ProductEntity product = productRepository.findById(x.getProductId()).get();
-            detailsOrder.setProduct(product);
-            detailsOrder.setOrder(orderEntity);
-            detailsOrder.setQuantity(x.getQuantity());
-            detailsOrder.setPrice(x.getPrice());
-            detailsOrder.setIsDeleted(false);
+            DetailsOrderEntity detailsOrder = DetailsOrderEntity.builder()
+                            .product(product)
+                            .order(orderEntity)
+                            .quantity(x.getQuantity())
+                            .price(x.getPrice())
+                            .isDeleted(false)
+                            .build();
             detailsOrderEntityList.add(detailsOrder);
         }
         orderEntity.setDetailsOrderList(detailsOrderEntityList);
         orderRepository.save(orderEntity);
-
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_SUCCESS));
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);

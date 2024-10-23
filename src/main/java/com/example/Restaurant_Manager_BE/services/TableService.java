@@ -1,10 +1,16 @@
 package com.example.Restaurant_Manager_BE.services;
 import com.example.Restaurant_Manager_BE.dto.TableDTO;
+import com.example.Restaurant_Manager_BE.responses.APIResponse;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 
 public interface TableService {
-    TableDTO findByDirection(String direction);
+    ResponseEntity<APIResponse> findByDirection(String direction);
 
-    String generateQRCode(Long id);
+    ResponseEntity<APIResponse> generateQRCode(Long id);
+
+    ResponseEntity<APIResponse> mergeAllDetailsInOrderList(String direction);
 
 }

@@ -2,15 +2,15 @@ package com.example.Restaurant_Manager_BE.entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "details_order")
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class DetailsOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

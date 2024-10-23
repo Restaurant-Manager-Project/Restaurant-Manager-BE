@@ -20,30 +20,16 @@ public class ProductController {
     @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn")
     @GetMapping("/api/products")
     public ResponseEntity<APIResponse> getAllProducts() {
-        APIResponse APIResponse = new APIResponse();
-
-        APIResponse.setResult(productService.getAll());
-        return new ResponseEntity<>(APIResponse, HttpStatus.OK);
+        return productService.getAll();
     }
 
     @Operation(summary = "Tìm kiếm món ăn theo tiêu chí", description = "Tìm kiếm món ăn theo tiêu chí cụ thể {name, price, ...}")
 
     @GetMapping("/api/products/search")
         public ResponseEntity<APIResponse> findProducts(@RequestParam Map<String, String> params) {
-        APIResponse APIResponse = new APIResponse();
-        if (params.containsKey("name")) {
-            APIResponse.setResult(productService.getByName(params.get("name")));
-        } else if (params.containsKey("id")) {
-            APIResponse.setResult(productService.getById(Long.parseLong(params.get("id"))));
-        }
-        return new ResponseEntity<>(APIResponse, HttpStatus.OK);
+        return productService.getByName(params.get("name"));
     }
 
-    @Operation(summary = "Tìm kiếm", description = "Tìm kiếm món ăn theo {id}")
-    @GetMapping("/api/products/{id}")
-    public ResponseEntity<APIResponse> getDetailsProduct(@PathVariable Long id) {
-        APIResponse APIResponse = new APIResponse();
-        return new ResponseEntity<>(APIResponse, HttpStatus.OK);
-    }
+
 
 }

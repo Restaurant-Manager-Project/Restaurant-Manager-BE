@@ -1,12 +1,14 @@
 package com.example.Restaurant_Manager_BE.services;
 
 import com.example.Restaurant_Manager_BE.dto.ProductDTO;
+import com.example.Restaurant_Manager_BE.responses.APIResponse;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface ProductService {
-    public List<ProductDTO> getAll();
-    public List<ProductDTO> getByName(String name);
+    ResponseEntity<APIResponse> getAll();
+    ResponseEntity<APIResponse> getByName(String name);
 
-    public ProductDTO getById(Long id);
+    ResponseEntity<APIResponse> getById(Long id);
 }
