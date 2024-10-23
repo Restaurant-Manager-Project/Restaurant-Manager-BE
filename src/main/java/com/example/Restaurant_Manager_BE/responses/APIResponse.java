@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class APIResponse {
 
     private boolean success = true;
-    private int code = 200;
+    private Integer code;
     private String message;
     private Object result;
 

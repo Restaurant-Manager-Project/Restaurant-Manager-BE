@@ -1,7 +1,7 @@
 package com.example.Restaurant_Manager_BE.controllers;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
-import com.example.Restaurant_Manager_BE.exceptions.BussinessException;
+import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.ErrorCode;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.dto.TableDTO;
@@ -21,7 +21,7 @@ public class TableController {
     @GetMapping("/tables")
     public APIResponse selectedTable(@RequestParam String code) {
         if (code.isEmpty()) {
-            throw new BussinessException(ErrorCode.EMPTY_INPUT_VALUE);
+//            throw new DataNotFoundException(ErrorCode.EMPTY_INPUT_VALUE);
         }
         TableDTO tableModel = tableService.findByDirection(code);
         APIResponse messageRespone = new APIResponse();

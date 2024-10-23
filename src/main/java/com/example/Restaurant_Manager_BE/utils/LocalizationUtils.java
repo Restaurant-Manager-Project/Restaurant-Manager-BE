@@ -22,7 +22,6 @@ public class LocalizationUtils {
     public String getLocalizedMessage(String messageKey, Object... params) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         Locale locale = localeResolver.resolveLocale(request);
-
         return messageSource.getMessage(messageKey, params, locale);
     }
 }

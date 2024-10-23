@@ -11,6 +11,8 @@ public class MessageKeys {
 
     // ORDER
     public static final String ORDER_CREATE_SUCCESS = "order.create_success";
+    public static final String ORDER_CREATE_FAILED = "order.create_fail";
+
     public static final String ORDER_GET_SUCCESS = "order.get_success";
     public static final String ORDER_LIST_GET_SUCCESS = "order_list.get_success";
     public static final String ORDER_CANCEL_SUCCESS = "order.cancel_success";

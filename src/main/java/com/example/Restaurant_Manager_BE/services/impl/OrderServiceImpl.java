@@ -1,12 +1,18 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
+import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.entities.*;
 import com.example.Restaurant_Manager_BE.dto.DetailsProductDTO;
 import com.example.Restaurant_Manager_BE.dto.OrderDTO;
+import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.repositories.*;
+import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.OrderService;
+import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,17 +26,20 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
     private final TableRepository tableRepository;
+    private final LocalizationUtils localizationUtils;
 
     @Override
-    public boolean createOrder(OrderDTO orderDTO) {
-        OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setDateCreate(orderDTO.getDateCreate());
-        orderEntity.setTotal(orderDTO.getTotal());
-        TableEntity tableEntity = tableRepository.findById(orderDTO.getTableId()).get();
-        orderEntity.setTable(tableEntity);
-        orderEntity.setDirectionTable(orderDTO.getDirectionTable());
-        orderEntity.setIsDeleted(false);
+    public ResponseEntity<APIResponse> createOrder(OrderDTO orderDTO) {
 
+        TableEntity tableEntity = tableRepository.findById(orderDTO.getTableId()).get();
+
+        OrderEntity orderEntity = OrderEntity.builder()
+                .dateCreate(orderDTO.getDateCreate())
+                .total(orderDTO.getTotal())
+                .directionTable(orderDTO.getDirectionTable())
+                .isDeleted(false)
+                .table(tableEntity)
+                .build();
 
         List<DetailsOrderEntity> detailsOrderEntityList = new ArrayList<>();
         for (DetailsProductDTO x : orderDTO.getDetailsProductDTOList()) {
@@ -45,20 +54,26 @@ public class OrderServiceImpl implements OrderService {
         }
         orderEntity.setDetailsOrderList(detailsOrderEntityList);
         orderRepository.save(orderEntity);
-        return true;
+
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_SUCCESS));
+        return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
     }
 
     @Override
-    public List<OrderDTO> getOrdersByDirection(String direction) {
-        List<OrderEntity> orderList = orderRepository.findByDirectionTable(direction);
+    public ResponseEntity<APIResponse> getOrdersByDirection(String direction) {
+        List<OrderEntity> orderList = orderRepository.findByDirectionTable(direction)
+                .filter(orderEntities -> !orderEntities.isEmpty())
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
         List<OrderDTO> orderDTOList = new ArrayList<>();
-
-        for (OrderEntity x : orderList) {
-            OrderDTO orderDTO = modelMapper.map(x, OrderDTO.class);
+        orderList.forEach(order -> {
+            OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
             orderDTOList.add(orderDTO);
-        }
-
-        return orderDTOList;
+        });
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_LIST_GET_SUCCESS));
+        APIResponse.setResult(orderDTOList);
+        return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
 
     }
 }
