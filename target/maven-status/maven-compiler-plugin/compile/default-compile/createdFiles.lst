@@ -1,4 +1,5 @@
 com\example\Restaurant_Manager_BE\services\impl\StatusTableServiceImpl.class
+com\example\Restaurant_Manager_BE\controllers\ClientController.class
 com\example\Restaurant_Manager_BE\repositories\OrderRepository.class
 com\example\Restaurant_Manager_BE\dto\ProductDTO.class
 com\example\Restaurant_Manager_BE\repositories\ClientRepository.class
@@ -17,6 +18,7 @@ com\example\Restaurant_Manager_BE\services\impl\OrderServiceImpl.class
 com\example\Restaurant_Manager_BE\exceptions\InvalidInputException.class
 com\example\Restaurant_Manager_BE\entities\SupplierEntity.class
 com\example\Restaurant_Manager_BE\services\impl\DetailsOrderServiceImpl.class
+com\example\Restaurant_Manager_BE\services\impl\ClientServiceImpl.class
 com\example\Restaurant_Manager_BE\entities\RoleEntity.class
 com\example\Restaurant_Manager_BE\RestaurantManagerBeApplication.class
 com\example\Restaurant_Manager_BE\services\OrderService.class
@@ -28,7 +30,6 @@ com\example\Restaurant_Manager_BE\utils\LocalizationUtils.class
 com\example\Restaurant_Manager_BE\dto\TableDTO.class
 com\example\Restaurant_Manager_BE\controllers\ProductController.class
 com\example\Restaurant_Manager_BE\repositories\StatusTableRepository.class
-com\example\Restaurant_Manager_BE\entities\DetailsProductEntity.class
 com\example\Restaurant_Manager_BE\entities\TableEntity.class
 com\example\Restaurant_Manager_BE\repositories\DetailsOrderRepository.class
 com\example\Restaurant_Manager_BE\services\TableService.class
@@ -41,12 +42,15 @@ com\example\Restaurant_Manager_BE\configurations\LanguageConfig.class
 com\example\Restaurant_Manager_BE\configurations\WebConfig.class
 com\example\Restaurant_Manager_BE\controllers\TableController.class
 com\example\Restaurant_Manager_BE\dto\DetailsOrderDTO.class
+com\example\Restaurant_Manager_BE\dto\ClientDTO.class
 com\example\Restaurant_Manager_BE\entities\CategoryEntity.class
 com\example\Restaurant_Manager_BE\constants\MessageKeys.class
 com\example\Restaurant_Manager_BE\entities\ImportEntity.class
+com\example\Restaurant_Manager_BE\entities\DetailsImportEntity.class
 com\example\Restaurant_Manager_BE\entities\EmployeeEntity.class
 com\example\Restaurant_Manager_BE\utils\QRcode.class
 com\example\Restaurant_Manager_BE\dto\DetailsProductDTO.class
 com\example\Restaurant_Manager_BE\dto\OrderDTO.class
 com\example\Restaurant_Manager_BE\services\StatusTableService.class
 com\example\Restaurant_Manager_BE\exceptions\DataNotFoundException.class
+com\example\Restaurant_Manager_BE\services\ClientService.class

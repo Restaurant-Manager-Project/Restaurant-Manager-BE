@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface OrderService {
     ResponseEntity<APIResponse> createOrder(OrderDTO orderDTO);
-
     ResponseEntity<APIResponse> getOrdersByDirection(String direction);
 
 }
