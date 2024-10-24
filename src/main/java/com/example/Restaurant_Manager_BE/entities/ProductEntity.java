@@ -2,15 +2,14 @@ package com.example.Restaurant_Manager_BE.entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "products")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductEntity {
@@ -32,7 +31,7 @@ public class ProductEntity {
     private Boolean isDeleted;
 
     @OneToMany(mappedBy = "product")
-    private List<DetailsProductEntity> detailsProductList;
+    private List<DetailsImportEntity> detailsProductList;
 
     @OneToMany(mappedBy = "product")
     private List<DetailsOrderEntity> detailsOrderList;

@@ -2,16 +2,15 @@ package com.example.Restaurant_Manager_BE.entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Table(name = "details_product")
-@Data
+@Table(name = "details_import")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DetailsProductEntity {
+public class DetailsImportEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
