@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.advices;
 
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
+import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidParamException;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,15 @@ public class GlobalExceptionHandler{
 
     @ExceptionHandler(InvalidParamException.class)
     public ResponseEntity<APIResponse> handleInvalidParamException(InvalidParamException ex){
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setSuccess(false);
+        apiResponse.setCode(400);
+        apiResponse.setMessage(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+    }
+
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<APIResponse> handleInvalidInputException(InvalidInputException ex){
         APIResponse apiResponse = new APIResponse();
         apiResponse.setSuccess(false);
         apiResponse.setCode(400);
