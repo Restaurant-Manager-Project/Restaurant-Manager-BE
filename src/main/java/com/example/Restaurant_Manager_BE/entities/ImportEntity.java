@@ -24,7 +24,7 @@ public class ImportEntity {
     private EmployeeEntity employee;
 
     @OneToMany(mappedBy = "importBill")
-    private List<DetailsProductEntity> detailsProductList;
+    private List<DetailsImportEntity> detailsProductList;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id")
