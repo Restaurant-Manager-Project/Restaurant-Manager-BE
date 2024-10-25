@@ -1,9 +1,13 @@
 package com.example.Restaurant_Manager_BE.Test;
 
+import com.example.Restaurant_Manager_BE.services.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
@@ -16,20 +20,24 @@ import java.util.*;
 @RequiredArgsConstructor
 public class PaymentController {
     private final PaymentService paymentService;
-
-    @GetMapping("/vn-pay")
-    public ResponseEntity<PaymentResponse> pay(HttpServletRequest request) {
-        return  paymentService.createVnPayPayment(request);
+    private final OrderService orderService;
+    @PostMapping("/vn-pay")
+    public ResponseEntity<PaymentResponse> pay(@RequestBody Map<String, Object> reqData, HttpServletRequest request) {
+        return  paymentService.createVnPayPayment(reqData, request);
     }
     @GetMapping("/vn-pay-callback")
     public ResponseEntity<PaymentResponse> payCallbackHandler(HttpServletRequest request) {
         String status = request.getParameter("vnp_ResponseCode");
-        long amount = Long.parseLong(request.getParameter("vnp_Amount"));
-        if (status.equals("00")) {
-            return ResponseEntity.ok(new PaymentResponse("00", "Success" , "", amount));
-        } else {
-            return ResponseEntity.ok(new PaymentResponse("99", "Fail" , "", amount));
-        }
+        String direction = request.getParameter("vnp_OrderInfo");
+        long amount = Long.parseLong(request.getParameter("vnp_Amount")) / 100;
+        return ResponseEntity.ok(PaymentResponse.builder()
+                .code(status)
+                .message(status.equals("00") ? "Success" : "Fail")
+                .amount(amount)
+                .direction(direction)
+                .resData(orderService.getOrdersByDirection(direction).getBody())
+                .build());
     }
+    
 
 }
