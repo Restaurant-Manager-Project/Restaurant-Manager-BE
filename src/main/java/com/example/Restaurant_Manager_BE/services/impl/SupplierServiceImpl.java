@@ -8,14 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.dto.ImportDTO;
 import com.example.Restaurant_Manager_BE.dto.SupplierDTO;
 import com.example.Restaurant_Manager_BE.entities.SupplierEntity;
+import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.repositories.SupplierRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.SupplierService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 
-import io.micrometer.core.ipc.http.HttpSender.Response;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -53,8 +54,19 @@ public class SupplierServiceImpl implements SupplierService {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // @Override
-    // public ResponseEntity<APIResponse> createSupplier(SupplierDTO supplierDTO) {
+    @Override
+    public ResponseEntity<APIResponse> getById(Long id) {
+        SupplierEntity supplierEntity = supplierRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(
+                        localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED)));
 
-    // }
+        SupplierDTO supplierDTO = modelMapper.map(supplierEntity, SupplierDTO.class);
+
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_GET_SUCCESS));
+        apiResponse.setResult(supplierDTO);
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
 }
