@@ -1,19 +1,16 @@
-package com.example.Restaurant_Manager_BE.Test;
+package com.example.Restaurant_Manager_BE.controllers;
 
+import com.example.Restaurant_Manager_BE.responses.PaymentResponse;
+import com.example.Restaurant_Manager_BE.services.PaymentService;
 import com.example.Restaurant_Manager_BE.services.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -30,13 +27,23 @@ public class PaymentController {
         String status = request.getParameter("vnp_ResponseCode");
         String direction = request.getParameter("vnp_OrderInfo");
         long amount = Long.parseLong(request.getParameter("vnp_Amount")) / 100;
-        return ResponseEntity.ok(PaymentResponse.builder()
-                .code(status)
-                .message(status.equals("00") ? "Success" : "Fail")
-                .amount(amount)
-                .direction(direction)
-                .resData(orderService.getOrdersByDirection(direction).getBody())
-                .build());
+        if (status.equals("00")) {
+            return ResponseEntity.ok(PaymentResponse.builder()
+                    .code(status)
+                    .message("Success")
+                    .amount(amount)
+                    .direction(direction)
+                    .resData(orderService.getOrdersByDirection(direction).getBody())
+                    .build());
+        }
+        else {
+            return ResponseEntity.ok(PaymentResponse.builder()
+                    .code(status)
+                    .message("Failed")
+                    .amount(amount)
+                    .direction(direction)
+                    .build());
+        }
     }
     
 

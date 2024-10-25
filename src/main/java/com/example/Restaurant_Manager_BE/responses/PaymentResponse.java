@@ -1,4 +1,4 @@
-package com.example.Restaurant_Manager_BE.Test;
+package com.example.Restaurant_Manager_BE.responses;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
