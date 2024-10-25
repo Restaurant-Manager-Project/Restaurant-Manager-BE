@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ProductService {
     ResponseEntity<APIResponse> getAll();
+
     ResponseEntity<APIResponse> getByName(String name);
 
     ResponseEntity<APIResponse> getById(Long id);

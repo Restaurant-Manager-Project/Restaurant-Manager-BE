@@ -5,8 +5,8 @@ public class MessageKeys {
     public static final String PRODUCT_CREATE_SUCCESS = "product.create_success";
     public static final String PRODUCT_LIST_GET_SUCCESS = "product_list.get_success";
     public static final String PRODUCT_UPDATE_SUCCESS = "product.update_success";
-    public static final String PRODUCT_DELETE_SUCCESS = "product.delete_success" ;
-    public static final String PRODUCT_GET_SUCCESS = "product.get_success" ;
+    public static final String PRODUCT_DELETE_SUCCESS = "product.delete_success";
+    public static final String PRODUCT_GET_SUCCESS = "product.get_success";
     public static final String PRODUCT_NOT_EXISTED = "product.not_existed";
     public static final String PRODUCT_IMAGE_UPDATE_SUCCESS = "product.image.update_success";
 
@@ -23,11 +23,16 @@ public class MessageKeys {
     // DETAILS ORDER
     public static final String DETAILS_ORDER_CREATE_SUCCESS = "details_order.get_success";
 
-
     // TABLE
     public static final String TABLE_CREATE_SUCCESS = "table.create_success";
     public static final String TABLE_CREATE_QR_SUCCESS = "table.create_qr_success";
     public static final String TABLE_GET_SUCCESS = "table.get_success";
     public static final String TABLE_NOT_FOUND = "table.not_found";
 
+    // SUPPLIER
+    public static final String SUPPLIER_CREATE_SUCCESS = "supplier.create_success";
+    public static final String SUPPLIER_DELETE_SUCCESS = "supplier.delete_success";
+    public static final String SUPPLIER_LIST_GET_SUCCESS = "supplier_list.get_success";
+    public static final String SUPPLIER_GET_SUCCESS = "supplier.get_success";
+    public static final String SUPPLIER_NOT_EXISTED = "supplier.not_existed";
 }

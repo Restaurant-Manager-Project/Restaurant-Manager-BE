@@ -1,6 +1,5 @@
 package com.example.Restaurant_Manager_BE.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,6 +37,5 @@ public class ProductEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
-
 
 }
