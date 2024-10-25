@@ -1,6 +1,13 @@
 package com.example.Restaurant_Manager_BE.constants;
 
 public class MessageKeys {
+    // CLIENT
+    public static final String CLIENT_GET_SUCCESS = "client.get_success";
+    public static final String CLIENT_NOT_EXISTS = "client.not_exists";
+    public static final String CLIENT_CREATE_SUCCESS = "client.create_success";
+    public static final String CLIENT_CREATE_FALIED = "client.create_failed";
+
+
     // PRODUCT
     public static final String PRODUCT_CREATE_SUCCESS = "product.create_success";
     public static final String PRODUCT_LIST_GET_SUCCESS = "product_list.get_success";

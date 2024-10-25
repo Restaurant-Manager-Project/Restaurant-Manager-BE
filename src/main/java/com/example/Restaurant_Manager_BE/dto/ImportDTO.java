@@ -20,5 +20,5 @@ public class ImportDTO {
     private long total;
 
     @JsonProperty("detailsProductList")
-    private List<DetailsImportDTO> detailsImportDTO;
+    private List<DetailsImportDTO> detailsImportDTOList;
 }
