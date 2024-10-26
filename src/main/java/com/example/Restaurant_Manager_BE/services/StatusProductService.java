@@ -15,6 +15,6 @@ public interface StatusProductService {
 
     ResponseEntity<APIResponse> updateStatusProduct(StatusProductDTO statusProductDTO);
 
-    // ResponseEntity<APIResponse> deleteStatusProduct(Long id);
+    ResponseEntity<APIResponse> deleteStatusProduct(Long id);
 
 }

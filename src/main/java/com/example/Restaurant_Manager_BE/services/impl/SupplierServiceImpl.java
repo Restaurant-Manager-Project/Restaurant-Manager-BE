@@ -81,6 +81,7 @@ public class SupplierServiceImpl implements SupplierService {
         supplierRepository.save(supplierEntity);
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_CREATE_SUCCESS));
+        apiResponse.setResult(supplierEntity);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
