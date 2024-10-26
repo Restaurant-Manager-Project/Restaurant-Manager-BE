@@ -2,8 +2,6 @@ HELP.md
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-!/target/Restaurant-Manager-BE-0.0.1-SNAPSHOT.jar
-!/target/Restaurant-Manager-BE-0.0.1-SNAPSHOT.jar.original
 
 ### STS ###
 .apt_generated
@@ -34,3 +32,5 @@ build/
 .vscode/
 src/main/resources/env.properties
 /target/*
+!/target/Restaurant-Manager-BE-0.0.1-SNAPSHOT.jar
+!/target/Restaurant-Manager-BE-0.0.1-SNAPSHOT.jar.original
