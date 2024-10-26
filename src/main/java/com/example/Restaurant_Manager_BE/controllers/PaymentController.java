@@ -27,7 +27,10 @@ public class PaymentController {
         String status = request.getParameter("vnp_ResponseCode");
         String direction = request.getParameter("vnp_OrderInfo");
         long amount = Long.parseLong(request.getParameter("vnp_Amount")) / 100;
+        System.out.println("status: " + status);
+        System.out.println("direction: " + direction);
         if (status.equals("00")) {
+            System.out.println("0");
             return ResponseEntity.ok(PaymentResponse.builder()
                     .code(status)
                     .message("Success")
@@ -37,6 +40,7 @@ public class PaymentController {
                     .build());
         }
         else {
+            System.out.println("1");
             return ResponseEntity.ok(PaymentResponse.builder()
                     .code(status)
                     .message("Failed")
