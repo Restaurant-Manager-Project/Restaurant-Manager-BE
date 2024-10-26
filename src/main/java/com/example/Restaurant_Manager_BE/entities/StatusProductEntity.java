@@ -6,27 +6,23 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Table(name = "suppliers")
-@Getter
-@Setter
+@Table(name = "status_product")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SupplierEntity {
+public class StatusProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "name")
     private String name;
-    @Column(name = "address")
-    private String address;
-    @Column(name = "phone")
-    private String phone;
+
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    @OneToMany(mappedBy = "supplier")
-    private List<ImportEntity> importList;
+    @OneToMany(mappedBy = "statusProduct")
+    private List<ProductEntity> productEntityList;
 
 }

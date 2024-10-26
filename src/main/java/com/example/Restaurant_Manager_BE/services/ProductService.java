@@ -8,7 +8,10 @@ import java.util.List;
 
 public interface ProductService {
     ResponseEntity<APIResponse> getAll();
-    ResponseEntity<APIResponse> getByName(String name);
 
+    ResponseEntity<APIResponse> getByName(String name);
+    ResponseEntity<APIResponse> createProducts(ProductDTO productDTO);
     ResponseEntity<APIResponse> getById(Long id);
+    ResponseEntity<APIResponse> deleteProducts(Long id);
+    ResponseEntity<APIResponse> updateProducts(Long id , ProductDTO productDTO);
 }

@@ -1,6 +1,5 @@
 package com.example.Restaurant_Manager_BE.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,5 +39,8 @@ public class ProductEntity {
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private StatusProductEntity statusProduct;
 
 }

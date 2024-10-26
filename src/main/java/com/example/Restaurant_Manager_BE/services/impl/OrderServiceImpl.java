@@ -42,12 +42,12 @@ public class OrderServiceImpl implements OrderService {
         for (DetailsProductDTO x : orderDTO.getDetailsProductDTOList()) {
             ProductEntity product = productRepository.findById(x.getProductId()).get();
             DetailsOrderEntity detailsOrder = DetailsOrderEntity.builder()
-                            .product(product)
-                            .order(orderEntity)
-                            .quantity(x.getQuantity())
-                            .price(x.getPrice())
-                            .isDeleted(false)
-                            .build();
+                    .product(product)
+                    .order(orderEntity)
+                    .quantity(x.getQuantity())
+                    .price(x.getPrice())
+                    .isDeleted(false)
+                    .build();
             detailsOrderEntityList.add(detailsOrder);
         }
         orderEntity.setDetailsOrderList(detailsOrderEntityList);
@@ -61,7 +61,8 @@ public class OrderServiceImpl implements OrderService {
     public ResponseEntity<APIResponse> getOrdersByDirection(String direction) {
         List<OrderEntity> orderList = orderRepository.findByDirectionTable(direction)
                 .filter(orderEntities -> !orderEntities.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
+                .orElseThrow(() -> new DataNotFoundException(
+                        localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
         List<OrderDTO> orderDTOList = new ArrayList<>();
         orderList.forEach(order -> {
             OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
