@@ -52,17 +52,34 @@ public class StatusProductImpl implements StatusProductService {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // @Override
-    // public ResponseEntity<APIResponse> getByName(String name){
-    // List<StatusProductEntity> statusProductEntityList =
-    // statusProductRepository.findByNameContaining(name);
-    // List<StatusProductDTO> statusProductDTOList = new ArrayList<>();
-    // statusProductEntityList.forEach(statusProduct ->{
-    // StatusProductDTO statusProductDTO = modelMapper.map(statusProduct,
-    // StatusProductDTO.class)
-    // statusProductDTOList.add(statusProductDTO);
-    // });
-    // APIResponse apiResponse = new APIResponse();
-    // apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.STATUS_PRODUCT_GET_SUCCESS));
-    // }
+    @Override
+    public ResponseEntity<APIResponse> getByName(String name) {
+        List<StatusProductEntity> statusProductEntityList = statusProductRepository.findByNameContaining(name);
+        List<StatusProductDTO> statusProductDTOList = new ArrayList<>();
+
+        statusProductEntityList.forEach(statusProduct -> {
+            StatusProductDTO statusProductDTO = modelMapper.map(statusProduct, StatusProductDTO.class);
+            statusProductDTOList.add(statusProductDTO);
+        });
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.STATUS_PRODUCT_GET_SUCCESS));
+        apiResponse.setResult(statusProductDTOList);
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @Override
+    public ResponseEntity<APIResponse> updateStatusProduct(StatusProductDTO statusProductDTO) {
+        StatusProductEntity statusProductEntity = statusProductRepository.findById(statusProductDTO.getId())
+                .orElseThrow(() -> new DataNotFoundException(
+                        localizationUtils.getLocalizedMessage(MessageKeys.STATUS_PRODUCT_NOT_EXISTED)));
+
+        statusProductEntity.setName(statusProductDTO.getName());
+        statusProductRepository.save(statusProductEntity);
+
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.STATUS_PRODUCT_UPDATE_SUCCESS));
+        apiResponse.setResult(statusProductEntity);
+        return ResponseEntity.ok(apiResponse);
+    }
+
 }

@@ -107,21 +107,17 @@ public class SupplierServiceImpl implements SupplierService {
         SupplierEntity supplierEntity = supplierRepository.findById(supplierDTO.getId())
                 .orElseThrow(() -> new DataNotFoundException(
                         localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED)));
-        if (supplierEntity != null) {
-            supplierEntity.setAddress(supplierDTO.getAddress());
-            supplierEntity.setName(supplierDTO.getName());
-            supplierEntity.setPhone(supplierDTO.getPhone());
 
-            supplierRepository.save(supplierEntity);
+        supplierEntity.setAddress(supplierDTO.getAddress());
+        supplierEntity.setName(supplierDTO.getName());
+        supplierEntity.setPhone(supplierDTO.getPhone());
 
-            APIResponse apiResponse = new APIResponse();
-            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_UPDATE_SUCCESS));
-            apiResponse.setResult(supplierEntity);
-            return ResponseEntity.ok(apiResponse);
-        } else {
-            APIResponse apiResponse = new APIResponse();
-            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
-        }
+        supplierRepository.save(supplierEntity);
+
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_UPDATE_SUCCESS));
+        apiResponse.setResult(supplierEntity);
+        return ResponseEntity.ok(apiResponse);
     }
+
 }

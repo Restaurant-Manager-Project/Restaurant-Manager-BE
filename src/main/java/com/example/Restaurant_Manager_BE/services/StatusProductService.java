@@ -11,11 +11,10 @@ public interface StatusProductService {
 
     ResponseEntity<APIResponse> getById(Long id);
 
-    // ResponseEntity<APIResponse> updateStatusProduct(Long id, StatusProductDTO
-    // statusProductDTO);
+    ResponseEntity<APIResponse> getByName(String name);
+
+    ResponseEntity<APIResponse> updateStatusProduct(StatusProductDTO statusProductDTO);
 
     // ResponseEntity<APIResponse> deleteStatusProduct(Long id);
-
-    // ResponseEntity<APIResponse> getByName(String name);
 
 }
