@@ -7,16 +7,20 @@ public class MessageKeys {
     public static final String CLIENT_CREATE_SUCCESS = "client.create_success";
     public static final String CLIENT_CREATE_FALIED = "client.create_failed";
 
+    //CATEGORY
+    public static final String CATEGORY_NOT_EXISTED = "category.not_existed";
 
     // PRODUCT
     public static final String PRODUCT_CREATE_SUCCESS = "product.create_success";
     public static final String PRODUCT_LIST_GET_SUCCESS = "product_list.get_success";
     public static final String PRODUCT_UPDATE_SUCCESS = "product.update_success";
     public static final String PRODUCT_DELETE_SUCCESS = "product.delete_success" ;
+    public static final String PRODUCT_DELETE_FAILED = "product.delete_failed";
     public static final String PRODUCT_GET_SUCCESS = "product.get_success" ;
     public static final String PRODUCT_NOT_EXISTED = "product.not_existed";
     public static final String PRODUCT_IMAGE_UPDATE_SUCCESS = "product.image.update_success";
-
+    public static final String PRODUCT_CREATE_FAILED = "product.create_failed";
+    public static final String PRODUCT_UPDATE_FAILED = "product.update_failed";
     // ORDER
     public static final String ORDER_CREATE_SUCCESS = "order.create_success";
     public static final String ORDER_CREATE_FAILED = "order.create_failed";
