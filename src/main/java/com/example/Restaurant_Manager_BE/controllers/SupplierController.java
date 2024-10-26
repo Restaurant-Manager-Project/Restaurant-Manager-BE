@@ -62,13 +62,12 @@ public class SupplierController {
     }
 
     @Operation(summary = "Chỉnh sửa thông tin nhà cung cấp")
-    @PutMapping("/api/supplier/{id}")
+    @PutMapping("/api/supplier")
 
-    public ResponseEntity<APIResponse> updateSupplier(@PathVariable("id") Long supplierId,
-            @RequestBody SupplierDTO supplierDTO) {
+    public ResponseEntity<APIResponse> updateSupplier(@RequestBody SupplierDTO supplierDTO) {
         if (supplierDTO == null) {
             throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED));
         }
-        return supplierService.updateSupplier(supplierId, supplierDTO);
+        return supplierService.updateSupplier(supplierDTO);
     }
 }

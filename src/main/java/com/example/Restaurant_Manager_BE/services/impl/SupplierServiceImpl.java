@@ -103,11 +103,11 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public ResponseEntity<APIResponse> updateSupplier(Long supplierId, SupplierDTO supplierDTO) {
-        Optional<SupplierEntity> supplierOptional = supplierRepository.findById(supplierId);
-        if (supplierOptional.isPresent()) {
-            SupplierEntity supplierEntity = supplierOptional.get();
-
+    public ResponseEntity<APIResponse> updateSupplier(SupplierDTO supplierDTO) {
+        SupplierEntity supplierEntity = supplierRepository.findById(supplierDTO.getId())
+                .orElseThrow(() -> new DataNotFoundException(
+                        localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED)));
+        if (supplierEntity != null) {
             supplierEntity.setAddress(supplierDTO.getAddress());
             supplierEntity.setName(supplierDTO.getName());
             supplierEntity.setPhone(supplierDTO.getPhone());

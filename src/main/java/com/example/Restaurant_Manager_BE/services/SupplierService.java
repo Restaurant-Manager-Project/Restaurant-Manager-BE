@@ -18,5 +18,5 @@ public interface SupplierService {
 
     ResponseEntity<APIResponse> deleteSupplier(Long supplierId);
 
-    ResponseEntity<APIResponse> updateSupplier(Long supplierId, SupplierDTO supplierDTO);
+    ResponseEntity<APIResponse> updateSupplier(SupplierDTO supplierDTO);
 }

@@ -42,4 +42,11 @@ public class MessageKeys {
     public static final String SUPPLIER_GET_SUCCESS = "supplier.get_success";
     public static final String SUPPLIER_UPDATE_SUCCESS = "supplier.update_success";
     public static final String SUPPLIER_NOT_EXISTED = "supplier.not_existed";
+
+    // STATUS PRODUCT
+    public static final String STATUS_PRODUCT_CREATE_SUCCESS = "status_product.create_success";
+    public static final String STATUS_PRODUCT_DELETE_SUCCESS = "status_product.delete_success";
+    public static final String STATUS_PRODUCT_GET_SUCCESS = "status_product.get_success";
+    public static final String STATUS_PRODUCT_UPDATE_SUCCESS = "status_product.update_success";
+    public static final String STATUS_PRODUCT_NOT_EXISTED = "status_product.not_existed";
 }
