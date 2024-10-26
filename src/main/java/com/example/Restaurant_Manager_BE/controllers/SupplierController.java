@@ -3,9 +3,11 @@ package com.example.Restaurant_Manager_BE.controllers;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,11 +48,27 @@ public class SupplierController {
 
     @Operation(summary = "Tạo nhà cung cấp mới")
     @PostMapping("/api/suppliers")
-    public ResponseEntity<APIResponse> createSupplier(@RequestBody SupplierDTO supplierDTO, @RequestParam String hi) {
+    public ResponseEntity<APIResponse> createSupplier(@RequestBody SupplierDTO supplierDTO) {
         if (supplierDTO == null) {
             throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED));
         }
         return supplierService.createSupplier(supplierDTO);
+    }
 
+    @Operation(summary = "Xóa nhà cung cấp")
+    @DeleteMapping("/api/supplier/{id}")
+    public ResponseEntity<APIResponse> deleteSupplier(@PathVariable("id") Long supplierId) {
+        return supplierService.deleteSupplier(supplierId);
+    }
+
+    @Operation(summary = "Chỉnh sửa thông tin nhà cung cấp")
+    @PutMapping("/api/supplier/{id}")
+
+    public ResponseEntity<APIResponse> updateSupplier(@PathVariable("id") Long supplierId,
+            @RequestBody SupplierDTO supplierDTO) {
+        if (supplierDTO == null) {
+            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED));
+        }
+        return supplierService.updateSupplier(supplierId, supplierDTO);
     }
 }

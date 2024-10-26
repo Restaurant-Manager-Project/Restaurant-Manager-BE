@@ -30,3 +30,7 @@ build/
 
 ### VS Code ###
 .vscode/
+src/main/resources/env.properties
+/target/*
+!/target/Restaurant-Manager-BE-0.0.1-SNAPSHOT.jar
+!/target/Restaurant-Manager-BE-0.0.1-SNAPSHOT.jar.original

@@ -7,7 +7,6 @@ public class MessageKeys {
     public static final String CLIENT_CREATE_SUCCESS = "client.create_success";
     public static final String CLIENT_CREATE_FALIED = "client.create_failed";
 
-
     // PRODUCT
     public static final String PRODUCT_CREATE_SUCCESS = "product.create_success";
     public static final String PRODUCT_LIST_GET_SUCCESS = "product_list.get_success";
@@ -41,5 +40,6 @@ public class MessageKeys {
     public static final String SUPPLIER_DELETE_SUCCESS = "supplier.delete_success";
     public static final String SUPPLIER_LIST_GET_SUCCESS = "supplier_list.get_success";
     public static final String SUPPLIER_GET_SUCCESS = "supplier.get_success";
+    public static final String SUPPLIER_UPDATE_SUCCESS = "supplier.update_success";
     public static final String SUPPLIER_NOT_EXISTED = "supplier.not_existed";
 }

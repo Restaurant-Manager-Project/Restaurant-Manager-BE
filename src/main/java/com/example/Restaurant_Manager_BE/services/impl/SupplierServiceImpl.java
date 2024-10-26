@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 
 import org.modelmapper.ModelMapper;
@@ -9,13 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
-import com.example.Restaurant_Manager_BE.dto.ImportDTO;
 import com.example.Restaurant_Manager_BE.dto.SupplierDTO;
-import com.example.Restaurant_Manager_BE.entities.EmployeeEntity;
-import com.example.Restaurant_Manager_BE.entities.ImportEntity;
 import com.example.Restaurant_Manager_BE.entities.SupplierEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
-import com.example.Restaurant_Manager_BE.repositories.EmployeeRepository;
 import com.example.Restaurant_Manager_BE.repositories.SupplierRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.SupplierService;
@@ -29,7 +26,6 @@ public class SupplierServiceImpl implements SupplierService {
     private final LocalizationUtils localizationUtils;
     private final ModelMapper modelMapper;
     private final SupplierRepository supplierRepository;
-    private final EmployeeRepository employeeRepository;
 
     @Override
     public ResponseEntity<APIResponse> getAll() {
@@ -82,26 +78,50 @@ public class SupplierServiceImpl implements SupplierService {
                 .phone(supplierDTO.getPhone())
                 .isDeleted(false)
                 .build();
-
-        // List<ImportEntity> importEntityList = new ArrayList<>();
-        // if (supplierDTO.getImportDTOList() != null) {
-        // for (ImportDTO x : supplierDTO.getImportDTOList()) {
-        // EmployeeEntity employee =
-        // employeeRepository.findById(x.getEmployeeId()).get();
-        // ImportEntity importEntity = ImportEntity.builder()
-        // .employee(employee)
-        // .supplier(supplierEntity)
-        // .dateCreate(x.getDateCreate())
-        // .total(x.getTotal())
-        // .isDeleted(false)
-        // .build();
-        // importEntityList.add(importEntity);
-        // }
-        // }
-        // supplierEntity.setImportList(importEntityList);
         supplierRepository.save(supplierEntity);
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_CREATE_SUCCESS));
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @Override
+    public ResponseEntity<APIResponse> deleteSupplier(Long supplierId) {
+        Optional<SupplierEntity> supplierOptional = supplierRepository.findById(supplierId);
+        if (supplierOptional.isPresent()) {
+            SupplierEntity supplierEntity = supplierOptional.get();
+            supplierEntity.setIsDeleted(true);
+            supplierRepository.save(supplierEntity);
+
+            APIResponse apiResponse = new APIResponse();
+            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_DELETE_SUCCESS));
+            return ResponseEntity.ok(apiResponse);
+        } else {
+            APIResponse apiResponse = new APIResponse();
+            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
+
+    @Override
+    public ResponseEntity<APIResponse> updateSupplier(Long supplierId, SupplierDTO supplierDTO) {
+        Optional<SupplierEntity> supplierOptional = supplierRepository.findById(supplierId);
+        if (supplierOptional.isPresent()) {
+            SupplierEntity supplierEntity = supplierOptional.get();
+
+            supplierEntity.setAddress(supplierDTO.getAddress());
+            supplierEntity.setName(supplierDTO.getName());
+            supplierEntity.setPhone(supplierDTO.getPhone());
+
+            supplierRepository.save(supplierEntity);
+
+            APIResponse apiResponse = new APIResponse();
+            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_UPDATE_SUCCESS));
+            apiResponse.setResult(supplierEntity);
+            return ResponseEntity.ok(apiResponse);
+        } else {
+            APIResponse apiResponse = new APIResponse();
+            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
     }
 }
