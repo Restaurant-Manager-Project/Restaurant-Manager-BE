@@ -1,6 +1,5 @@
 package com.example.Restaurant_Manager_BE.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class SupplierEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +28,5 @@ public class SupplierEntity {
 
     @OneToMany(mappedBy = "supplier")
     private List<ImportEntity> importList;
-
 
 }

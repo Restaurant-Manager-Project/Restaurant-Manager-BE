@@ -21,6 +21,4 @@ public class OrderDTO {
     @JsonProperty("detailList")
     private List<DetailsProductDTO> detailsProductDTOList;
 
-
-
 }

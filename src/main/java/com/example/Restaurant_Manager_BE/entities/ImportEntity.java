@@ -1,8 +1,8 @@
 package com.example.Restaurant_Manager_BE.entities;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ImportEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,15 +33,11 @@ public class ImportEntity {
 
     @Column(name = "date_create")
     private Date dateCreate;
-    
 
     @Column(name = "total")
     private Long total;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-
-
-
 
 }
