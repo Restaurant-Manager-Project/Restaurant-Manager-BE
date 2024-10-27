@@ -31,11 +31,11 @@ public class ProductEntity {
     private Boolean isDeleted;
 
     @OneToMany(mappedBy = "product")
-    private List<DetailsImportEntity> detailsProductList;
+    private List<DetailsImportEntity> detailsImportList;
 
     @OneToMany(mappedBy = "product")
     private List<DetailsOrderEntity> detailsOrderList;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 

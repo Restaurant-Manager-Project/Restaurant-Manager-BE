@@ -1,8 +1,8 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.dto.DetailsOrderDTO;
 import com.example.Restaurant_Manager_BE.entities.*;
-import com.example.Restaurant_Manager_BE.dto.DetailsProductDTO;
 import com.example.Restaurant_Manager_BE.dto.OrderDTO;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.repositories.*;
@@ -39,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
                 .table(tableEntity)
                 .build();
         List<DetailsOrderEntity> detailsOrderEntityList = new ArrayList<>();
-        for (DetailsProductDTO x : orderDTO.getDetailsProductDTOList()) {
+        for (DetailsOrderDTO x : orderDTO.getDetailsOrderDTOList()) {
             ProductEntity product = productRepository.findById(x.getProductId()).get();
             DetailsOrderEntity detailsOrder = DetailsOrderEntity.builder()
                     .product(product)
@@ -66,6 +66,14 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDTO> orderDTOList = new ArrayList<>();
         orderList.forEach(order -> {
             OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
+            List<DetailsOrderDTO> detailsOrderDTOList = new ArrayList<>();
+            order.getDetailsOrderList().forEach(detailsOrder -> {
+                DetailsOrderDTO detailsOrderDTO = modelMapper.map(detailsOrder, DetailsOrderDTO.class);
+                detailsOrderDTO.setProductName(detailsOrder.getProduct().getName());
+//                detailsOrderDTO.setProductId(detailsOrder.getProduct().getId());
+                detailsOrderDTOList.add(detailsOrderDTO);
+            });
+            orderDTO.setDetailsOrderDTOList(detailsOrderDTOList);
             orderDTOList.add(orderDTO);
         });
         APIResponse APIResponse = new APIResponse();

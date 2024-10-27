@@ -19,6 +19,6 @@ public class OrderDTO {
     private Long total;
     private String directionTable;
     @JsonProperty("detailList")
-    private List<DetailsProductDTO> detailsProductDTOList;
+    private List<DetailsOrderDTO> detailsOrderDTOList;
 
 }
