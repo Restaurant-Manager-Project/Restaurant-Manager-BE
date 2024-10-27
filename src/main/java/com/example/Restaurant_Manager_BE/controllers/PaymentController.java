@@ -6,10 +6,7 @@ import com.example.Restaurant_Manager_BE.services.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -18,14 +15,14 @@ import java.util.*;
 public class PaymentController {
     private final PaymentService paymentService;
     private final OrderService orderService;
-    @PostMapping("/vn-pay")
+    @PostMapping("/vnpay")
     public ResponseEntity<PaymentResponse> pay(@RequestBody Map<String, Object> reqData, HttpServletRequest request) {
         return  paymentService.createVnPayPayment(reqData, request);
     }
-    @GetMapping("/vn-pay-callback")
-    public ResponseEntity<PaymentResponse> payCallbackHandler(HttpServletRequest request) {
+    @GetMapping("/{direction}/vnpay-callback")
+    public ResponseEntity<PaymentResponse> payCallbackHandler(HttpServletRequest request, @PathVariable String direction) {
         String status = request.getParameter("vnp_ResponseCode");
-        String direction = request.getParameter("vnp_OrderInfo");
+//        String direction = request.getParameter("vnp_OrderInfo");
         long amount = Long.parseLong(request.getParameter("vnp_Amount")) / 100;
         System.out.println("status: " + status);
         System.out.println("direction: " + direction);

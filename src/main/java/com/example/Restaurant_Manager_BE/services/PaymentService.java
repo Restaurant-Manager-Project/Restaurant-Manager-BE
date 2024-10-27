@@ -19,6 +19,7 @@ public class PaymentService {
         String directionTable =  reqData.get("directionTable").toString();
         String bankCode = reqData.getOrDefault("bankCode", "").toString();
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
+        vnpParamsMap.put("vnp_ReturnUrl", vnPayConfig.getVnp_ReturnUrl() + "/" + directionTable + "/vnpay-callback");
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount));
         if (bankCode != null && !bankCode.isEmpty()) {
             vnpParamsMap.put("vnp_BankCode", bankCode);
