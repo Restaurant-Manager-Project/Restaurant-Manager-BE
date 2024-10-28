@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.converters.ConverterOrder;
 import com.example.Restaurant_Manager_BE.dto.DetailsOrderDTO;
 import com.example.Restaurant_Manager_BE.entities.*;
 import com.example.Restaurant_Manager_BE.dto.OrderDTO;
@@ -27,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     private final ModelMapper modelMapper;
     private final TableRepository tableRepository;
     private final LocalizationUtils localizationUtils;
+    private final ConverterOrder converterOrder;
 
     @Override
     public ResponseEntity<APIResponse> createOrder(OrderDTO orderDTO) {
@@ -57,29 +59,20 @@ public class OrderServiceImpl implements OrderService {
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
     }
 
-    @Override
-    public ResponseEntity<APIResponse> getOrdersByDirection(String direction) {
-        List<OrderEntity> orderList = orderRepository.findByDirectionTable(direction)
-                .filter(orderEntities -> !orderEntities.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException(
-                        localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
-        List<OrderDTO> orderDTOList = new ArrayList<>();
-        orderList.forEach(order -> {
-            OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
-            List<DetailsOrderDTO> detailsOrderDTOList = new ArrayList<>();
-            order.getDetailsOrderList().forEach(detailsOrder -> {
-                DetailsOrderDTO detailsOrderDTO = modelMapper.map(detailsOrder, DetailsOrderDTO.class);
-                detailsOrderDTO.setProductName(detailsOrder.getProduct().getName());
-//                detailsOrderDTO.setProductId(detailsOrder.getProduct().getId());
-                detailsOrderDTOList.add(detailsOrderDTO);
-            });
-            orderDTO.setDetailsOrderDTOList(detailsOrderDTOList);
-            orderDTOList.add(orderDTO);
-        });
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_LIST_GET_SUCCESS));
-        APIResponse.setResult(orderDTOList);
-        return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
 
+@Override
+public ResponseEntity<APIResponse> getOrdersByDirection(String direction) {
+    List<OrderEntity> orderList = orderRepository.getAllOrderWithDetailsByDirectionTable(direction);
+    if (orderList.isEmpty()) {
+        throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND));
     }
+    List<OrderDTO> orderDTOList = converterOrder.toDTOList(orderList);
+    APIResponse APIResponse = new APIResponse();
+    APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_LIST_GET_SUCCESS));
+    APIResponse.setResult(orderDTOList);
+    return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
+
+}
+
+
 }
