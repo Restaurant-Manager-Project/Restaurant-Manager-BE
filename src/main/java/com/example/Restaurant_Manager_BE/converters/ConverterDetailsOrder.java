@@ -4,6 +4,7 @@ package com.example.Restaurant_Manager_BE.converters;
 
 import com.example.Restaurant_Manager_BE.dto.DetailsOrderDTO;
 import com.example.Restaurant_Manager_BE.entities.DetailsOrderEntity;
+import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface ConverterDetailsOrder {
 
     public List<DetailsOrderDTO> toDTOList(List<DetailsOrderEntity> entityList);
 
-    public List<DetailsOrderEntity> toEntityList(List<DetailsOrderDTO> dtoList);
+    public List<DetailsOrderEntity> toEntityList(List<DetailsOrderDTO> dtoList, OrderEntity orderEntity);
 }

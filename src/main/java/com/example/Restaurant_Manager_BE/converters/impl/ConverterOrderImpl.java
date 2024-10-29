@@ -4,6 +4,9 @@ import com.example.Restaurant_Manager_BE.converters.ConverterDetailsOrder;
 import com.example.Restaurant_Manager_BE.converters.ConverterOrder;
 import com.example.Restaurant_Manager_BE.dto.OrderDTO;
 import com.example.Restaurant_Manager_BE.entities.OrderEntity;
+import com.example.Restaurant_Manager_BE.entities.TableEntity;
+import com.example.Restaurant_Manager_BE.repositories.TableRepository;
+import com.example.Restaurant_Manager_BE.services.TableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConverterOrderImpl implements ConverterOrder {
     private final ConverterDetailsOrder converterDetailsOrder;
+    private final TableRepository tableRepository;
     @Override
     public OrderDTO toDTO(OrderEntity entity) {
         if (entity == null) {
@@ -30,7 +34,19 @@ public class ConverterOrderImpl implements ConverterOrder {
 
     @Override
     public OrderEntity toEntity(OrderDTO dto) {
-        return null;
+        if (dto == null) {
+            return null;
+        }
+        TableEntity tableEntity = tableRepository.findById(dto.getTableId()).get();
+        OrderEntity orderEntity = OrderEntity.builder()
+            .dateCreate(dto.getDateCreate())
+            .total(dto.getTotal())
+            .table(tableEntity)
+            .directionTable(dto.getDirectionTable())
+            .isDeleted(false)
+            .build();
+        orderEntity.setDetailsOrderList(converterDetailsOrder.toEntityList(dto.getDetailsOrderDTOList(), orderEntity));
+        return orderEntity;
     }
 
     @Override
@@ -48,6 +64,14 @@ public class ConverterOrderImpl implements ConverterOrder {
 
     @Override
     public List<OrderEntity> toEntityList(List<OrderDTO> dtoList) {
-        return null;
+        if (dtoList == null || dtoList.isEmpty()) {
+            return null;
+        }
+        List<OrderEntity> list = new ArrayList<>();
+        dtoList.forEach(x -> {
+            OrderEntity orderEntity = toEntity(x);
+            list.add(orderEntity);
+        });
+        return list;
     }
 }

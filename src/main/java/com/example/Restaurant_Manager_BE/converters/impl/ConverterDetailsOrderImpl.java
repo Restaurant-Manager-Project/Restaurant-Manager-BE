@@ -3,6 +3,10 @@ package com.example.Restaurant_Manager_BE.converters.impl;
 import com.example.Restaurant_Manager_BE.converters.ConverterDetailsOrder;
 import com.example.Restaurant_Manager_BE.dto.DetailsOrderDTO;
 import com.example.Restaurant_Manager_BE.entities.DetailsOrderEntity;
+import com.example.Restaurant_Manager_BE.entities.OrderEntity;
+import com.example.Restaurant_Manager_BE.repositories.OrderRepository;
+import com.example.Restaurant_Manager_BE.repositories.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class ConverterDetailsOrderImpl implements ConverterDetailsOrder {
+
+    private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
     @Override
     public DetailsOrderDTO toDTO(DetailsOrderEntity entity) {
         if (entity == null) {
@@ -27,7 +35,17 @@ public class ConverterDetailsOrderImpl implements ConverterDetailsOrder {
 
     @Override
     public DetailsOrderEntity toEntity(DetailsOrderDTO dto) {
-        return null;
+        if (dto == null) {
+            return null;
+        }
+
+        return DetailsOrderEntity.builder()
+                .id(dto.getId())
+                .quantity(dto.getQuantity())
+                .product(productRepository.findById(dto.getProductId()).get())
+                .price(dto.getPrice())
+                .isDeleted(false)
+                .build();
     }
 
     @Override
@@ -44,7 +62,16 @@ public class ConverterDetailsOrderImpl implements ConverterDetailsOrder {
     }
 
     @Override
-    public List<DetailsOrderEntity> toEntityList(List<DetailsOrderDTO> dtoList) {
-        return null;
+    public List<DetailsOrderEntity> toEntityList(List<DetailsOrderDTO> dtoList, OrderEntity orderEntity) {
+        if (dtoList == null || dtoList.isEmpty()) {
+            return null;
+        }
+        List<DetailsOrderEntity> list = new ArrayList<>();
+        dtoList.forEach(x -> {
+            DetailsOrderEntity detailsOrderEntity = toEntity(x);
+            detailsOrderEntity.setOrder(orderEntity);
+            list.add(detailsOrderEntity);
+        });
+        return list;
     }
 }

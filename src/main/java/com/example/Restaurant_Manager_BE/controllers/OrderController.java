@@ -26,7 +26,6 @@ public class OrderController {
         if (orderDTO == null) {
             throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_FAILED));
         }
-
         return orderService.createOrder(orderDTO);
     }
 

@@ -12,6 +12,7 @@ import lombok.*;
 public class DetailsOrderDTO {
     private Long id;
     private Long productId;
+    private Long orderId;
     private String productName;
     private Integer quantity;
     private Long price;

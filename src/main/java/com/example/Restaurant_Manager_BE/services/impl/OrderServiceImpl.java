@@ -25,34 +25,13 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    private final ModelMapper modelMapper;
     private final TableRepository tableRepository;
     private final LocalizationUtils localizationUtils;
     private final ConverterOrder converterOrder;
 
     @Override
     public ResponseEntity<APIResponse> createOrder(OrderDTO orderDTO) {
-        TableEntity tableEntity = tableRepository.findById(orderDTO.getTableId()).get();
-        OrderEntity orderEntity = OrderEntity.builder()
-                .dateCreate(orderDTO.getDateCreate())
-                .total(orderDTO.getTotal())
-                .directionTable(orderDTO.getDirectionTable())
-                .isDeleted(false)
-                .table(tableEntity)
-                .build();
-        List<DetailsOrderEntity> detailsOrderEntityList = new ArrayList<>();
-        for (DetailsOrderDTO x : orderDTO.getDetailsOrderDTOList()) {
-            ProductEntity product = productRepository.findById(x.getProductId()).get();
-            DetailsOrderEntity detailsOrder = DetailsOrderEntity.builder()
-                    .product(product)
-                    .order(orderEntity)
-                    .quantity(x.getQuantity())
-                    .price(x.getPrice())
-                    .isDeleted(false)
-                    .build();
-            detailsOrderEntityList.add(detailsOrder);
-        }
-        orderEntity.setDetailsOrderList(detailsOrderEntityList);
+        OrderEntity orderEntity = converterOrder.toEntity(orderDTO);
         orderRepository.save(orderEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_SUCCESS));
