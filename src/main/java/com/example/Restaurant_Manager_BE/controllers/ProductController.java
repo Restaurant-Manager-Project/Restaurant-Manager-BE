@@ -18,8 +18,10 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
+
     private final ProductService productService;
     private final LocalizationUtils localizationUtils;
+
 
     @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn")
     @GetMapping("/api/products")
@@ -30,9 +32,10 @@ public class ProductController {
     @Operation(summary = "Tìm kiếm món ăn theo tiêu chí", description = "Tìm kiếm món ăn theo tiêu chí cụ thể {name, price, ...}")
 
     @GetMapping("/api/products/search")
-        public ResponseEntity<APIResponse> findProducts(@RequestParam Map<String, String> params) {
+    public ResponseEntity<APIResponse> findProducts(@RequestParam Map<String, String> params) {
         return productService.getByName(params.get("name"));
     }
+
     //Phần Create trong CRUD
     @Operation(summary = "Thêm sản phẩm",description = "Thêm món ăn sau khi nhập đầy đủ thông tin")
     @PostMapping("/api/products")
@@ -59,5 +62,6 @@ public class ProductController {
         Long id = ProductDTO.getId();
         return productService.updateProducts(id,ProductDTO);
     }
+
 }
     

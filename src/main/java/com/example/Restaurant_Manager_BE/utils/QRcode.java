@@ -21,16 +21,6 @@ public class QRcode {
     public static String generateQR(String code) {
         return linkQR + domain + code;
     }
-    //encode string :
-//    public static String encoding(String str){
-//       String encodedString = Base64.getEncoder().encodeToString(str.getBytes());
-//       return encodedString;
-//    }
-//
-//    public static String decoding(String str){
-//        byte[] decodedBytes = Base64.getDecoder().decode(str);
-//        String decodedString = new String(decodedBytes);
-//       return decodedString;
-//    }
+
 
 }
