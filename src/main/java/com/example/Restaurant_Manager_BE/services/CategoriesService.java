@@ -6,4 +6,7 @@ import com.example.Restaurant_Manager_BE.dto.CategoriesDTO;
 
 public interface CategoriesService {
     ResponseEntity<APIResponse> createCategories(CategoriesDTO categoryDTO);
+    ResponseEntity<APIResponse> getAll();
+    ResponseEntity<APIResponse> deleteCategory(Long id);
+    ResponseEntity<APIResponse> updateCategory(Long id, CategoriesDTO categoriesDTO);
 }
