@@ -46,6 +46,7 @@ public class VNPAYConfig {
         vnpParamsMap.put("vnp_ReturnUrl", this.vnp_ReturnUrl);
         LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
         String vnpCreateDate = localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        vnpParamsMap.put("vnp_ReturnUrl", vnp_ReturnUrl + "/vnpay-callback");
         vnpParamsMap.put("vnp_CreateDate", vnpCreateDate);
         String vnp_ExpireDate = localDateTime.plusMinutes(15).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
