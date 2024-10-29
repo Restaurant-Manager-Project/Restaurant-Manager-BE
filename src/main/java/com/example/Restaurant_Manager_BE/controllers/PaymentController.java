@@ -22,12 +22,11 @@ public class PaymentController {
     public ResponseEntity<PaymentResponse> pay(@RequestBody Map<String, Object> reqData, HttpServletRequest request) {
         return  paymentService.createVnPayPayment(reqData, request);
     }
-    @GetMapping("/{direction}/vnpay-callback")
-    public ResponseEntity<PaymentResponse> payCallbackHandler(HttpServletRequest request, @PathVariable String direction) {
+    @GetMapping("/vnpay-callback")
+    public ResponseEntity<PaymentResponse> payCallbackHandler(HttpServletRequest request) {
         String status = request.getParameter("vnp_ResponseCode");
+        String direction = request.getParameter("vnp_OrderInfo");
         long amount = Long.parseLong(request.getParameter("vnp_Amount")) / 100;
-        System.out.println("status: " + status);
-        System.out.println("direction: " + direction);
         if (status.equals("00")) {
             tableService.generateDirection(direction);
             return ResponseEntity.ok(PaymentResponse.builder()
