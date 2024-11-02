@@ -9,6 +9,13 @@ public class MessageKeys {
 
     //CATEGORY
     public static final String CATEGORY_NOT_EXISTED = "category.not_existed";
+    public static final String CATEGORY_LIST_GET_SUCCESS = "category_list.get_success";
+    public static final String CATEGORY_DELETE_SUCCESS = "category.delete_success";
+    public static final String CATEGORY_UPDATE_SUCCESS = "category.update_success";
+    public static final String CATEGORY_CREATE_SUCCESS = "category.create_success";
+    public static final String CATEGORY_CREATE_FAILED = "category.create_failed";
+    public static final String CATEGORY_DELETE_FAILED = "category.delete_failed";
+    public static final String CATEGORY_UPDATE_FAILED = "category.update_failed";
 
 
     // PRODUCT

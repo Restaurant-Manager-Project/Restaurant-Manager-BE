@@ -8,4 +8,5 @@ import lombok.*;
 public class CategoriesDTO {
     private int id;
     private String name;
+    private String img;
 }

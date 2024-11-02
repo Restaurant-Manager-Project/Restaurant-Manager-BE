@@ -23,6 +23,9 @@ public class CategoryEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
+    @Column(name = "img")
+    private String img;
+
     @OneToMany(mappedBy = "category")
     private List<ProductEntity> productList;
 
