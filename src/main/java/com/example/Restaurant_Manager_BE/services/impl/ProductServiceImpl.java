@@ -83,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
                 .img(productDTO.getImg())
                 .isDeleted(false)
                 .description(productDTO.getDescription())
-                .price(productDTO.getPrice())
+//                .price(productDTO.getPrice())
                 .category(categoryEntity)
                 .build();
         productRepository.save(productEntity);
@@ -114,4 +114,5 @@ public class ProductServiceImpl implements ProductService {
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_UPDATE_SUCCESS));
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
     }
+
 }

@@ -25,10 +25,7 @@ public class TableController {
         return tableService.findByDirection(code);
     }
 
-    @GetMapping("/tables/generateQRCode/{id}")
-    public ResponseEntity<APIResponse> generateQRCodeLink(@PathVariable Long id) {
-        return tableService.generateQRCode(id);
-    }
+
 
     @GetMapping("/api/table/{direction}/details-orders")
     public ResponseEntity<APIResponse> mergeDetailsOrder(@PathVariable String direction) {

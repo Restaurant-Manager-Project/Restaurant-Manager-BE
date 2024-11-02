@@ -45,20 +45,20 @@ public class TableServiceImpl implements TableService {
         return ResponseEntity.ok(APIResponse);
     }
 
-    public boolean generateDirection(Long id) {
-        TableEntity tableEntity = tableRepository.findById(id)
+    @Override
+    public void generateDirection(String direction) {
+        TableEntity tableEntity = tableRepository.findByDirection(direction)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        String direction = QRcode.generatePassword(25);
-        tableEntity.setDirection(direction);
+        String directionNew = QRcode.generatePassword(25);
+        tableEntity.setDirection(directionNew);
         tableRepository.save(tableEntity);
-        return true;
     }
 
     @Override
-    public ResponseEntity<APIResponse> generateQRCode(Long id) {
-        TableEntity tableEntity = tableRepository.findById(id)
+    public ResponseEntity<APIResponse> generateQRCode(String direction) {
+        TableEntity tableEntity = tableRepository.findByDirection(direction)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        String linkQR = QRcode.generateQR(tableEntity.getDirection());
+        String linkQR = QRcode.generateQR(tableEntity.getDirection());;
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_CREATE_QR_SUCCESS));
         APIResponse.setResult(linkQR);

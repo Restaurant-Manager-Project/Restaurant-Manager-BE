@@ -1,6 +1,9 @@
 package com.example.Restaurant_Manager_BE.constants;
 
 public class MessageKeys {
+    //INVALID INPUT
+    public static final String INVALID_INPUT = "invalid.input";
+
     // CLIENT
     public static final String CLIENT_GET_SUCCESS = "client.get_success";
     public static final String CLIENT_NOT_EXISTS = "client.not_exists";
@@ -9,6 +12,13 @@ public class MessageKeys {
 
     //CATEGORY
     public static final String CATEGORY_NOT_EXISTED = "category.not_existed";
+    public static final String CATEGORY_LIST_GET_SUCCESS = "category_list.get_success";
+    public static final String CATEGORY_DELETE_SUCCESS = "category.delete_success";
+    public static final String CATEGORY_UPDATE_SUCCESS = "category.update_success";
+    public static final String CATEGORY_CREATE_SUCCESS = "category.create_success";
+    public static final String CATEGORY_CREATE_FAILED = "category.create_failed";
+    public static final String CATEGORY_DELETE_FAILED = "category.delete_failed";
+    public static final String CATEGORY_UPDATE_FAILED = "category.update_failed";
 
 
     // PRODUCT
@@ -19,9 +29,7 @@ public class MessageKeys {
     public static final String PRODUCT_DELETE_SUCCESS = "product.delete_success";
     public static final String PRODUCT_GET_SUCCESS = "product.get_success";
 
-    public static final String PRODUCT_DELETE_SUCCESS = "product.delete_success" ;
     public static final String PRODUCT_DELETE_FAILED = "product.delete_failed";
-    public static final String PRODUCT_GET_SUCCESS = "product.get_success" ;
 
     public static final String PRODUCT_NOT_EXISTED = "product.not_existed";
     public static final String PRODUCT_IMAGE_UPDATE_SUCCESS = "product.image.update_success";
@@ -60,4 +68,14 @@ public class MessageKeys {
     public static final String STATUS_PRODUCT_GET_SUCCESS = "status_product.get_success";
     public static final String STATUS_PRODUCT_UPDATE_SUCCESS = "status_product.update_success";
     public static final String STATUS_PRODUCT_NOT_EXISTED = "status_product.not_existed";
+
+    //INVOICE
+    public static final String INVOICE_NOT_EXISTED = "invoice.not_existed";
+    public static final String INVOICE_DELETE_SUCCESS = "invoice.delete_success";
+    public static final String INVOICE_UPDATE_SUCCESS = "invoice.update_success";
+    public static final String INVOICE_CREATE_SUCCESS = "invoice.create_success";
+    public static final String INVOICE_CREATE_FAILED = "invoice.create_failed";
+    public static final String INVOICE_DELETE_FAILED = "invoice.delete_failed";
+    public static final String INVOICE_GET_SUCCESS = "invoice.get_success";
+    public static final String INVOICE_LIST_GET_SUCCESS = "invoice_list.get_success";
 }

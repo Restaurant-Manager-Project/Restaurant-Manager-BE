@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class DetailsOrderEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id")
     private OrderEntity order;

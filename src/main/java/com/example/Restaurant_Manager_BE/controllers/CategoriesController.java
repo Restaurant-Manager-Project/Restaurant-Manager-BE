@@ -2,6 +2,7 @@ package com.example.Restaurant_Manager_BE.controllers;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.dto.ProductDTO;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
+import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.CategoriesService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
@@ -20,8 +21,26 @@ public class CategoriesController {
     @PostMapping("/api/categories")
     public ResponseEntity<APIResponse> CreateCategories(@RequestBody CategoriesDTO  categoriesDTO){
         if(categoriesDTO == null){
-            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_CREATE_FAILED ));
+            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_CREATE_FAILED ));
         }
         return categoriesService.createCategories(categoriesDTO);
+    }
+    @Operation(summary = "Lấy danh sách Loại ", description = "Lấy danh sách loại sản phẩm ")
+    @GetMapping("/api/categories")
+    public ResponseEntity<APIResponse> getALLCategories(){
+        return categoriesService.getAll();
+    }
+    @Operation(summary = "Xóa categories")
+    @DeleteMapping("api/categories/{id}")
+    public ResponseEntity<APIResponse> deleteCategory(@PathVariable Long id){
+        return categoriesService.deleteCategory(id);
+    }
+    @Operation(summary="Sửa categories")
+    @PutMapping("api/categories/{id}")
+    public ResponseEntity<APIResponse> updateCategory(@PathVariable Long id, @RequestBody CategoriesDTO categoriesDTO){
+        if(categoriesDTO == null) {
+            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_NOT_EXISTED));
+        }
+            return categoriesService.updateCategory(id, categoriesDTO);
     }
 }

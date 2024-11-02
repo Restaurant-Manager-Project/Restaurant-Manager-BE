@@ -1,5 +1,6 @@
 package com.example.Restaurant_Manager_BE.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,10 +27,16 @@ public class OrderEntity {
     @Column(name = "direction_table")
     private String directionTable;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private List<DetailsOrderEntity> detailsOrderList;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id")
+    private InvoiceEntity invoice;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id")
     private TableEntity table;
 
