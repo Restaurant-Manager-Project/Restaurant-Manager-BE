@@ -8,39 +8,37 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "orders")
-@Getter
+@Table(name = "invoices")
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderEntity {
+public class InvoiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
+
+    @Column(name = "time_create")
+    private Date timeCreate;
+
     @Column(name = "total")
     private Long total;
-    @Column(name = "date_create")
-    private Date dateCreate;
+
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-    @Column(name = "direction_table")
-    private String directionTable;
 
-
-    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    private List<DetailsOrderEntity> detailsOrderList;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id")
-    private InvoiceEntity invoice;
+    @OneToMany(mappedBy = "invoice", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+            CascadeType.REFRESH })
+    private List<OrderEntity> orderEntityList;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "table_id")
-    private TableEntity table;
+    @JoinColumn(name = "client_id")
+    private ClientEntity client;
 
-
-
-
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
+    private EmployeeEntity employee;
 }

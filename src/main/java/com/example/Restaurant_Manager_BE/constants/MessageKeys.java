@@ -1,6 +1,9 @@
 package com.example.Restaurant_Manager_BE.constants;
 
 public class MessageKeys {
+    //INVALID INPUT
+    public static final String INVALID_INPUT = "invalid.input";
+
     // CLIENT
     public static final String CLIENT_GET_SUCCESS = "client.get_success";
     public static final String CLIENT_NOT_EXISTS = "client.not_exists";
@@ -65,4 +68,14 @@ public class MessageKeys {
     public static final String STATUS_PRODUCT_GET_SUCCESS = "status_product.get_success";
     public static final String STATUS_PRODUCT_UPDATE_SUCCESS = "status_product.update_success";
     public static final String STATUS_PRODUCT_NOT_EXISTED = "status_product.not_existed";
+
+    //INVOICE
+    public static final String INVOICE_NOT_EXISTED = "invoice.not_existed";
+    public static final String INVOICE_DELETE_SUCCESS = "invoice.delete_success";
+    public static final String INVOICE_UPDATE_SUCCESS = "invoice.update_success";
+    public static final String INVOICE_CREATE_SUCCESS = "invoice.create_success";
+    public static final String INVOICE_CREATE_FAILED = "invoice.create_failed";
+    public static final String INVOICE_DELETE_FAILED = "invoice.delete_failed";
+    public static final String INVOICE_GET_SUCCESS = "invoice.get_success";
+    public static final String INVOICE_LIST_GET_SUCCESS = "invoice_list.get_success";
 }
