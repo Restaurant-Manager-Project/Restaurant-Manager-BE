@@ -54,14 +54,17 @@ public class ProductController {
         return productService.deleteProducts(id);
     }
     @Operation(summary = "Sửa sản phẩm ",description = "Sửa sản phẩm theo thông tin nhập ")
-    @PutMapping("/api/products")
-    public ResponseEntity<APIResponse> updateProduct(@RequestBody ProductDTO ProductDTO){
+    @PutMapping("/api/products/{id}")
+    public ResponseEntity<APIResponse> updateProduct(@RequestBody ProductDTO ProductDTO,@PathVariable("id") Long id){
         if(ProductDTO == null){
             throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_UPDATE_FAILED));
         }
-        Long id = ProductDTO.getId();
+//        Long id = ProductDTO.getId();
+//        productService.SkipNullFields(ProductDTO);
         return productService.updateProducts(id,ProductDTO);
     }
+
+
 
 }
     

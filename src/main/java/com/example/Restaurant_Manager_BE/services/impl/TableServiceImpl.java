@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import com.example.Restaurant_Manager_BE.repositories.StatusTableRepository;
+import com.example.Restaurant_Manager_BE.entities.StatusTableEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class TableServiceImpl implements TableService {
-
+    private final StatusTableRepository statusTableRepository;
     private final TableRepository tableRepository;
     private final DetailsOrderRepository detailsOrderRepository;
     private final OrderRepository orderRepository;
@@ -87,6 +89,29 @@ public class TableServiceImpl implements TableService {
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.DETAILS_ORDER_CREATE_SUCCESS));
         APIResponse.setResult(detailsOrderDTOList);
+        return ResponseEntity.ok(APIResponse);
+    }
+    @Override
+    public ResponseEntity<APIResponse> updateStatusOfTableByID(Long id,Long status_id){
+        TableEntity tableEntity = tableRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
+        StatusTableEntity statusTableEntity= statusTableRepository.findById(status_id)
+                        .orElseThrow(()->new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.STATUS_TABLE_NOT_FOUND)));
+        System.out.println("Found statusTableEntity: " + statusTableEntity);
+        tableEntity.setStatusTable(statusTableEntity);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.STATUS_TABLE_UPDATED_SUCCESS));
+        tableRepository.save(tableEntity);
+        return ResponseEntity.ok(APIResponse);
+    }
+    @Override
+    public ResponseEntity<APIResponse> deleteTableByID(Long id){
+        TableEntity tableEntity = tableRepository.findById(id)
+                .orElseThrow(()->new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
+        tableEntity.setIsDeleted(true);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_DELETE_SUCCESS));
+        tableRepository.save(tableEntity);
         return ResponseEntity.ok(APIResponse);
     }
 }

@@ -12,6 +12,7 @@ import com.example.Restaurant_Manager_BE.services.ProductService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import com.example.Restaurant_Manager_BE.entities.CategoryEntity;
 import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
+//import com.example.Restaurant_Manager_BE.repositories.;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,11 +110,34 @@ public class ProductServiceImpl implements ProductService {
     public ResponseEntity<APIResponse> updateProducts(Long id , ProductDTO productDTO){
         ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
-        modelMapper.map(productDTO, productEntity);
+//        modelMapper.map(productDTO, productEntity);
+        SkipNullFields(productDTO,productEntity);
         productRepository.save(productEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_UPDATE_SUCCESS));
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
     }
+    @Override
+    public void SkipNullFields(ProductDTO productDTO, ProductEntity productEntity) {
+        // Sử dụng productEntity đã truyền vào để cập nhật
+        for (Field field : productDTO.getClass().getDeclaredFields()) {
+            field.setAccessible(true); // Đảm bảo truy cập vào các field private
+            try {
+                Object value = field.get(productDTO);
+                System.out.println(field.getName() + " " + value);
+                if (value != null) {
+                    // Gán giá trị không null vào ProductEntity
+                    Field entityField = productEntity.getClass().getDeclaredField(field.getName());
+                    entityField.setAccessible(true); // Đảm bảo truy cập vào các field private
+                    entityField.set(productEntity, value); // Cập nhật giá trị vào ProductEntity
+                }
+            } catch (IllegalAccessException | NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Updated ProductEntity: " + productEntity);
+    }
+
 
 }
