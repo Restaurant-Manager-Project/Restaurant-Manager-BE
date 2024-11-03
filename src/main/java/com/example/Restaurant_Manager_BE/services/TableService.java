@@ -16,4 +16,5 @@ public interface TableService {
     void generateDirection(String direction);
     ResponseEntity<APIResponse> updateStatusOfTableByID(Long id,Long status_id);
     ResponseEntity<APIResponse> deleteTableByID(Long id);
+    ResponseEntity<APIResponse> getALLTables();
 }

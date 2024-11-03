@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.dto.DetailsOrderDTO;
+import com.example.Restaurant_Manager_BE.dto.ProductDTO;
 import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 import com.example.Restaurant_Manager_BE.entities.TableEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
@@ -112,6 +113,19 @@ public class TableServiceImpl implements TableService {
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_DELETE_SUCCESS));
         tableRepository.save(tableEntity);
+        return ResponseEntity.ok(APIResponse);
+    }
+    @Override
+    public ResponseEntity<APIResponse> getALLTables(){
+        List<TableEntity> tableEntityList = tableRepository.findAllWithStatusTable();
+        List<TableDTO> tableDTOList = new ArrayList<>();
+        tableEntityList.forEach(tableEntity -> {
+            TableDTO tableDTO = modelMapper.map(tableEntity, TableDTO.class);
+            tableDTOList.add(tableDTO);
+        });
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_GET_SUCCESS));
+        APIResponse.setResult(tableDTOList);
         return ResponseEntity.ok(APIResponse);
     }
 }

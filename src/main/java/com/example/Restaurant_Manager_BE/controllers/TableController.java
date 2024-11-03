@@ -21,7 +21,11 @@ public class TableController {
         }
         return tableService.findByDirection(code);
     }
-
+    @Operation(summary= "Lấy tất cả bản trong db")
+    @GetMapping("/api/tables")
+    public ResponseEntity<APIResponse> getTables() {
+        return tableService.getALLTables();
+    }
     @Operation(summary = "Chỉnh sửa trạng thái của bàn")
     @PutMapping("/api/table/{table_id}/status")
     public ResponseEntity<APIResponse> updateStatusOfTable(@PathVariable Long table_id, @RequestParam("statusID") Long statusID) {

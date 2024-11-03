@@ -25,7 +25,7 @@ public class TableEntity {
     @Column(name = "direction")
     private String direction;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id")
     private StatusTableEntity statusTable;
 

@@ -19,10 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import com.example.Restaurant_Manager_BE.entities.DetailsImportEntity;
+import com.example.Restaurant_Manager_BE.repositories.DetailImportRepository;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -30,17 +32,24 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final DetailImportRepository importRepository;
     private final ModelMapper modelMapper;
     private final LocalizationUtils localizationUtils;
     private final CategoryRepository categoryRepository;
     @Override
     public ResponseEntity<APIResponse> getAll() {
         List<ProductEntity> productEntityList = productRepository.findAll();
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        productEntityList.forEach(productEntity -> {
-            ProductDTO product = modelMapper.map(productEntity, ProductDTO.class);
-            productDTOList.add(product);
-        });
+        List<ProductDTO> productDTOList = productRepository.getProduct_with_Price_from_Import();
+//        productEntityList.forEach(productEntity -> {
+//            ProductDTO product = modelMapper.map(productEntity, ProductDTO.class);
+//            Optional<DetailsImportEntity> detailImportEntity = importRepository.findByProduct(productEntity);
+//            if (detailImportEntity.isPresent()) {
+//                product.setPrice(detailImportEntity.get().getPrice()); // giả sử có phương thức getPrice trong DetailImportEntity
+//            } else {
+//                product.setPrice(null); // hoặc một giá mặc định nào đó nếu không tìm thấy
+//            }
+//            productDTOList.add(product);
+//        });
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_LIST_GET_SUCCESS));
         APIResponse.setResult(productDTOList);
