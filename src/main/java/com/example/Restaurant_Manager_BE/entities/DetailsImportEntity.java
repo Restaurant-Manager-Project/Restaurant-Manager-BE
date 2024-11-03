@@ -15,7 +15,7 @@ public class DetailsImportEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private ProductEntity product;
 
@@ -28,6 +28,9 @@ public class DetailsImportEntity {
 
     @Column(name = "import_price")
     private Long importPrice;
+
+    @Column(name = "sell_price")
+    private Long Price;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
