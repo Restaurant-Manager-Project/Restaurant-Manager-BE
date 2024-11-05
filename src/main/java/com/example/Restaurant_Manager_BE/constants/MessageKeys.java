@@ -47,12 +47,15 @@ public class MessageKeys {
     // DETAILS ORDER
     public static final String DETAILS_ORDER_CREATE_SUCCESS = "details_order.get_success";
 
+    //STATUS TABLE
+    public static final String STATUS_TABLE_NOT_FOUND = "status.table.not_found";
+    public static final String STATUS_TABLE_UPDATED_SUCCESS = "status_table_updated_success";
     // TABLE
     public static final String TABLE_CREATE_SUCCESS = "table.create_success";
     public static final String TABLE_CREATE_QR_SUCCESS = "table.create_qr_success";
     public static final String TABLE_GET_SUCCESS = "table.get_success";
     public static final String TABLE_NOT_FOUND = "table.not_found";
-
+    public static final String TABLE_DELETE_SUCCESS = "table_delete_success";
     // SUPPLIER
     public static final String SUPPLIER_CREATE_SUCCESS = "supplier.create_success";
     public static final String SUPPLIER_DELETE_SUCCESS = "supplier.delete_success";
