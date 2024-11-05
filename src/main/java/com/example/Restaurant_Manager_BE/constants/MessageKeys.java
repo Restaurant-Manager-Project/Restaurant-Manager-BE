@@ -6,6 +6,8 @@ public class MessageKeys {
     public static final String CLIENT_NOT_EXISTS = "client.not_exists";
     public static final String CLIENT_CREATE_SUCCESS = "client.create_success";
     public static final String CLIENT_CREATE_FALIED = "client.create_failed";
+    public static final String CLIENT_DELETE_SUCCESS = "client.delete_success";
+    public static final String CLIENT_UPDATE_SUCCESS = "client.update_success";
 
     //CATEGORY
     public static final String CATEGORY_NOT_EXISTED = "category.not_existed";
