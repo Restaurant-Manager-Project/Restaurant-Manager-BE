@@ -1,5 +1,6 @@
 package com.example.Restaurant_Manager_BE.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class SupplierEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "supplier")
     private List<ImportEntity> importList;
 

@@ -13,11 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ImportDTO {
-    private long id;
-    private long employeeId;
-    private long supplierId;
+    private Long id;
+    private Long employeeId;
+    private String employeeName;
+    private Long supplierId;
+    private String supplierName;
     private Date dateCreate;
-    private long total;
+    private Long total;
 
     @JsonProperty("detailsProductList")
     private List<DetailsImportDTO> detailsImportDTOList;

@@ -1,21 +1,24 @@
 package com.example.Restaurant_Manager_BE.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "imports")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ImportEntity {
+
+
+public class ImportEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +27,7 @@ public class ImportEntity {
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "importBill")
     private List<DetailsImportEntity> detailsProductList;
 
