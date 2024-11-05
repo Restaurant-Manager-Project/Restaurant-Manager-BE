@@ -84,8 +84,12 @@ public class MessageKeys {
     public static final String INVOICE_GET_SUCCESS = "invoice.get_success";
     public static final String INVOICE_LIST_GET_SUCCESS = "invoice_list.get_success";
 
+
     // IMPORT
     public static final String IMPORT_CREATE_SUCCESS = "import.create_success";
     public static final String IMPORT_NOT_EXISTED = "import.not_existed";
     public static final String IMPORT_GET_SUCCESS = "import.get_success";
+    public static final String IMPORT_GET_ALL_SUCCESS = "import.get_all_success";
+    public static final String IMPORT_UPDATE_SUCCESS = "import.update_success";
+
 }
