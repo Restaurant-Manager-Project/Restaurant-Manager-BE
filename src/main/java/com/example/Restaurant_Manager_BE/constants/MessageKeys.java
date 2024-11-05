@@ -9,6 +9,8 @@ public class MessageKeys {
     public static final String CLIENT_NOT_EXISTS = "client.not_exists";
     public static final String CLIENT_CREATE_SUCCESS = "client.create_success";
     public static final String CLIENT_CREATE_FALIED = "client.create_failed";
+    public static final String CLIENT_DELETE_SUCCESS = "client.delete_success";
+    public static final String CLIENT_UPDATE_SUCCESS = "client.update_success";
 
     //CATEGORY
     public static final String CATEGORY_NOT_EXISTED = "category.not_existed";
@@ -81,4 +83,9 @@ public class MessageKeys {
     public static final String INVOICE_DELETE_FAILED = "invoice.delete_failed";
     public static final String INVOICE_GET_SUCCESS = "invoice.get_success";
     public static final String INVOICE_LIST_GET_SUCCESS = "invoice_list.get_success";
+
+    // IMPORT
+    public static final String IMPORT_CREATE_SUCCESS = "import.create_success";
+    public static final String IMPORT_NOT_EXISTED = "import.not_existed";
+    public static final String IMPORT_GET_SUCCESS = "import.get_success";
 }
