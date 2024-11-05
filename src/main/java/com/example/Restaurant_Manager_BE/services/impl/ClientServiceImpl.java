@@ -14,6 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
+
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -40,6 +42,56 @@ public class ClientServiceImpl implements ClientService {
         }
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_CREATE_SUCCESS));
+        return ResponseEntity.ok(APIResponse);
+    }
+    @Override
+    public ResponseEntity<APIResponse> deleteClient(Long client_id) {
+        ClientEntity clientEntity = clientRepository.findById(client_id)
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_NOT_EXISTS)));
+        clientEntity.setIsDeleted(true);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_DELETE_SUCCESS));
+        clientRepository.save(clientEntity);
+        return ResponseEntity.ok(APIResponse);
+    }
+    @Override
+    public ResponseEntity<APIResponse> updateClient(Long id, ClientDTO clientDTO) {
+        ClientEntity clientEntity = clientRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_NOT_EXISTS)));
+
+        SkipNullFields(clientDTO, clientEntity);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_UPDATE_SUCCESS));
+        clientRepository.save(clientEntity);
+        return ResponseEntity.ok(APIResponse);
+    }
+
+    @Override
+    public void SkipNullFields(ClientDTO clientDTO, ClientEntity clientEntity) {
+        // Sử dụng clientEntity đã truyền vào để cập nhật
+        for (Field field : clientDTO.getClass().getDeclaredFields()) {
+            field.setAccessible(true); // Đảm bảo truy cập vào các field private
+            try {
+                Object value = field.get(clientDTO);
+                System.out.println(field.getName() + " " + value);
+                if (value != null) {
+                    // Gán giá trị không null vào ClientEntity
+                    Field entityField = clientEntity.getClass().getDeclaredField(field.getName());
+                    entityField.setAccessible(true); // Đảm bảo truy cập vào các field private
+                    entityField.set(clientEntity, value); // Cập nhật giá trị vào ClientEntity
+                }
+            } catch (IllegalAccessException | NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Updated ClientEntity: " + clientEntity);
+    }
+    @Override
+    public  ResponseEntity<APIResponse> getALL(){
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_GET_SUCCESS));
+        APIResponse.setResult(clientRepository.findAll_fromClient_andInvoice());
         return ResponseEntity.ok(APIResponse);
     }
 }

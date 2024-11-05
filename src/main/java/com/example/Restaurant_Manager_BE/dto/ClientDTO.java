@@ -16,6 +16,6 @@ public class ClientDTO {
     private String firstName;
     private String lastName;
     private String phone;
-
+    private Long purchase_count;
 
 }
