@@ -17,10 +17,19 @@ class ImportController {
         return importService.createImport(importDTO);
     }
 
+    @GetMapping("/api/imports")
+    public ResponseEntity<APIResponse> getAllImport() {
+        return importService.getAllImport();
+    }
+
     @GetMapping("/api/imports/{id}")
     public ResponseEntity<APIResponse> getImportById(@PathVariable Long id) {
         return importService.getImportById(id);
     }
 
+    @PutMapping("/api/imports/{id}")
+    public ResponseEntity<APIResponse> updateImport(@PathVariable Long id, @RequestBody ImportDTO importDTO) {
+        return importService.updateImport(id, importDTO);
+    }
 
 }

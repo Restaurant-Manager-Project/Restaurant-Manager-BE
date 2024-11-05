@@ -9,4 +9,6 @@ public interface ImportService {
     ResponseEntity<APIResponse> createImport(ImportDTO importDTO);
     ResponseEntity<APIResponse> getImportById(Long id);
     ResponseEntity<APIResponse> getAllImport();
+
+    ResponseEntity<APIResponse> updateImport(Long id, ImportDTO importDTO);
 }
