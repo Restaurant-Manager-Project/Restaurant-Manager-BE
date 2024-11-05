@@ -1,7 +1,7 @@
 package com.example.Restaurant_Manager_BE.constants;
 
 public class MessageKeys {
-    //INVALID INPUT
+    // INVALID INPUT
     public static final String INVALID_INPUT = "invalid.input";
 
     // CLIENT
@@ -10,7 +10,7 @@ public class MessageKeys {
     public static final String CLIENT_CREATE_SUCCESS = "client.create_success";
     public static final String CLIENT_CREATE_FALIED = "client.create_failed";
 
-    //CATEGORY
+    // CATEGORY
     public static final String CATEGORY_NOT_EXISTED = "category.not_existed";
     public static final String CATEGORY_LIST_GET_SUCCESS = "category_list.get_success";
     public static final String CATEGORY_DELETE_SUCCESS = "category.delete_success";
@@ -19,7 +19,6 @@ public class MessageKeys {
     public static final String CATEGORY_CREATE_FAILED = "category.create_failed";
     public static final String CATEGORY_DELETE_FAILED = "category.delete_failed";
     public static final String CATEGORY_UPDATE_FAILED = "category.update_failed";
-
 
     // PRODUCT
     public static final String PRODUCT_CREATE_SUCCESS = "product.create_success";
@@ -69,7 +68,7 @@ public class MessageKeys {
     public static final String STATUS_PRODUCT_UPDATE_SUCCESS = "status_product.update_success";
     public static final String STATUS_PRODUCT_NOT_EXISTED = "status_product.not_existed";
 
-    //INVOICE
+    // INVOICE
     public static final String INVOICE_NOT_EXISTED = "invoice.not_existed";
     public static final String INVOICE_DELETE_SUCCESS = "invoice.delete_success";
     public static final String INVOICE_UPDATE_SUCCESS = "invoice.update_success";
@@ -78,4 +77,18 @@ public class MessageKeys {
     public static final String INVOICE_DELETE_FAILED = "invoice.delete_failed";
     public static final String INVOICE_GET_SUCCESS = "invoice.get_success";
     public static final String INVOICE_LIST_GET_SUCCESS = "invoice_list.get_success";
+
+    // EMPLOYEE
+    public static final String EMPLOYEE_NOT_EXISTED = "employee.not_existed";
+    public static final String EMPLOYEE_DELETE_SUCCESS = "employee.delete_success";
+    public static final String EMPLOYEE_UPDATE_SUCCESS = "employee.update_success";
+    public static final String EMPLOYEE_CREATE_SUCCESS = "employee.create_success";
+    public static final String EMPLOYEE_CREATE_FAILED = "employee.create_failed";
+    public static final String EMPLOYEE_DELETE_FAILED = "employee.delete_failed";
+    public static final String EMPLOYEE_GET_SUCCESS = "employee.get_success";
+    public static final String EMPLOYEE_LIST_GET_SUCCESS = "employee_list.get_success";
+
+    // EMPLOYEE
+    public static final String ACCOUNT_NOT_EXISTED = "account.not_existed";
+
 }
