@@ -1,8 +1,11 @@
 package com.example.Restaurant_Manager_BE.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -12,6 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
+
+
 public class EmployeeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +45,7 @@ public class EmployeeEntity {
     @JoinColumn(name = "account_username")
     private AccountEntity account;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "employee")
     private List<ImportEntity> importList;
 

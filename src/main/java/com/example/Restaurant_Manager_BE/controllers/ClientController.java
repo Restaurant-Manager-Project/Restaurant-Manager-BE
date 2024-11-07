@@ -21,5 +21,16 @@ public class ClientController {
     public ResponseEntity<APIResponse> createClient(@RequestBody ClientDTO clientDTO) {
         return clientService.createClient(clientDTO);
     }
-
+    @DeleteMapping("/api/clients/{id}")
+    public ResponseEntity<APIResponse> deleteClient(@PathVariable("id") Long client_id) {
+        return clientService.deleteClient(client_id);
+    }
+    @PutMapping("/api/clients/{id}")
+    public ResponseEntity<APIResponse> updateClient(@PathVariable("id") Long id, @RequestBody ClientDTO clientDTO) {
+        return clientService.updateClient(id, clientDTO);
+    }
+    @GetMapping("api/clients")
+    public ResponseEntity<APIResponse> findAll() {
+        return clientService.getALL();
+    }
 }
