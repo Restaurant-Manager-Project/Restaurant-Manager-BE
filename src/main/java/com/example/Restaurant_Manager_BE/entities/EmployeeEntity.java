@@ -14,6 +14,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+
 
 
 public class EmployeeEntity {
@@ -21,10 +23,10 @@ public class EmployeeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_Name")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_Name")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "phone")
@@ -39,13 +41,14 @@ public class EmployeeEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    @OneToOne
-    @JoinColumn(name = "account_id")
+    @ManyToOne
+    @JoinColumn(name = "account_username")
     private AccountEntity account;
 
     @JsonIgnore
     @OneToMany(mappedBy = "employee")
     private List<ImportEntity> importList;
 
-
+    @OneToMany(mappedBy = "employee")
+    private List<InvoiceEntity> invoiceList;
 }

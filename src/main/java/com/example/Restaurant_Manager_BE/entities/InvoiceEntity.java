@@ -37,8 +37,7 @@ public class InvoiceEntity {
     @JoinColumn(name = "client_id")
     private ClientEntity client;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
 }
