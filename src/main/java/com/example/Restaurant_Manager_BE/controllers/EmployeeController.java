@@ -27,9 +27,6 @@ public class EmployeeController {
 
     @PostMapping("/api/employees")
     public ResponseEntity<APIResponse> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        if (employeeDTO == null) {
-            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED));
-        }
         return employeeService.createEmployee(employeeDTO);
     }
 

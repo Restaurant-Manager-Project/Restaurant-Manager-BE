@@ -30,12 +30,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public ResponseEntity<APIResponse> createEmployee(EmployeeDTO employeeDTO) {
-
-        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
-        employeeEntity.setIsDeleted(false);
-        if (employeeRepository.save(employeeEntity) == null) {
+        if (employeeDTO == null) {
             throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_CREATE_FAILED));
         }
+        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
+        employeeEntity.setIsDeleted(false);
+        employeeRepository.save(employeeEntity);
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_CREATE_SUCCESS));
         return ResponseEntity.ok(apiResponse);
@@ -98,7 +98,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         modelMapper.map(employeeDTO, employeeEntity);
         employeeRepository.save(employeeEntity);
         APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_UPDATE_SUCCESS));
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_UPDATE_SUCCESS));
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
     }
 
