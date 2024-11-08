@@ -16,5 +16,5 @@ public interface ConverterImport {
 
     public List<ImportEntity> toEntityList(List<ImportDTO> dtoList);
 
-    public ImportEntity mergeNonNullFields(ImportEntity target, ImportEntity source);
+    public void mergeNonNullFields(ImportEntity target, ImportEntity source);
 }
