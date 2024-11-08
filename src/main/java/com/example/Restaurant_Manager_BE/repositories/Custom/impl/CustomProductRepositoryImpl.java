@@ -16,7 +16,8 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
     public List<ProductDTO> getProduct_with_Price_from_Import(){
         String jpql = "SELECT new com.example.Restaurant_Manager_BE.dto.ProductDTO(p.id, p.name,p.description,p.img, di.Price,p.category.name) " +
                 "FROM ProductEntity p " +
-                "JOIN FETCH DetailsImportEntity di ON di.product.id = p.id "
+                "JOIN FETCH DetailsImportEntity di ON di.product.id = p.id "+
+                "WHERE p.isDeleted = false"
                 ;
         TypedQuery<ProductDTO> query=entityManager.createQuery(jpql, ProductDTO.class);
         return query.getResultList();

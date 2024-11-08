@@ -62,7 +62,7 @@ public class CategoriesImpl implements CategoriesService {
         }
         @Override
         public ResponseEntity<APIResponse> getAll() {
-            List<CategoryEntity> categoryEntityList = categoryRepository.findAll();
+            List<CategoryEntity> categoryEntityList = categoryRepository.findByIsDeletedFalse();
             List<CategoriesDTO> categoriesDTOList = categoryEntityList.stream()
                     .map(entity -> EntityDTOconverter.convertToDTO(entity, CategoriesDTO.class))
                     .collect(Collectors.toList());

@@ -17,6 +17,7 @@ public class CustomClientRepositoryImpl implements CustomClientRepository {
                 "                      c.id, c.firstName, c.lastName, c.phone, COUNT(i.id))"+
                 "                      FROM ClientEntity c "+
                 "                      LEFT JOIN InvoicesEntity i ON i.client.id = c.id"+
+                "                      WHERE c.isDeleted = false"+
                 "                      GROUP BY c.id, c.firstName, c.lastName, c.phone";
         TypedQuery<ClientDTO> query = entityManager.createQuery(jpql, ClientDTO.class);
         return query.getResultList();
