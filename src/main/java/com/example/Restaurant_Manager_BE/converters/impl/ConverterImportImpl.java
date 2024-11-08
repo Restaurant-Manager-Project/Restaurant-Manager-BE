@@ -6,6 +6,7 @@ import com.example.Restaurant_Manager_BE.dto.OrderDTO;
 import com.example.Restaurant_Manager_BE.entities.ImportEntity;
 import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.SerializationUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -40,9 +41,9 @@ public class ConverterImportImpl implements ConverterImport {
     }
 
     @Override
-    public ImportEntity mergeNonNullFields(ImportEntity target, ImportEntity source) {
+    public void mergeNonNullFields(ImportEntity target, ImportEntity source) {
         if (source == null) {
-            return null;
+            return;
         }
         Field[] fields = source.getClass().getDeclaredFields();
         for (Field field : fields) {
@@ -57,6 +58,5 @@ public class ConverterImportImpl implements ConverterImport {
                 e.printStackTrace();
             }
         }
-        return target;
     }
 }
