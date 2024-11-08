@@ -21,8 +21,10 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
     }
 
     @Override
-    public List<OrderEntity> getAllOrderWithTable() {
-        TypedQuery<OrderEntity> query = entityManager.createQuery("SELECT o FROM OrderEntity o JOIN FETCH o.table", OrderEntity.class);
+    public List<OrderEntity> getAllOrderWithTableAndProcess() {
+        TypedQuery<OrderEntity> query = entityManager.createQuery("SELECT o FROM OrderEntity o " +
+                                                                "JOIN FETCH o.table " +
+                                                                "JOIN FETCH o.process", OrderEntity.class);
         return query.getResultList();
     }
 }
