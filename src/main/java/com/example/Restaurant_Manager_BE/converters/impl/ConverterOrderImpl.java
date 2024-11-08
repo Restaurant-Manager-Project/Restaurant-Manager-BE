@@ -27,7 +27,10 @@ public class ConverterOrderImpl implements ConverterOrder {
                 .dateCreate(entity.getDateCreate())
                 .total(entity.getTotal())
                 .directionTable(entity.getDirectionTable())
+                .processId(entity.getProcess().getId())
+                .processName(entity.getProcess().getName())
                 .tableId(entity.getTable().getId())
+                .nameTable(entity.getTable().getName())
                 .detailsOrderDTOList(converterDetailsOrder.toDTOList(entity.getDetailsOrderList()))
                 .build();
     }

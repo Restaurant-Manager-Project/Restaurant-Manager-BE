@@ -1,5 +1,6 @@
 package com.example.Restaurant_Manager_BE.entities;
 
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +24,6 @@ public class AccountEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    @OneToOne(mappedBy = "account")
-    private EmployeeEntity employee;
+    @OneToMany(mappedBy = "account")
+    private List<EmployeeEntity> employee;
 }

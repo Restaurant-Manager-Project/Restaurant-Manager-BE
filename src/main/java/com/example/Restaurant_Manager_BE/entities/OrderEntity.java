@@ -27,8 +27,8 @@ public class OrderEntity {
     @Column(name = "direction_table")
     private String directionTable;
 
-
-    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "order", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+            CascadeType.REFRESH })
     private List<DetailsOrderEntity> detailsOrderList;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,7 +40,10 @@ public class OrderEntity {
     @JoinColumn(name = "table_id")
     private TableEntity table;
 
-
+    @JsonIgnore
+    @JoinColumn(name = "process_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ProcessEntity process;
 
 
 }
