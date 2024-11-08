@@ -9,4 +9,6 @@ public interface OrderService {
 
     ResponseEntity<APIResponse> getOrdersByDirection(String direction);
 
+    ResponseEntity<APIResponse> getAllOrders();
+
 }

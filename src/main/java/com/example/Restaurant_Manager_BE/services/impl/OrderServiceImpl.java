@@ -5,8 +5,10 @@ import com.example.Restaurant_Manager_BE.converters.ConverterOrder;
 import com.example.Restaurant_Manager_BE.dto.DetailsOrderDTO;
 import com.example.Restaurant_Manager_BE.entities.*;
 import com.example.Restaurant_Manager_BE.dto.OrderDTO;
+import com.example.Restaurant_Manager_BE.enums.StatusOrder;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.repositories.*;
+import com.example.Restaurant_Manager_BE.repositories.Custom.ProcessRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.OrderService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
@@ -28,10 +30,12 @@ public class OrderServiceImpl implements OrderService {
     private final TableRepository tableRepository;
     private final LocalizationUtils localizationUtils;
     private final ConverterOrder converterOrder;
+    private final ProcessRepository processRepository;
 
     @Override
     public ResponseEntity<APIResponse> createOrder(OrderDTO orderDTO) {
         OrderEntity orderEntity = converterOrder.toEntity(orderDTO);
+        orderEntity.setProcess(processRepository.getById(StatusOrder.RECEIVED.getId()));
         orderRepository.save(orderEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_SUCCESS));
@@ -39,8 +43,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-@Override
-public ResponseEntity<APIResponse> getOrdersByDirection(String direction) {
+    @Override
+    public ResponseEntity<APIResponse> getOrdersByDirection(String direction) {
     List<OrderEntity> orderList = orderRepository.getAllOrderWithDetailsByDirectionTable(direction);
     if (orderList.isEmpty()) {
         throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND));
@@ -53,5 +57,19 @@ public ResponseEntity<APIResponse> getOrdersByDirection(String direction) {
 
 }
 
-
+    @Override
+    public ResponseEntity<APIResponse> getAllOrders() {
+        List<OrderEntity> listOrder = orderRepository.getAllOrderWithTable();
+        listOrder.forEach(orderEntity -> {
+            orderEntity.setDetailsOrderList(null);
+        });
+        if (listOrder.isEmpty()) {
+            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND));
+        }
+        List<OrderDTO> orderDTOList = converterOrder.toDTOList(listOrder);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_LIST_GET_SUCCESS));
+        APIResponse.setResult(orderDTOList);
+        return ResponseEntity.ok(APIResponse);
+    }
 }

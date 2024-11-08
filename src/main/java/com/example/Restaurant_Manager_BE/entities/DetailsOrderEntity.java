@@ -33,6 +33,4 @@ public class DetailsOrderEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
-
-
 }

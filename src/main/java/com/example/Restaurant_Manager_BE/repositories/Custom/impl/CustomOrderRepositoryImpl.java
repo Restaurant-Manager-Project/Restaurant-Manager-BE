@@ -19,4 +19,10 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
         query.setParameter("directionTable", directionTable);
         return query.getResultList();
     }
+
+    @Override
+    public List<OrderEntity> getAllOrderWithTable() {
+        TypedQuery<OrderEntity> query = entityManager.createQuery("SELECT o FROM OrderEntity o JOIN FETCH o.table", OrderEntity.class);
+        return query.getResultList();
+    }
 }

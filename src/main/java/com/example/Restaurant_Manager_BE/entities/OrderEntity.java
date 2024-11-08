@@ -40,4 +40,10 @@ public class OrderEntity {
     @JoinColumn(name = "table_id")
     private TableEntity table;
 
+    @JsonIgnore
+    @JoinColumn(name = "process_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ProcessEntity process;
+
+
 }
