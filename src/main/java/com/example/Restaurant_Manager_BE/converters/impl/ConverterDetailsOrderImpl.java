@@ -4,6 +4,8 @@ import com.example.Restaurant_Manager_BE.converters.ConverterDetailsOrder;
 import com.example.Restaurant_Manager_BE.dto.DetailsOrderDTO;
 import com.example.Restaurant_Manager_BE.entities.DetailsOrderEntity;
 import com.example.Restaurant_Manager_BE.entities.OrderEntity;
+import com.example.Restaurant_Manager_BE.entities.ProcessEntity;
+import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import com.example.Restaurant_Manager_BE.repositories.OrderRepository;
 import com.example.Restaurant_Manager_BE.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +40,11 @@ public class ConverterDetailsOrderImpl implements ConverterDetailsOrder {
         if (dto == null) {
             return null;
         }
-
         return DetailsOrderEntity.builder()
                 .id(dto.getId())
                 .quantity(dto.getQuantity())
-                .product(productRepository.findById(dto.getProductId()).get())
+//                .product(productRepository.findById(dto.getProductId()).get())
+                .product(ProductEntity.builder().id(dto.getProductId()).build())
                 .price(dto.getPrice())
                 .isDeleted(false)
                 .build();

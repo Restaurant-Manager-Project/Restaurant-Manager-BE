@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface CustomOrderRepository {
     List<OrderEntity> getAllOrderWithDetailsByDirectionTable(String directionTable);
+    List<OrderEntity> getAllOrderWithTable();
 }

@@ -28,6 +28,7 @@ public class ConverterOrderImpl implements ConverterOrder {
                 .total(entity.getTotal())
                 .directionTable(entity.getDirectionTable())
                 .tableId(entity.getTable().getId())
+                .nameTable(entity.getTable().getName())
                 .detailsOrderDTOList(converterDetailsOrder.toDTOList(entity.getDetailsOrderList()))
                 .build();
     }
