@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ResponseEntity<APIResponse> getAllOrders() {
-        List<OrderEntity> listOrder = orderRepository.getAllOrderWithTable();
+        List<OrderEntity> listOrder = orderRepository.getAllOrderWithTableAndProcess();
         listOrder.forEach(orderEntity -> {
             orderEntity.setDetailsOrderList(null);
         });
