@@ -23,6 +23,7 @@ public class ImportEntity  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;

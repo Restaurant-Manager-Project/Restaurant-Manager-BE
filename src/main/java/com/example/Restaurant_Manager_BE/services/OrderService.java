@@ -11,4 +11,6 @@ public interface OrderService {
 
     ResponseEntity<APIResponse> getAllOrders();
 
+    ResponseEntity<APIResponse> getOrderById(Long id);
+
 }

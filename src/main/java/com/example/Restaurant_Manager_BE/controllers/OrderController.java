@@ -30,8 +30,13 @@ public class OrderController {
     }
 
     @GetMapping("/api/orders")
-    public ResponseEntity<APIResponse> getProductByDirection(@RequestParam(name = "direction") String direction) {
+    public ResponseEntity<APIResponse> getOrderByDirection(@RequestParam(name = "direction") String direction) {
         return orderService.getOrdersByDirection(direction);
+    }
+
+    @GetMapping("/api/orders/{id}")
+    public ResponseEntity<APIResponse> getOrderById(@PathVariable Long id) {
+        return orderService.getOrderById(id);
     }
 
     @GetMapping("/api/orders/")
