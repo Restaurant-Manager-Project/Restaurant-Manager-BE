@@ -5,12 +5,14 @@ import com.example.Restaurant_Manager_BE.dto.ImportDTO;
 import com.example.Restaurant_Manager_BE.dto.OrderDTO;
 import com.example.Restaurant_Manager_BE.entities.ImportEntity;
 import com.example.Restaurant_Manager_BE.entities.OrderEntity;
+import com.example.Restaurant_Manager_BE.utils.FormatUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.SerializationUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,7 +21,16 @@ public class ConverterImportImpl implements ConverterImport {
     private final ModelMapper modelMapper;
     @Override
     public ImportDTO toDTO(ImportEntity entity) {
-        return null;
+        if (entity == null) {
+            return null;
+        }
+        return ImportDTO.builder()
+                .id(entity.getId())
+                .dateCreate(FormatUtil.DATE_FORMAT.format(entity.getDateCreate()))
+                .total(entity.getTotal())
+                .supplierId(entity.getSupplier().getId())
+                .supplierName(entity.getSupplier().getName())
+                .build();
     }
 
     @Override
@@ -32,7 +43,14 @@ public class ConverterImportImpl implements ConverterImport {
 
     @Override
     public List<ImportDTO> toDTOList(List<ImportEntity> entityList) {
-        return null;
+        if (entityList == null) {
+            return null;
+        }
+        List<ImportDTO> importDTOList = new ArrayList<>();
+        entityList.forEach(entity -> {
+            importDTOList.add(toDTO(entity));
+        });
+        return importDTOList;
     }
 
     @Override

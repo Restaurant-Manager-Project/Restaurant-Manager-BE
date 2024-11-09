@@ -41,7 +41,7 @@ public class EmployeeEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_username")
     private AccountEntity account;
 
