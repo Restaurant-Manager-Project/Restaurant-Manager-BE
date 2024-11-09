@@ -72,4 +72,15 @@ public class OrderServiceImpl implements OrderService {
         APIResponse.setResult(orderDTOList);
         return ResponseEntity.ok(APIResponse);
     }
+
+    @Override
+    public ResponseEntity<APIResponse> getOrderById(Long id) {
+        OrderEntity orderEntity = orderRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
+        OrderDTO orderDTO = converterOrder.toDTO(orderEntity);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_GET_SUCCESS));
+        APIResponse.setResult(orderDTO);
+        return ResponseEntity.ok(APIResponse);
+    }
 }
