@@ -15,21 +15,21 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequiredArgsConstructor
-public class OrderController {
-    private final OrderService orderService;
-    private final DetailsOrderService detailsOrderService;
-    private final LocalizationUtils localizationUtils;
-    @Operation(summary = "Thêm order", description = "Tạo order gồm các chi tiết món ăn khi gọi món")
-    @PostMapping("/api/order")
-    public ResponseEntity<APIResponse> orderProduct(@RequestBody OrderDTO orderDTO) {
-        if (orderDTO == null) {
-            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_FAILED));
+    @RequiredArgsConstructor
+    public class OrderController {
+        private final OrderService orderService;
+        private final DetailsOrderService detailsOrderService;
+        private final LocalizationUtils localizationUtils;
+        @Operation(summary = "Thêm order", description = "Tạo order gồm các chi tiết món ăn khi gọi món")
+        @PostMapping("/api/order")
+        public ResponseEntity<APIResponse> orderProduct(@RequestBody OrderDTO orderDTO) {
+            if (orderDTO == null) {
+                throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_FAILED));
+            }
+            return orderService.createOrder(orderDTO);
         }
-        return orderService.createOrder(orderDTO);
-    }
 
-    @GetMapping("/api/orders")
+        @GetMapping("/api/orders")
     public ResponseEntity<APIResponse> getOrderByDirection(@RequestParam(name = "direction") String direction) {
         return orderService.getOrdersByDirection(direction);
     }
