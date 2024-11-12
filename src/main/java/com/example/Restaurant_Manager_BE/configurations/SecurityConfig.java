@@ -19,7 +19,7 @@ public class SecurityConfig {
                         request -> request
                                 .anyRequest().permitAll()
                 )
-//                .formLogin(login -> login.disable())
+                .formLogin(login -> login.disable())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
