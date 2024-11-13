@@ -28,10 +28,12 @@ public class AuthController {
         // Xác thực người dùng
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        securityUtil.createToken(authentication);
+        String accessToken = securityUtil.createToken(authentication);
+
+
 
         APIResponse apiResponse = new APIResponse();
-        apiResponse.setResult(accountDTO);
+        apiResponse.setResult(accessToken);
 
         return ResponseEntity.ok(apiResponse);
     }
