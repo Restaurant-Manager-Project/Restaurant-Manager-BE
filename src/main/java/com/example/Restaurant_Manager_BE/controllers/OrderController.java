@@ -15,35 +15,39 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequiredArgsConstructor
-public class OrderController {
-    private final OrderService orderService;
-    private final DetailsOrderService detailsOrderService;
-    private final LocalizationUtils localizationUtils;
-    @Operation(summary = "Thêm order", description = "Tạo order gồm các chi tiết món ăn khi gọi món")
-    @PostMapping("/api/order")
-    public ResponseEntity<APIResponse> orderProduct(@RequestBody OrderDTO orderDTO) {
-        if (orderDTO == null) {
-            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_FAILED));
+    @RequiredArgsConstructor
+    public class OrderController {
+        private final OrderService orderService;
+        private final DetailsOrderService detailsOrderService;
+        private final LocalizationUtils localizationUtils;
+        @Operation(summary = "Thêm order", description = "Tạo order gồm các chi tiết món ăn khi gọi món")
+        @PostMapping("/api/order")
+        public ResponseEntity<APIResponse> orderProduct(@RequestBody OrderDTO orderDTO) {
+            if (orderDTO == null) {
+                throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_FAILED));
+            }
+            return orderService.createOrder(orderDTO);
         }
-        return orderService.createOrder(orderDTO);
-    }
 
-    @GetMapping("/api/orders")
-    public ResponseEntity<APIResponse> getOrderByDirection(@RequestParam(name = "direction") String direction) {
-        return orderService.getOrdersByDirection(direction);
-    }
+        @GetMapping("/api/orders")
+        public ResponseEntity<APIResponse> getOrderByDirection(@RequestParam(name = "direction") String direction) {
+            return orderService.getOrdersByDirection(direction);
+        }
 
-    @GetMapping("/api/orders/{id}")
-    public ResponseEntity<APIResponse> getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id);
-    }
+        @GetMapping("/api/orders/{id}")
+        public ResponseEntity<APIResponse> getOrderById(@PathVariable Long id) {
+            return orderService.getOrderById(id);
+        }
 
-    @GetMapping("/api/orders/")
-    public ResponseEntity<APIResponse> getAllOrders() {
-        return orderService.getAllOrders();
-    }
+        @GetMapping("/api/orders/")
+        public ResponseEntity<APIResponse> getAllOrders() {
+            return orderService.getAllOrders();
+        }
 
+        @PutMapping("/api/orders/{id}")
+        public ResponseEntity<APIResponse> updateOrder(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
+            return orderService.updateOrder(id, orderDTO);
+        }
 
 }
 

@@ -29,7 +29,7 @@ public class ImportEntity  {
     private EmployeeEntity employee;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "importBill")
+    @OneToMany(mappedBy = "importBill", cascade = CascadeType.ALL)
     private List<DetailsImportEntity> detailsProductList;
 
     @ManyToOne

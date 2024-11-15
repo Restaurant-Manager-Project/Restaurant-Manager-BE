@@ -13,4 +13,6 @@ public interface OrderService {
 
     ResponseEntity<APIResponse> getOrderById(Long id);
 
+    ResponseEntity<APIResponse> updateOrder(Long id, OrderDTO orderDTO);
+
 }

@@ -1,10 +1,13 @@
 package com.example.Restaurant_Manager_BE.converters.impl;
 
+import com.example.Restaurant_Manager_BE.converters.ConvertDetailsImport;
 import com.example.Restaurant_Manager_BE.converters.ConverterImport;
 import com.example.Restaurant_Manager_BE.dto.ImportDTO;
 import com.example.Restaurant_Manager_BE.dto.OrderDTO;
+import com.example.Restaurant_Manager_BE.entities.EmployeeEntity;
 import com.example.Restaurant_Manager_BE.entities.ImportEntity;
 import com.example.Restaurant_Manager_BE.entities.OrderEntity;
+import com.example.Restaurant_Manager_BE.entities.SupplierEntity;
 import com.example.Restaurant_Manager_BE.utils.FormatUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.SerializationUtils;
@@ -19,6 +22,8 @@ import java.util.List;
 @Component
 public class ConverterImportImpl implements ConverterImport {
     private final ModelMapper modelMapper;
+    private final ConvertDetailsImport convertDetailsImport;
+
     @Override
     public ImportDTO toDTO(ImportEntity entity) {
         if (entity == null) {
@@ -26,7 +31,7 @@ public class ConverterImportImpl implements ConverterImport {
         }
         return ImportDTO.builder()
                 .id(entity.getId())
-                .dateCreate(FormatUtil.DATE_FORMAT.format(entity.getDateCreate()))
+                .dateCreate(entity.getDateCreate())
                 .total(entity.getTotal())
                 .supplierId(entity.getSupplier().getId())
                 .supplierName(entity.getSupplier().getName())
@@ -38,7 +43,14 @@ public class ConverterImportImpl implements ConverterImport {
         if (dto ==  null) {
             return null;
         }
-        return modelMapper.map(dto, ImportEntity.class);
+        ImportEntity importEntity = ImportEntity.builder()
+                .employee(EmployeeEntity.builder().id(dto.getEmployeeId()).build())
+                .supplier(SupplierEntity.builder().id(dto.getSupplierId()).build())
+                .dateCreate(dto.getDateCreate())
+                .total(dto.getTotal())
+                .build();
+        importEntity.setDetailsProductList(convertDetailsImport.toEntityList(dto.getDetailsImportDTOList(), importEntity));
+        return importEntity;
     }
 
     @Override

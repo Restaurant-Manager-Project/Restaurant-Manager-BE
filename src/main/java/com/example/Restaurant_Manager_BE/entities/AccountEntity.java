@@ -22,7 +22,7 @@ public class AccountEntity {
     private RoleEntity role;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     @OneToMany(mappedBy = "account")
     private List<EmployeeEntity> employee;
