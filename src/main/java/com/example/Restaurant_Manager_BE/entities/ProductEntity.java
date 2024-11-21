@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +34,7 @@ public class ProductEntity {
     private Boolean isDeleted;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
     private List<DetailsImportEntity> detailsImportList;
 
     @JsonIgnore
@@ -40,7 +42,7 @@ public class ProductEntity {
     private List<DetailsOrderEntity> detailsOrderList;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 

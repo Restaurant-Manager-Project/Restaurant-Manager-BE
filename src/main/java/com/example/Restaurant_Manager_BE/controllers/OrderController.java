@@ -39,6 +39,11 @@ public class OrderController {
         return orderService.getAllOrders();
     }
 
-
+    @Operation(summary  = "chỉnh sửa trạng thái của order ")
+    @PutMapping("/api/orders/{order_id}/process/{process_id}")
+    public ResponseEntity<APIResponse> updateProcessOrder(@PathVariable("order_id") Long id ,
+                                                          @PathVariable("process_id") Long p_id){
+        return orderService.updateProcessOfOrder(id, p_id);
+    }
 }
 

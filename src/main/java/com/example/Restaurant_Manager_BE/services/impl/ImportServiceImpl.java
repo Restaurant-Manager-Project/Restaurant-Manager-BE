@@ -43,9 +43,10 @@ public class ImportServiceImpl implements ImportService {
     public ResponseEntity<APIResponse> getImportById(Long id) {
         ImportEntity importEntity = importRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(MessageKeys.IMPORT_NOT_EXISTED));
+        ImportDTO importDTO = converterImport.toDTO(importEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.IMPORT_GET_SUCCESS));
-        APIResponse.setResult(importEntity);
+        APIResponse.setResult(importDTO);
         return ResponseEntity.ok(APIResponse);
     }
 

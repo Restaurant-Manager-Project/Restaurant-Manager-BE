@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.SerializationUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-
+import com.example.Restaurant_Manager_BE.converters.ConverterDetailImport;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -17,9 +17,23 @@ import java.util.List;
 @Component
 public class ConverterImportImpl implements ConverterImport {
     private final ModelMapper modelMapper;
+    private final ConverterDetailImport converterDetailImport;
     @Override
     public ImportDTO toDTO(ImportEntity entity) {
-        return null;
+        if(entity == null){
+            return null;
+        }
+        return ImportDTO.builder()
+                .id(entity.getId())
+                .total(entity.getTotal())
+                .employeeId(entity.getEmployee().getId())
+                .employeeName(entity.getEmployee().getFirstName()+entity.getEmployee().getLastName())
+                .supplierId(entity.getSupplier().getId())
+                .supplierName(entity.getSupplier().getName())
+                .dateCreate(entity.getDateCreate())
+                .total(entity.getTotal())
+//                .detailsImportDTOList(converterDetailImport.toDTOList(entity.getDetailsProductList()))
+                .build();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +13,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +29,7 @@ public class CategoryEntity {
     @Column(name = "img")
     private String img;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
     private List<ProductEntity> productList;
 
 }
