@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface TableRepository extends JpaRepository<TableEntity, Long> {
     Optional<TableEntity> findByDirection(String direction);
-    @Query("SELECT t FROM TableEntity t JOIN FETCH t.statusTable")
+    @Query("SELECT t FROM TableEntity t JOIN FETCH t.statusTable where t.isDeleted=false")
     List<TableEntity> findAllWithStatusTable();
 
 }

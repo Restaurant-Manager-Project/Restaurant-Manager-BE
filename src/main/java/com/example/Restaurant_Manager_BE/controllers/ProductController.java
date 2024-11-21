@@ -23,7 +23,7 @@ public class ProductController {
     private final LocalizationUtils localizationUtils;
 
 
-    @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn")
+    @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn ")
     @GetMapping("/api/products")
     public ResponseEntity<APIResponse> getAllProducts() {
         return productService.getAll();
