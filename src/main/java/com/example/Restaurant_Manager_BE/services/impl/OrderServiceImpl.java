@@ -74,15 +74,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity<APIResponse> updateProcessOfOrder(Long order_id , Long process_id){
-        OrderEntity orderEntity = orderRepository.findById(order_id)
+    public ResponseEntity<APIResponse> getOrderById(Long id) {
+        OrderEntity orderEntity = orderRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
-        ProcessEntity processEntity = processRepository.findById(process_id)
-                .orElseThrow(()-> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PROCESS_NOT_FOUND)));
-        orderEntity.setProcess(processEntity);
+        OrderDTO orderDTO = converterOrder.toDTO(orderEntity);
         APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_LIST_GET_SUCCESS));
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_GET_SUCCESS));
+        APIResponse.setResult(orderDTO);
+        return ResponseEntity.ok(APIResponse);
+    }
+
+    @Override
+    public ResponseEntity<APIResponse> updateOrder(Long id, OrderDTO orderDTO) {
+        OrderEntity orderEntity = orderRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
+        orderEntity.setProcess(processRepository.getById(orderDTO.getProcessId()));
         orderRepository.save(orderEntity);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_UPDATE_SUCCESS));
         return ResponseEntity.ok(APIResponse);
     }
 }

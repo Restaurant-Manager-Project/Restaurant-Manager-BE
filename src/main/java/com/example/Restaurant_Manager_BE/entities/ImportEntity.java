@@ -23,12 +23,13 @@ public class ImportEntity  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "importBill")
+    @OneToMany(mappedBy = "importBill", cascade = CascadeType.ALL)
     private List<DetailsImportEntity> detailsProductList;
 
     @ManyToOne

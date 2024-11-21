@@ -1,7 +1,9 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.converters.ConvertDetailsImport;
 import com.example.Restaurant_Manager_BE.converters.ConverterImport;
+import com.example.Restaurant_Manager_BE.dto.DetailsImportDTO;
 import com.example.Restaurant_Manager_BE.dto.ImportDTO;
 import com.example.Restaurant_Manager_BE.entities.ImportEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
@@ -24,7 +26,6 @@ public class ImportServiceImpl implements ImportService {
     private final ImportRepository importRepository;
     private final ConverterImport converterImport;
     private final LocalizationUtils localizationUtils;
-
 
     @Override
     public ResponseEntity<APIResponse> createImport(ImportDTO importDTO) {
@@ -52,10 +53,11 @@ public class ImportServiceImpl implements ImportService {
 
     @Override
     public ResponseEntity<APIResponse> getAllImport() {
-        List<ImportEntity> listImport = importRepository.findAll();
+        List<ImportEntity> listImport = importRepository.getAllWithEmployeeAndSupplier();
+        List<ImportDTO> listImportDTO = converterImport.toDTOList(listImport);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.IMPORT_GET_ALL_SUCCESS));
-        APIResponse.setResult(listImport);
+        APIResponse.setResult(listImportDTO);
         return ResponseEntity.ok(APIResponse);
     }
 

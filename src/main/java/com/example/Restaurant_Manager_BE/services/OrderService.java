@@ -11,5 +11,8 @@ public interface OrderService {
 
     ResponseEntity<APIResponse> getAllOrders();
 
-    ResponseEntity<APIResponse> updateProcessOfOrder(Long order_id , Long process_id);
+    ResponseEntity<APIResponse> getOrderById(Long id);
+
+    ResponseEntity<APIResponse> updateOrder(Long id, OrderDTO orderDTO);
+
 }
