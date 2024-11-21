@@ -22,7 +22,7 @@ public class ImportDTO {
     private String employeeName;
     private Long supplierId;
     private String supplierName;
-    private String dateCreate;
+    private Date dateCreate;
     private Long total;
 
     @JsonProperty("detailsProductList")

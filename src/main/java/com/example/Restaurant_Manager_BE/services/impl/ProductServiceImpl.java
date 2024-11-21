@@ -1,6 +1,6 @@
 package com.example.Restaurant_Manager_BE.services.impl;
-
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.converters.ConverterProducts;
 import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import com.example.Restaurant_Manager_BE.dto.ProductDTO;
@@ -12,7 +12,6 @@ import com.example.Restaurant_Manager_BE.services.ProductService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import com.example.Restaurant_Manager_BE.entities.CategoryEntity;
 import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
-//import com.example.Restaurant_Manager_BE.repositories.;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-
+    private final ConverterProducts converterProducts;
     private final ProductRepository productRepository;
     private final DetailImportRepository importRepository;
     private final ModelMapper modelMapper;
@@ -38,18 +37,9 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     @Override
     public ResponseEntity<APIResponse> getAll() {
-        List<ProductEntity> productEntityList = productRepository.findAll();
-        List<ProductDTO> productDTOList = productRepository.getProduct_with_Price_from_Import();
-//        productEntityList.forEach(productEntity -> {
-//            ProductDTO product = modelMapper.map(productEntity, ProductDTO.class);
-//            Optional<DetailsImportEntity> detailImportEntity = importRepository.findByProduct(productEntity);
-//            if (detailImportEntity.isPresent()) {
-//                product.setPrice(detailImportEntity.get().getPrice()); // giả sử có phương thức getPrice trong DetailImportEntity
-//            } else {
-//                product.setPrice(null); // hoặc một giá mặc định nào đó nếu không tìm thấy
-//            }
-//            productDTOList.add(product);
-//        });
+        List<ProductEntity> productEntityList =productRepository.getProduct_with_Price_from_Import();
+        List<ProductDTO> productDTOList =converterProducts.toDTOList(productEntityList);
+//        List<ProductDTO> productDTOList1 = productRepository.getProduct_with_Price_from_Import_price_notNUll();
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_LIST_GET_SUCCESS));
         APIResponse.setResult(productDTOList);
@@ -77,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
         ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
         ProductDTO product = modelMapper.map(productEntity, ProductDTO.class);
-        product.setCategoryName(productEntity.getCategory().getName());
+//        product.setCategoryName(productEntity.getCategory().getName());
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_GET_SUCCESS));
         APIResponse.setResult(product);
@@ -86,17 +76,7 @@ public class ProductServiceImpl implements ProductService {
     //create new product
     @Override
     public ResponseEntity<APIResponse> createProducts(ProductDTO productDTO){
-
-        CategoryEntity categoryEntity = categoryRepository.findByName(productDTO.getCategoryName())
-        .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_NOT_EXISTED)));
-        ProductEntity productEntity = ProductEntity.builder()
-                .name(productDTO.getName())
-                .img(productDTO.getImg())
-                .isDeleted(false)
-                .description(productDTO.getDescription())
-//                .price(productDTO.getPrice())
-                .category(categoryEntity)
-                .build();
+        ProductEntity productEntity = converterProducts.toEntity(productDTO);
         productRepository.save(productEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_CREATE_SUCCESS));
@@ -119,33 +99,12 @@ public class ProductServiceImpl implements ProductService {
     public ResponseEntity<APIResponse> updateProducts(Long id , ProductDTO productDTO){
         ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
-//        modelMapper.map(productDTO, productEntity);
-        SkipNullFields(productDTO,productEntity);
+        ProductEntity productEntityUpdate = converterProducts.toEntity(productDTO);
+        converterProducts.mergeNonNullFieldsProduct(productEntity, productEntityUpdate);
         productRepository.save(productEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_UPDATE_SUCCESS));
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
-    }
-    @Override
-    public void SkipNullFields(ProductDTO productDTO, ProductEntity productEntity) {
-        // Sử dụng productEntity đã truyền vào để cập nhật
-        for (Field field : productDTO.getClass().getDeclaredFields()) {
-            field.setAccessible(true); // Đảm bảo truy cập vào các field private
-            try {
-                Object value = field.get(productDTO);
-                System.out.println(field.getName() + " " + value);
-                if (value != null) {
-                    // Gán giá trị không null vào ProductEntity
-                    Field entityField = productEntity.getClass().getDeclaredField(field.getName());
-                    entityField.setAccessible(true); // Đảm bảo truy cập vào các field private
-                    entityField.set(productEntity, value); // Cập nhật giá trị vào ProductEntity
-                }
-            } catch (IllegalAccessException | NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println("Updated ProductEntity: " + productEntity);
     }
 
 

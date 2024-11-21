@@ -30,20 +30,24 @@ import org.springframework.web.bind.annotation.*;
         }
 
         @GetMapping("/api/orders")
-    public ResponseEntity<APIResponse> getOrderByDirection(@RequestParam(name = "direction") String direction) {
-        return orderService.getOrdersByDirection(direction);
-    }
+        public ResponseEntity<APIResponse> getOrderByDirection(@RequestParam(name = "direction") String direction) {
+            return orderService.getOrdersByDirection(direction);
+        }
 
-    @GetMapping("/api/orders/{id}")
-    public ResponseEntity<APIResponse> getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id);
-    }
+        @GetMapping("/api/orders/{id}")
+        public ResponseEntity<APIResponse> getOrderById(@PathVariable Long id) {
+            return orderService.getOrderById(id);
+        }
 
-    @GetMapping("/api/orders/")
-    public ResponseEntity<APIResponse> getAllOrders() {
-        return orderService.getAllOrders();
-    }
+        @GetMapping("/api/orders/")
+        public ResponseEntity<APIResponse> getAllOrders() {
+            return orderService.getAllOrders();
+        }
 
+        @PutMapping("/api/orders/{id}")
+        public ResponseEntity<APIResponse> updateOrder(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
+            return orderService.updateOrder(id, orderDTO);
+        }
 
 }
 

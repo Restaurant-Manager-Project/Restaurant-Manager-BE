@@ -15,5 +15,4 @@ public interface ProductService {
     ResponseEntity<APIResponse> getById(Long id);
     ResponseEntity<APIResponse> deleteProducts(Long id);
     ResponseEntity<APIResponse> updateProducts(Long id , ProductDTO productDTO);
-    void SkipNullFields(ProductDTO productDTO, ProductEntity productEntity);
 }

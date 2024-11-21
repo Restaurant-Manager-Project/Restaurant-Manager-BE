@@ -45,6 +45,7 @@ public class MessageKeys {
     public static final String ORDER_CANCEL_SUCCESS = "order.cancel_success";
     public static final String ORDER_DELETE_SUCCESS = "order.delete_success";
     public static final String ORDER_NOT_FOUND = "order.not_found";
+    public static final String ORDER_UPDATE_SUCCESS = "order.update_success";
 
     // DETAILS ORDER
     public static final String DETAILS_ORDER_CREATE_SUCCESS = "details_order.get_success";
@@ -102,4 +103,7 @@ public class MessageKeys {
     public static final String IMPORT_GET_ALL_SUCCESS = "import.get_all_success";
     public static final String IMPORT_UPDATE_SUCCESS = "import.update_success";
 
+
+    //PROCESS
+    public static final String PROCESS_NOT_FOUND = "process.not_found";
 }

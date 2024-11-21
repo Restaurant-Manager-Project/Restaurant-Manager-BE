@@ -12,4 +12,5 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long>, CustomOrderRepository {
     Optional<List<OrderEntity>> findByDirectionTable(String direction);
+
 }
