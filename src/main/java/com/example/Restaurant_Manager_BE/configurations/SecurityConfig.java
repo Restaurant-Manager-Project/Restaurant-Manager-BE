@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 .requestMatchers("/", "/login").permitAll()
 //                                    .requestMatchers("api/products/**").hasAuthority("SCOPE_USER")
                                 .anyRequest().authenticated()
+//                                .anyRequest().permitAll()
 
                 )
                 .formLogin(login -> login.disable())
