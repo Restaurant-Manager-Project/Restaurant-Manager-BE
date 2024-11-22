@@ -38,8 +38,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
 //                                .requestMatchers("/", "/login").permitAll()
-//                                .requestMatchers("api/products/**").hasAuthority("SCOPE_USER")
+//                                    .requestMatchers("api/products/**").hasAuthority("SCOPE_USER")
                                 .anyRequest().permitAll()
+
                 )
                 .formLogin(login -> login.disable())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
