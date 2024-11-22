@@ -1,5 +1,10 @@
 package com.example.Restaurant_Manager_BE.utils;
 
+import com.example.Restaurant_Manager_BE.entities.AccountEntity;
+import com.example.Restaurant_Manager_BE.repositories.AccountRepository;
+import com.example.Restaurant_Manager_BE.repositories.RoleRepository;
+import com.example.Restaurant_Manager_BE.services.AccountService;
+import com.example.Restaurant_Manager_BE.services.RoleService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 
@@ -9,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -27,16 +33,20 @@ public class SecurityUtil {
     private long expiration;
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS256;
     private final JwtEncoder jwtEncoder;
+    private final RoleService roleService;
+    private final AccountRepository accountRepository;
+
 
     public String createToken(Authentication authentication) {
         Instant now = Instant.now();
-        String[] roles = {"USER", "ADMIN"};
+        AccountEntity accountEntity = accountRepository.findByUsername(authentication.getName()).get();
+        List<String> keyPermission = roleService.getPermissionKey(accountEntity.getRole().getId());
         Instant validity = now.plus(expiration, ChronoUnit.SECONDS);
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(authentication.getName())
-                .claim("scope", roles)
+                .claim("scope", keyPermission)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
