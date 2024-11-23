@@ -25,7 +25,7 @@ public class ConverterProductsImpl implements ConverterProducts {
 
     @Override
     public ProductDTO toDTO(ProductEntity entity) {
-        if(entity == null)return null;
+        if(entity == null) return null;
         return ProductDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
@@ -49,6 +49,7 @@ public List<ProductDTO> toDTOList(List<ProductEntity> entities) {
                 //Đổi sang DTO
                 return ProductDTO.builder()
                         .id(entity.getId())
+                        .name(entity.getName())
                         .img(entity.getImg())
                         .description(entity.getDescription())
                         .categoryId(entity.getCategory().getId())
