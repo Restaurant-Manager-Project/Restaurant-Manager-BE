@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Role;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -33,6 +34,8 @@ import javax.crypto.spec.SecretKeySpec;
 public class SecurityConfig {
     @Value("${secretKey}")
     private String secretKey;
+
+    private String prefix = "/api";
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
@@ -40,15 +43,23 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
                                 .requestMatchers("/", "/login").permitAll()
+                                .requestMatchers("/swagger-ui/**",
+                                        "/swagger-resources/*",
+                                        "/v3/api-docs/**")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.GET, String.format("%s/products", prefix)).permitAll()
 //                                    .requestMatchers("api/products/**").hasAuthority("SCOPE_USER")
                                 .anyRequest().authenticated()
+
 //                                .anyRequest().permitAll()
 
                 )
                 .formLogin(login -> login.disable())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(jwt -> jwt
                         .jwtAuthenticationConverter(jwtAuthenticationConverter())))
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         return http.build();
     }
 
