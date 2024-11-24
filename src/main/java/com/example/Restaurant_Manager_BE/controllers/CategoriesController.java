@@ -12,11 +12,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @RestController
 @RequiredArgsConstructor
 public class CategoriesController {
     private final CategoriesService categoriesService;
     private final LocalizationUtils localizationUtils;
+
+    @PreAuthorize("hasRole('category.create')")
     @Operation(summary = "Thêm loại sản phẩm",description = "Thêm loại của món ăn sau khi nhập đầy đủ thông tin")
     @PostMapping("/api/categories")
     public ResponseEntity<APIResponse> CreateCategories(@RequestBody CategoriesDTO  categoriesDTO){
@@ -25,16 +29,22 @@ public class CategoriesController {
         }
         return categoriesService.createCategories(categoriesDTO);
     }
+
+    @PreAuthorize("hasRole('category.view')")
     @Operation(summary = "Lấy danh sách Loại ", description = "Lấy danh sách loại sản phẩm ")
     @GetMapping("/api/categories")
     public ResponseEntity<APIResponse> getALLCategories(){
         return categoriesService.getAll();
     }
+
+    @PreAuthorize("hasRole('category.update')")
     @Operation(summary = "Xóa categories")
     @DeleteMapping("api/categories/{id}")
     public ResponseEntity<APIResponse> deleteCategory(@PathVariable Long id){
         return categoriesService.deleteCategory(id);
     }
+
+    @PreAuthorize("hasRole('category.delete')")
     @Operation(summary="Sửa categories")
     @PutMapping("api/categories/{id}")
     public ResponseEntity<APIResponse> updateCategory(@PathVariable Long id, @RequestBody CategoriesDTO categoriesDTO){

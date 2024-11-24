@@ -18,6 +18,7 @@ import com.example.Restaurant_Manager_BE.services.EmployeeService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,26 +26,31 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final LocalizationUtils localizationUtils;
 
+    @PreAuthorize("hasRole('employee.create')")
     @PostMapping("/api/employees")
     public ResponseEntity<APIResponse> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
         return employeeService.createEmployee(employeeDTO);
     }
 
+    @PreAuthorize("hasRole('employee.view')")
     @GetMapping("/api/employees")
     public ResponseEntity<APIResponse> getAllEmployees() {
         return employeeService.getAll();
     }
 
+    @PreAuthorize("hasRole('employee.view')")
     @GetMapping("/api/employees/{id}")
     public ResponseEntity<APIResponse> getEmployeeById(@PathVariable("id") Long id) {
         return employeeService.getById(id);
     }
 
+    @PreAuthorize("hasRole('employee.delete')")
     @DeleteMapping("/api/employees/{id}")
     public ResponseEntity<APIResponse> deleteEmployee(@PathVariable Long id) {
         return employeeService.deleteEmployee(id);
     }
 
+    @PreAuthorize("hasRole('employee.update')")
     @PutMapping("/api/employees/{id}")
     public ResponseEntity<APIResponse> updateEmployee(@PathVariable("id") Long id,
             @RequestBody EmployeeDTO employeeDTO) {
@@ -54,6 +60,7 @@ public class EmployeeController {
         return employeeService.updateEmployee(id, employeeDTO);
     }
 
+    @PreAuthorize("hasRole('employee.view')")
     @GetMapping("/api/employees/search")
     public ResponseEntity<APIResponse> findEmployees(
             @RequestParam(required = false) String firstName,

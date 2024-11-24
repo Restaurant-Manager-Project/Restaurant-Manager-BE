@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,11 +16,13 @@ public class InvoiceController {
 
     private final InvoiceService invoiceService;
 
+    @PreAuthorize("hasRole('invoice.create')")
     @PostMapping("/api/invoices")
     public ResponseEntity<APIResponse> createInvoice(@RequestBody InvoiceDTO invoiceDTO) {
         return invoiceService.createInvoice(invoiceDTO);
     }
 
+    @PreAuthorize("hasRole('invoice.update')")
     @PutMapping("/api/invoices")
     public ResponseEntity<APIResponse> updateInvoice(@RequestBody InvoiceDTO invoiceDTO) {
         return invoiceService.updateInvoice(invoiceDTO);
@@ -30,11 +33,13 @@ public class InvoiceController {
         return invoiceService.deleteInvoice(id);
     }
 
+    @PreAuthorize("hasRole('invoice.view')")
     @GetMapping("/api/invoices")
     public ResponseEntity<APIResponse> getAllInvoices() {
         return invoiceService.getAll();
     }
 
+    @PreAuthorize("hasRole('invoice.view')")
     @GetMapping("/api/invoices/search")
     public ResponseEntity<APIResponse> findByTimeCreate(@RequestParam("timeCreate") Date timeCreate) {
         return invoiceService.findByTimeCreate(timeCreate);

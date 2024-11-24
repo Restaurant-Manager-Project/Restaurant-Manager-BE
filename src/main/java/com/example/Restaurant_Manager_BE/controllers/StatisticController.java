@@ -12,13 +12,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequiredArgsConstructor
 public class StatisticController {
     private final ProductService productService;
     private final LocalizationUtils localizationUtils;
-
+    @PreAuthorize("hasRole('statistic.view')")
     @Operation(summary = "Thống kê sản phẩm theo số lượng bán được và xếp hạng chúng")
     @GetMapping("api/statistic/products/{category_id}")
     public ResponseEntity<APIResponse> getStatisticProductsByCategory(@PathVariable("category_id")

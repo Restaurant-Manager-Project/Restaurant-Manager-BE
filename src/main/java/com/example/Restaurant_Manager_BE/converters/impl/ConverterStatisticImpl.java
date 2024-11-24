@@ -3,11 +3,15 @@ package com.example.Restaurant_Manager_BE.converters.impl;
 import com.example.Restaurant_Manager_BE.converters.ConverterStatistic;
 import com.example.Restaurant_Manager_BE.dto.StatisticDTO.ProductStatisticDTO;
 import com.example.Restaurant_Manager_BE.entities.ProductEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
+@Component
 public class ConverterStatisticImpl implements ConverterStatistic {
     @Override
     public ProductStatisticDTO toProductStatisticDTO(Object[] result) {
