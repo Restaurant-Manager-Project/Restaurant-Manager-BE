@@ -9,11 +9,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @RestController
 @RequiredArgsConstructor
 public class TableController {
     private final TableService tableService;
     private final LocalizationUtils localizationUtils;
+
+    @PreAuthorize("hasRole('table.view')")
     @GetMapping("/tables")
     public ResponseEntity<APIResponse> selectedTable(@RequestParam String code) {
         if (code.isEmpty()) {
@@ -21,17 +25,21 @@ public class TableController {
         }
         return tableService.findByDirection(code);
     }
+    @PreAuthorize("hasRole('table.view')")
     @Operation(summary= "Lấy tất cả bản trong db")
     @GetMapping("/api/tables")
     public ResponseEntity<APIResponse> getTables() {
         return tableService.getALLTables();
     }
+
+    @PreAuthorize("hasRole('table_status.update')")
     @Operation(summary = "Chỉnh sửa trạng thái của bàn")
     @PutMapping("/api/table/{table_id}/status")
     public ResponseEntity<APIResponse> updateStatusOfTable(@PathVariable Long table_id, @RequestParam("statusID") Long statusID) {
         System.out.println(table_id+" "+statusID);
         return tableService.updateStatusOfTableByID(table_id,statusID);
     }
+    @PreAuthorize("hasRole('table.view')")
     @GetMapping("/api/table/{direction}/details-orders")
     public ResponseEntity<APIResponse> mergeDetailsOrder(@PathVariable String direction) {
         if (direction.isEmpty()) {
@@ -39,6 +47,7 @@ public class TableController {
         }
         return tableService.mergeAllDetailsInOrderList(direction);
     }
+    @PreAuthorize("hasRole('table.delete')")
     @Operation(summary = "Xóa table")
     @DeleteMapping("/api/table/{table_id}")
     public ResponseEntity<APIResponse> deleteTable(@PathVariable Long table_id) {

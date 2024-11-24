@@ -21,6 +21,7 @@ import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,24 +29,28 @@ public class SupplierController {
     private final SupplierService supplierService;
     private final LocalizationUtils localizationUtils;
 
+    @PreAuthorize("hasRole('supplier.view')")
     @Operation(summary = "Lấy danh sách nhà cung cấp", description = "Lấy tất cả danh sách nhà cung cấp")
     @GetMapping("/api/suppliers")
     public ResponseEntity<APIResponse> getAllSuppliers() {
         return supplierService.getAll();
     }
 
+    @PreAuthorize("hasRole('supplier.view')")
     @Operation(summary = "Tìm kiếm nhà cung cấp tiêu chí", description = "Tìm kiếm nhà cung cấp theo tiêu chí {name, address,...}")
     @GetMapping("/api/suppliers/search")
     public ResponseEntity<APIResponse> getSupplierByName(@RequestParam Map<String, String> params) {
         return supplierService.getByName(params.get("name"));
     }
 
+    @PreAuthorize("hasRole('supplier.view')")
     @Operation(summary = "Tìm kiếm nhà cung cấp theo id")
     @GetMapping("/api/supplier/{id}")
     public ResponseEntity<APIResponse> getSupplierById(@PathVariable("id") Long id) {
         return supplierService.getById(id);
     }
 
+    @PreAuthorize("hasRole('supplier.create')")
     @Operation(summary = "Tạo nhà cung cấp mới")
     @PostMapping("/api/suppliers")
     public ResponseEntity<APIResponse> createSupplier(@RequestBody SupplierDTO supplierDTO) {
@@ -55,6 +60,7 @@ public class SupplierController {
         return supplierService.createSupplier(supplierDTO);
     }
 
+    @PreAuthorize("hasRole('supplier.delete')")
     @Operation(summary = "Xóa nhà cung cấp")
     @DeleteMapping("/api/supplier/{id}")
     public ResponseEntity<APIResponse> deleteSupplier(@PathVariable("id") Long supplierId) {

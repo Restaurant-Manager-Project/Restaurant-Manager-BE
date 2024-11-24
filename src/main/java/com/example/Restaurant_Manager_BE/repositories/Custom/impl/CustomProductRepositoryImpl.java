@@ -34,4 +34,27 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         TypedQuery<ProductEntity> query=entityManager.createQuery(jpql, ProductEntity.class);
         return query.getResultList();
     }
+
+    @Override
+    public List<Object[]> getStatisticProductByCategoryAndSoldQuantity(Long categoryId) {
+        String jpql = "SELECT " +
+                "    p.id AS product_id, " +
+                "    p.name AS product_name, " +
+                "    COALESCE(SUM(d.quantity), 0) AS total_quantity_sold, " +
+                "    RANK() OVER (ORDER BY COALESCE(SUM(d.quantity), 0) DESC) AS rank " +
+                "FROM ProductEntity p " +
+                "LEFT JOIN p.detailsOrderList d " +
+                "WHERE (:categoryId IS NULL OR p.category.id = :categoryId) " +
+                "GROUP BY p.id, p.name " +
+                "ORDER BY total_quantity_sold DESC";
+
+        // Tạo query với kết quả là kiểu Object[]
+        TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
+
+        // Gán tham số categoryId nếu không null
+        query.setParameter("categoryId", categoryId);
+
+        return query.getResultList();
+    }
+
 }

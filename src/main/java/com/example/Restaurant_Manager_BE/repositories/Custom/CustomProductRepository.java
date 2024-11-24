@@ -8,4 +8,5 @@ import java.util.List;
 public interface CustomProductRepository {
     List<ProductEntity> getProduct_with_Price_from_Import();
     List<ProductDTO> getProduct_with_Price_from_Import_price_notNUll();
+    List<Object[]> getStatisticProductByCategoryAndSoldQuantity(Long id);
 }
