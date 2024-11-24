@@ -28,6 +28,7 @@ public class ConverterProductsImpl implements ConverterProducts {
         if(entity == null)return null;
         return ProductDTO.builder()
                 .id(entity.getId())
+                .name(entity.getName())
                 .img(entity.getImg())
                 .description(entity.getDescription())
                 .categoryId(entity.getCategory().getId())

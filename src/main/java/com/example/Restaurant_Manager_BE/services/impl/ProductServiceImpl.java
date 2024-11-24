@@ -1,6 +1,8 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.converters.ConverterProducts;
+import com.example.Restaurant_Manager_BE.converters.ConverterStatistic;
+import com.example.Restaurant_Manager_BE.dto.StatisticDTO.ProductStatisticDTO;
 import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import com.example.Restaurant_Manager_BE.dto.ProductDTO;
@@ -35,6 +37,7 @@ public class ProductServiceImpl implements ProductService {
     private final ModelMapper modelMapper;
     private final LocalizationUtils localizationUtils;
     private final CategoryRepository categoryRepository;
+    private final ConverterStatistic converterStatistic;
     @Override
     public ResponseEntity<APIResponse> getAll() {
         List<ProductEntity> productEntityList =productRepository.getProduct_with_Price_from_Import();
@@ -107,5 +110,13 @@ public class ProductServiceImpl implements ProductService {
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
     }
 
-
+    @Override
+    public ResponseEntity<APIResponse> StatisticProductByCategoryAndSoldQuantity(Long id) {
+        List<Object[]> productEntity = productRepository.getStatisticProductByCategoryAndSoldQuantity(id);
+        List<ProductStatisticDTO> result = converterStatistic.ProductStatisticDTO_List(productEntity);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_GET_SUCCESS));
+        APIResponse.setResult(result);
+        return ResponseEntity.ok(APIResponse);
+    }
 }
