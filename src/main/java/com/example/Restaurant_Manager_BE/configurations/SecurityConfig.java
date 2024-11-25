@@ -47,11 +47,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         request -> request
-                                .requestMatchers("/", "/login").permitAll()
-                                .requestMatchers("/swagger-ui/**",
+                                .requestMatchers("/",
+                                        "/login",
+                                        "/swagger-ui/**",
                                         "/swagger-resources/*",
-                                        "/v3/api-docs/**")
-                                .permitAll()
+                                        "/v3/api-docs/**",
+                                        "/tables",
+                                        String.format("%s/tables", prefix),
+                                        String.format("%s/products", prefix),
+                                        String.format("%s/categories", prefix)).permitAll()
+
                                 .requestMatchers(HttpMethod.GET,
                                         String.format("%s/products", prefix),
                                          String.format("%s/categories", prefix)

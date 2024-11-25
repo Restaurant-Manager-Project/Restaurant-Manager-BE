@@ -30,7 +30,6 @@ public class CategoriesController {
         return categoriesService.createCategories(categoriesDTO);
     }
 
-    @PreAuthorize("hasRole('category.view')")
     @Operation(summary = "Lấy danh sách Loại ", description = "Lấy danh sách loại sản phẩm ")
     @GetMapping("/api/categories")
     public ResponseEntity<APIResponse> getALLCategories(){

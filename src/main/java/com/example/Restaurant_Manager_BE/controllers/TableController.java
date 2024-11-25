@@ -17,7 +17,6 @@ public class TableController {
     private final TableService tableService;
     private final LocalizationUtils localizationUtils;
 
-    @PreAuthorize("hasRole('table.view')")
     @GetMapping("/tables")
     public ResponseEntity<APIResponse> selectedTable(@RequestParam String code) {
         if (code.isEmpty()) {
@@ -25,7 +24,6 @@ public class TableController {
         }
         return tableService.findByDirection(code);
     }
-    @PreAuthorize("hasRole('table.view')")
     @Operation(summary= "Lấy tất cả bản trong db")
     @GetMapping("/api/tables")
     public ResponseEntity<APIResponse> getTables() {

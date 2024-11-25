@@ -23,7 +23,6 @@ public class ProductController {
     private final ProductService productService;
     private final LocalizationUtils localizationUtils;
 
-    @PreAuthorize("hasRole('product.view')")
     @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn ")
     @GetMapping("/api/products")
     public ResponseEntity<APIResponse> getAllProducts() {
