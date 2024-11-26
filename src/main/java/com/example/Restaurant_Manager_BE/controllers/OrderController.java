@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
         private final OrderService orderService;
         private final DetailsOrderService detailsOrderService;
         private final LocalizationUtils localizationUtils;
-        @PreAuthorize("hasRole('order.view')")
+
         @Operation(summary = "Thêm order", description = "Tạo order gồm các chi tiết món ăn khi gọi món")
         @PostMapping("/api/order")
         public ResponseEntity<APIResponse> orderProduct(@RequestBody OrderDTO orderDTO) {

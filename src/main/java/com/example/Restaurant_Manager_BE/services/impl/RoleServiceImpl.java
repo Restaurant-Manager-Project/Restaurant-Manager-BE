@@ -1,10 +1,16 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
+import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.converters.ConverterRole;
+import com.example.Restaurant_Manager_BE.dto.RoleDTO;
 import com.example.Restaurant_Manager_BE.entities.RoleEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.repositories.RoleRepository;
+import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.RoleService;
+import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
+    private final LocalizationUtils localizationUtils;
+    private final ConverterRole converterRole;
 
     @Override
     public List<String> getPermissionKey(Long idRole) {
@@ -22,5 +30,27 @@ public class RoleServiceImpl implements RoleService {
                 .map(permission -> permission.getKey())
                 .toList();
         return listKey;
+    }
+
+    @Override
+    public ResponseEntity<APIResponse> getAllRoles() {
+        List<RoleEntity> listRole = roleRepository.findAll();
+        List<RoleDTO> listRoleDTO = converterRole.toDTOList(listRole);
+        APIResponse apiResponse = APIResponse.builder()
+                .result(listRoleDTO)
+                .message(localizationUtils.getLocalizedMessage(MessageKeys.ROLE_LIST_GET_SUCCESS))
+                .build();
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @Override
+    public ResponseEntity<APIResponse> createRole(RoleDTO roleDTO) {
+        RoleEntity role = converterRole.toEntity(roleDTO);
+        roleRepository.save(role);
+        APIResponse apiResponse = APIResponse.builder()
+                .result(converterRole.toDTO(role))
+                .message(localizationUtils.getLocalizedMessage(MessageKeys.ROLE_CREATE_SUCCESS))
+                .build();
+        return ResponseEntity.ok(apiResponse);
     }
 }
