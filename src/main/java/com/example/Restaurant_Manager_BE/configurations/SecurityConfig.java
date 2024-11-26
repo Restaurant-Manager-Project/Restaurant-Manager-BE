@@ -55,7 +55,9 @@ public class SecurityConfig {
                                         "/tables",
                                         String.format("%s/tables", prefix),
                                         String.format("%s/products", prefix),
-                                        String.format("%s/categories", prefix)).permitAll()
+                                        String.format("%s/categories", prefix),
+                                        String.format("%s/orders", prefix),
+                                        String.format("%s/table/*/details-orders", prefix)).permitAll()
 
                                 .requestMatchers(HttpMethod.GET,
                                         String.format("%s/products", prefix),

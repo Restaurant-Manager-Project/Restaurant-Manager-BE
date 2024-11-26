@@ -37,7 +37,7 @@ public class TableController {
         System.out.println(table_id+" "+statusID);
         return tableService.updateStatusOfTableByID(table_id,statusID);
     }
-    @PreAuthorize("hasRole('table.view')")
+
     @GetMapping("/api/table/{direction}/details-orders")
     public ResponseEntity<APIResponse> mergeDetailsOrder(@PathVariable String direction) {
         if (direction.isEmpty()) {

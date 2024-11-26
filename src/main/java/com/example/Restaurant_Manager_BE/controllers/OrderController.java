@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.*;
             return orderService.createOrder(orderDTO);
         }
 
-        @PreAuthorize("hasRole('order.view')")
+
         @GetMapping("/api/orders")
         public ResponseEntity<APIResponse> getOrderByDirection(@RequestParam(name = "direction") String direction) {
             return orderService.getOrdersByDirection(direction);
