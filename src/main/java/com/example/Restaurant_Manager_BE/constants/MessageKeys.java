@@ -36,6 +36,10 @@ public class MessageKeys {
     public static final String PRODUCT_IMAGE_UPDATE_SUCCESS = "product.image.update_success";
     public static final String PRODUCT_CREATE_FAILED = "product.create_failed";
     public static final String PRODUCT_UPDATE_FAILED = "product.update_failed";
+    public static final String PRODUCT_OUT_OF_STOCK = "product.out_of_stock";
+
+
+
     // ORDER
     public static final String ORDER_CREATE_SUCCESS = "order.create_success";
     public static final String ORDER_CREATE_FAILED = "order.create_failed";

@@ -7,6 +7,7 @@ import com.example.Restaurant_Manager_BE.entities.*;
 import com.example.Restaurant_Manager_BE.dto.OrderDTO;
 import com.example.Restaurant_Manager_BE.enums.StatusOrder;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
+import com.example.Restaurant_Manager_BE.exceptions.OutOfStockException;
 import com.example.Restaurant_Manager_BE.repositories.*;
 import com.example.Restaurant_Manager_BE.repositories.Custom.ProcessRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
@@ -17,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +34,31 @@ public class OrderServiceImpl implements OrderService {
     private final ConverterOrder converterOrder;
     private final ProcessRepository processRepository;
 
+
+    private void updateStockProduct(List<DetailsOrderEntity> listDetail) {
+        listDetail.forEach(detail -> {
+            ProductEntity productEntity = productRepository.findById(detail.getProduct().getId())
+                    .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
+            if (detail.getQuantity() > productEntity.getQuantity()) {
+                throw new OutOfStockException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_OUT_OF_STOCK));
+            }
+            else {
+                productEntity.setQuantity(productEntity.getQuantity() - detail.getQuantity());
+                productRepository.save(productEntity);
+            }
+        });
+    }
+
     @Override
+    @Transactional
     public ResponseEntity<APIResponse> createOrder(OrderDTO orderDTO) {
         OrderEntity orderEntity = converterOrder.toEntity(orderDTO);
         orderEntity.setProcess(processRepository.getById(StatusOrder.RECEIVED.getId()));
+        updateStockProduct(orderEntity.getDetailsOrderList());
         orderRepository.save(orderEntity);
+
+
+
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_SUCCESS));
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
