@@ -53,6 +53,8 @@ public class SecurityConfig {
                                         "/swagger-resources/*",
                                         "/v3/api-docs/**",
                                         "/tables",
+                                        "/vnpay",
+                                        "/vnpay-callback",
                                         String.format("%s/tables", prefix),
                                         String.format("%s/products", prefix),
                                         String.format("%s/categories", prefix),
