@@ -37,7 +37,7 @@ public class ProductController {
     }
 
     //Phần Create trong CRUD
-    @PreAuthorize("hasRole('product.create')")
+//    @PreAuthorize("hasRole('product.create')")
     @Operation(summary = "Thêm sản phẩm",description = "Thêm món ăn sau khi nhập đầy đủ thông tin")
     @PostMapping("/api/products")
     public ResponseEntity<APIResponse> CreateProduct(@RequestBody ProductDTO ProductDTO){
