@@ -2,7 +2,9 @@ package com.example.Restaurant_Manager_BE.converters.impl;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.converters.ConverterRole;
+import com.example.Restaurant_Manager_BE.dto.PermissionDTO;
 import com.example.Restaurant_Manager_BE.dto.RoleDTO;
+import com.example.Restaurant_Manager_BE.entities.ImportEntity;
 import com.example.Restaurant_Manager_BE.entities.Permission;
 import com.example.Restaurant_Manager_BE.entities.RoleEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +26,7 @@ public class ConverterRoleImpl implements ConverterRole {
     @Lazy
     private final RoleService roleService;
     private final PermissionRepository permissionRepository;
-    private LocalizationUtils localizationUtils;
+    private final LocalizationUtils localizationUtils;
     @Override
     public RoleDTO toDTO(RoleEntity roleEntity) {
         RoleDTO roleDTO = RoleDTO.builder()
@@ -33,6 +36,23 @@ public class ConverterRoleImpl implements ConverterRole {
                 .permissions(roleService.getPermissionKey(roleEntity.getId()))
                 .build();
         return roleDTO;
+    }
+    @Override
+    public PermissionDTO toPermissionDTO(Permission permissionEntity) {
+        if (permissionEntity == null) {return null;}
+        return PermissionDTO.builder()
+                .id(permissionEntity.getId())
+                .name(permissionEntity.getName())
+                .key(permissionEntity.getKey())
+                .build();
+    }
+
+    @Override
+    public List<PermissionDTO> toPermissionDTOList(List<Permission> permissionList) {
+        List<PermissionDTO> permission_DTO = permissionList.stream()
+                .map(per -> toPermissionDTO(per))
+                .toList();
+        return permission_DTO;
     }
 
     @Override
@@ -59,5 +79,23 @@ public class ConverterRoleImpl implements ConverterRole {
                 .toList();
         return listRoleDTO;
     }
-
+    @Override
+    public void mergeNonNullFields(RoleEntity target, RoleEntity source) {
+        if (source == null) {
+            return;
+        }
+        Field[] fields = source.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object value = field.get(source);
+                if (value != null) {
+                    field.set(target, value);
+                }
+            }
+            catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

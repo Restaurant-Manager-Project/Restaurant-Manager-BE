@@ -112,13 +112,15 @@ public class MessageKeys {
     public static final String PROCESS_NOT_FOUND = "process.not_found";
 
     // ROLES
-    public static final String ROLE_NOT_EXISTSED = "role.not_existed";
+    public static final String ROLE_NOT_EXISTED = "role.not_existed";
     public static final String ROLE_LIST_GET_SUCCESS = "role_list.get_success";
     public static final String ROLE_CREATE_SUCCESS = "role.create_success";
 
     // PERMISSION
     public static final String PERMISSION_NOT_EXISTED = "permission.not_existed";
-
+    public static final String PERMISSION_LIST_GET_SUCCESS = "permission.list.get_success";
+    public static final String ROlE_UPDATED_SUCCESS = "role.update_success";
+    public static final String ROLE_DELETE_SUCCESS = "role.delete_success";
 }
 
 

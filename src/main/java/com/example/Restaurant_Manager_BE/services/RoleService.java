@@ -10,6 +10,8 @@ import java.util.List;
 public interface RoleService {
     public List<String> getPermissionKey(Long idRole);
     public ResponseEntity<APIResponse> getAllRoles();
-
+    public ResponseEntity<APIResponse> getAllPermission();
     public ResponseEntity<APIResponse> createRole(RoleDTO roleDTO);
+    public ResponseEntity<APIResponse> updateRole(RoleDTO roleDTO,Long id);
+    public ResponseEntity<APIResponse> deleteRole(Long id);
 }
