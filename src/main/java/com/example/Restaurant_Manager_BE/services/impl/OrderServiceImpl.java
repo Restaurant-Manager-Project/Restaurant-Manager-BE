@@ -56,9 +56,6 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setProcess(processRepository.getById(StatusOrder.RECEIVED.getId()));
         updateStockProduct(orderEntity.getDetailsOrderList());
         orderRepository.save(orderEntity);
-
-
-
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_SUCCESS));
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);

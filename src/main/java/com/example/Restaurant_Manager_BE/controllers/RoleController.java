@@ -5,6 +5,7 @@ import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,6 +31,7 @@ public class RoleController {
     @DeleteMapping("api/roles/{id}")
     public ResponseEntity<APIResponse> deleteRole(@PathVariable("id") Long id) {return roleService.deleteRole(id);}
 
+    @PreAuthorize("hasRole('permission.view')")
     @GetMapping("/api/permission")
     public ResponseEntity<APIResponse> getAllPermission() {
         return roleService.getAllPermission();

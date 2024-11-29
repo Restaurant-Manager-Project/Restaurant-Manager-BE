@@ -21,6 +21,12 @@ public class ClientController {
         return clientService.findByPhone(phone);
     }
 
+    @PreAuthorize("hasRole('client.view')")
+    @GetMapping("/api/clients/search")
+    public ResponseEntity<APIResponse> findById(@RequestParam Long id) {
+        return clientService.findById(id);
+    }
+
     @PreAuthorize("hasRole('client.create')")
     @PostMapping("/api/clients")
     public ResponseEntity<APIResponse> createClient(@RequestBody ClientDTO clientDTO) {
@@ -42,4 +48,5 @@ public class ClientController {
     public ResponseEntity<APIResponse> findAll() {
         return clientService.getALL();
     }
+
 }

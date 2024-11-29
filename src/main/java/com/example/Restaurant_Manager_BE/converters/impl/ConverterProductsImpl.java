@@ -31,9 +31,10 @@ public class ConverterProductsImpl implements ConverterProducts {
                 .name(entity.getName())
                 .img(entity.getImg())
                 .description(entity.getDescription())
-                .categoryId(entity.getCategory().getId())
+                .categoryName(entity.getCategory().getName())
                 .price(entity.getDetailsImportList().get(0).getPrice())
-                .quantity(entity.getDetailsImportList().get(0).getQuantity())
+                .quantity_from_import(entity.getDetailsImportList().get(0).getQuantity())
+                .quantity(entity.getQuantity())
                 .build();
 
     }
@@ -52,9 +53,10 @@ public List<ProductDTO> toDTOList(List<ProductEntity> entities) {
                         .name(entity.getName())
                         .img(entity.getImg())
                         .description(entity.getDescription())
-                        .categoryId(entity.getCategory().getId())
+                        .categoryName(entity.getCategory().getName())
                         .price(detail != null ? detail.getPrice() : 0)
-                        .quantity(detail != null ? detail.getQuantity() : 0)
+                        .quantity_from_import(detail != null ? detail.getQuantity() : 0)
+                        .quantity(entity.getQuantity())
                         .build();
             })
             .collect(Collectors.toList());

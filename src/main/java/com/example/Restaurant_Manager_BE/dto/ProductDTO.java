@@ -18,7 +18,8 @@ public class ProductDTO {
     private String description;
     private String img;
     private Long price;
-//    private String categoryName;
+    private String categoryName;
     private Long categoryId;
     private Long quantity;
+    private Long quantity_from_import;
 }

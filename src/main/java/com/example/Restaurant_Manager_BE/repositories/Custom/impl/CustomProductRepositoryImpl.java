@@ -29,6 +29,7 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         String jpql="SELECT  p " +
                 "FROM ProductEntity p " +
                 "LEFT JOIN FETCH p.detailsImportList i " +
+                "LEFT JOIN FETCH p.category c "+
                 "WHERE p.isDeleted = false";
         ;
         TypedQuery<ProductEntity> query=entityManager.createQuery(jpql, ProductEntity.class);
