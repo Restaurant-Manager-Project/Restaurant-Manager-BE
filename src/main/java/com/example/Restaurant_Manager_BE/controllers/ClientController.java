@@ -22,8 +22,8 @@ public class ClientController {
     }
 
     @PreAuthorize("hasRole('client.view')")
-    @GetMapping("/api/clients/search")
-    public ResponseEntity<APIResponse> findById(@RequestParam Long id) {
+    @GetMapping("/api/clients/{id}")
+    public ResponseEntity<APIResponse> findById(@PathVariable Long id) {
         return clientService.findById(id);
     }
 
