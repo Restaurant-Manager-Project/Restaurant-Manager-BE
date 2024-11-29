@@ -2,10 +2,14 @@ package com.example.Restaurant_Manager_BE.services.impl;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.dto.InvoiceDTO;
+import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.entities.InvoiceEntity;
+import com.example.Restaurant_Manager_BE.entities.RankEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
+import com.example.Restaurant_Manager_BE.repositories.ClientRepository;
 import com.example.Restaurant_Manager_BE.repositories.InvoiceRepository;
+import com.example.Restaurant_Manager_BE.repositories.RankRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.InvoiceService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
@@ -26,6 +30,24 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final ModelMapper modelMapper;
     private final LocalizationUtils localizationUtils;
+    private final ClientRepository ClientRepository;
+    private final ClientRepository clientRepository;
+    private final RankRepository rankRepository;
+
+
+    public void updateClientPaid(InvoiceEntity invoiceEntity) {
+        ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId())
+                .orElseThrow(()->new DataNotFoundException
+                        (localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_NOT_EXISTS)));
+        List<InvoiceEntity> invoices = invoiceRepository.findByClient(client);
+        Long updatedPaid = invoices.stream()
+                .mapToLong(InvoiceEntity::getTotal)
+                .sum();
+        client.setPaid(updatedPaid);
+        List<RankEntity> AllRank = rankRepository.findAll();
+        client.updateRank(AllRank);
+        clientRepository.save(client);
+    }
 
     @Override
     public ResponseEntity<APIResponse> createInvoice(InvoiceDTO invoiceDTO) {
@@ -41,6 +63,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
+        updateClientPaid(invoiceEntity);
         apiResponse.setResult(invoiceEntity);
         return ResponseEntity.ok(apiResponse);
     }

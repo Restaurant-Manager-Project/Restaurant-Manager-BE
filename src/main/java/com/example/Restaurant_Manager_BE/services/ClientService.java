@@ -12,4 +12,6 @@ public interface ClientService {
     ResponseEntity<APIResponse> updateClient(Long id, ClientDTO clientDTO);
     void SkipNullFields(ClientDTO clientDTO, ClientEntity clientEntity);
     ResponseEntity<APIResponse> getALL();
+    ResponseEntity<APIResponse> getRank(Long id,Long paid);
+    ResponseEntity<APIResponse> findById(Long id);
 }

@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.converters.ClientConverter;
 import com.example.Restaurant_Manager_BE.dto.ClientDTO;
 import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
@@ -22,11 +23,23 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final LocalizationUtils localizationUtils;
     private final ModelMapper modelMapper;
+    private final ClientConverter clientConverter;
     @Override
     public ResponseEntity<APIResponse> findByPhone(String phone) {
         ClientEntity clientEntity = clientRepository.findByPhone(phone)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_NOT_EXISTS)));
-        ClientDTO clientDTO = modelMapper.map(clientEntity, ClientDTO.class);
+        ClientDTO clientDTO = clientConverter.toDTO(clientEntity);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_GET_SUCCESS));
+        APIResponse.setResult(clientDTO);
+        return ResponseEntity.ok(APIResponse);
+    }
+
+    @Override
+    public ResponseEntity<APIResponse> findById(Long id) {
+        ClientEntity clientEntity = clientRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_NOT_EXISTS)));
+        ClientDTO clientDTO = clientConverter.toDTO(clientEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_GET_SUCCESS));
         APIResponse.setResult(clientDTO);
@@ -94,4 +107,17 @@ public class ClientServiceImpl implements ClientService {
         APIResponse.setResult(clientRepository.findAll_fromClient_andInvoice());
         return ResponseEntity.ok(APIResponse);
     }
+
+    @Override
+    public ResponseEntity<APIResponse> getRank(Long id, Long paid) {
+        return null;
+    }
+
+//    @Override
+//    public ResponseEntity<APIResponse> getRank(Long id) {
+//        APIResponse APIResponse = new APIResponse();
+//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_GET_SUCCESS));
+//        APIResponse.setResult(clientRepository.getClientRank());
+//        return ResponseEntity.ok(APIResponse);
+//    }
 }

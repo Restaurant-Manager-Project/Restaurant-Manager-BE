@@ -1,8 +1,10 @@
 package com.example.Restaurant_Manager_BE.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 
 @Entity
@@ -23,5 +25,23 @@ public class ClientEntity {
     private String phone;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
+    @Column(name = "paid")
+    private Long paid;
 
+//    @OneToMany(mappedBy = "clients", fetch = FetchType.LAZY)
+//    private List<InvoiceEntity> invoices;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rank_id") // Liên kết với bảng rank
+    private RankEntity rank;
+
+    // Phương thức cập nhật rank
+    public void updateRank(List<RankEntity> availableRanks) {
+        // filter ranks that suit with paid
+        for (RankEntity r : availableRanks) {
+            if (this.paid >= r.getEligible()) {
+                this.rank = r;
+            }
+        }
+    }
 }
