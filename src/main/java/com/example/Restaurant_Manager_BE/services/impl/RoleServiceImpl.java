@@ -58,17 +58,7 @@ public class RoleServiceImpl implements RoleService {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @Override
-    public ResponseEntity<APIResponse> getAllPermission() {
-        List<Permission> per = permissionRepository.findAll();
-        List<PermissionDTO> perDTO = converterRole.toPermissionDTOList(per);
 
-        APIResponse apiResponse = APIResponse.builder()
-                .result(perDTO)
-                .message(localizationUtils.getLocalizedMessage(MessageKeys.PERMISSION_LIST_GET_SUCCESS))
-                .build();
-        return ResponseEntity.ok(apiResponse);
-    }
 
     @Override
     public ResponseEntity<APIResponse> updateRole(RoleDTO roleDTO, Long id) {

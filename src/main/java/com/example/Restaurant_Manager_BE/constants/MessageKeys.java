@@ -107,6 +107,8 @@ public class MessageKeys {
     public static final String IMPORT_GET_ALL_SUCCESS = "import.get_all_success";
     public static final String IMPORT_UPDATE_SUCCESS = "import.update_success";
 
+    //UPLOAD IMAGE
+    public static final String UPLOAD_IMG_SUCCESS = "upload_image_success";
 
     //PROCESS
     public static final String PROCESS_NOT_FOUND = "process.not_found";

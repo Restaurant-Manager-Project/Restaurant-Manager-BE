@@ -37,23 +37,7 @@ public class ConverterRoleImpl implements ConverterRole {
                 .build();
         return roleDTO;
     }
-    @Override
-    public PermissionDTO toPermissionDTO(Permission permissionEntity) {
-        if (permissionEntity == null) {return null;}
-        return PermissionDTO.builder()
-                .id(permissionEntity.getId())
-                .name(permissionEntity.getName())
-                .key(permissionEntity.getKey())
-                .build();
-    }
 
-    @Override
-    public List<PermissionDTO> toPermissionDTOList(List<Permission> permissionList) {
-        List<PermissionDTO> permission_DTO = permissionList.stream()
-                .map(per -> toPermissionDTO(per))
-                .toList();
-        return permission_DTO;
-    }
 
     @Override
     public RoleEntity toEntity(RoleDTO roleDTO) {
