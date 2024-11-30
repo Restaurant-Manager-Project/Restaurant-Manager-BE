@@ -31,10 +31,5 @@ public class RoleController {
     @DeleteMapping("api/roles/{id}")
     public ResponseEntity<APIResponse> deleteRole(@PathVariable("id") Long id) {return roleService.deleteRole(id);}
 
-    @PreAuthorize("hasRole('permission.view')")
-    @GetMapping("/api/permission")
-    public ResponseEntity<APIResponse> getAllPermission() {
-        return roleService.getAllPermission();
-    }
 
 }
