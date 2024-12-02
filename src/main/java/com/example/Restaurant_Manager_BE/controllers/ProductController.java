@@ -6,14 +6,22 @@ import com.example.Restaurant_Manager_BE.dto.ProductDTO;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.ProductService;
+import com.example.Restaurant_Manager_BE.services.UploadImgFile;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.beanutils.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 @RestController
@@ -22,6 +30,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final LocalizationUtils localizationUtils;
+
 
     @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn ")
     @GetMapping("/api/products")
@@ -40,17 +49,24 @@ public class ProductController {
 //    @PreAuthorize("hasRole('product.create')")
     @Operation(summary = "Thêm sản phẩm",description = "Thêm món ăn sau khi nhập đầy đủ thông tin")
     @PostMapping("/api/products")
-    public ResponseEntity<APIResponse> CreateProduct(@RequestBody ProductDTO ProductDTO){
-        if(ProductDTO == null){
-            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_CREATE_FAILED ));
+    public ResponseEntity<APIResponse> CreateProduct(@RequestParam Map<String, String> map, @RequestParam(value = "img", required = false) MultipartFile img) throws IOException {
+//        if( ProductDTO == null){
+//            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_CREATE_FAILED ));
+//        }
+        ProductDTO ProductDTO = new ProductDTO();
+        try {
+            BeanUtils.populate(ProductDTO, map);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return productService.createProducts(ProductDTO);
+        return productService.createProducts(ProductDTO, img);
     }
+
     @PreAuthorize("hasRole('product.delete')")
     @Operation(summary = "Xóa sản phẩm",description = "Xóa món ăn theo mã món ăn")
     @DeleteMapping("/api/products/{id}")
     public ResponseEntity<APIResponse> deleteProduct(@PathVariable("id") Long id){
-        if(id == null){
+        if (id == null){
             throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_DELETE_FAILED));
         }
         return productService.deleteProducts(id);

@@ -11,6 +11,7 @@ import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
 import com.example.Restaurant_Manager_BE.repositories.ProductRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.ProductService;
+import com.example.Restaurant_Manager_BE.services.UploadImgFile;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import com.example.Restaurant_Manager_BE.entities.CategoryEntity;
 import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
@@ -22,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.Restaurant_Manager_BE.entities.DetailsImportEntity;
 import com.example.Restaurant_Manager_BE.repositories.DetailImportRepository;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +41,7 @@ public class ProductServiceImpl implements ProductService {
     private final LocalizationUtils localizationUtils;
     private final CategoryRepository categoryRepository;
     private final ConverterStatistic converterStatistic;
+    private final UploadImgFile uploadImgFile;
     @Override
     public ResponseEntity<APIResponse> getAll() {
         List<ProductEntity> productEntityList =productRepository.getProduct_with_Price_from_Import();
@@ -78,8 +82,9 @@ public class ProductServiceImpl implements ProductService {
     }
     //create new product
     @Override
-    public ResponseEntity<APIResponse> createProducts(ProductDTO productDTO){
+    public ResponseEntity<APIResponse> createProducts(ProductDTO productDTO, MultipartFile img) {
         ProductEntity productEntity = converterProducts.toEntity(productDTO);
+        productEntity.setImg(uploadImgFile.uploadImg(img));
         productRepository.save(productEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_CREATE_SUCCESS));

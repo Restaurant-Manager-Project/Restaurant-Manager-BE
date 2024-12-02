@@ -3,6 +3,7 @@ package com.example.Restaurant_Manager_BE.services.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.UploadImgFile;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
@@ -27,18 +28,30 @@ public class UploadImgFileImpl implements UploadImgFile {
     private final Cloudinary cloudinary;
     private final LocalizationUtils localizationUtils;
     @Override
-    public ResponseEntity<APIResponse> uploadImg(MultipartFile file) throws IOException {
-        assert file.getOriginalFilename() != null;
-        String publicValue = generatePublicValue(file.getOriginalFilename());
-        String extension = getFileName(file.getOriginalFilename())[1];
-        File uploadFile = convert(file);
-        log.info("fileUpload is : {}", uploadFile);
-        cloudinary.uploader().upload(uploadFile, ObjectUtils.asMap("public_id", publicValue));
-        cleanDisk(uploadFile);
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMG_SUCCESS));
-        APIResponse.setResult(cloudinary.url().generate(StringUtils.join(publicValue,".", extension)));
-        return ResponseEntity.ok(APIResponse);
+    public String uploadImg(MultipartFile img) {
+        if (img == null) {
+            return "";
+        }
+
+        String fileName = img.getOriginalFilename();
+        if (!fileName.matches(".*\\.(png|jpg|jpeg|gif|bmp)$")) {
+            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMG_INVALID));
+        }
+
+        assert img.getOriginalFilename() != null;
+        String publicValue = generatePublicValue(img.getOriginalFilename());
+        String extension = getFileName(img.getOriginalFilename())[1];
+        try {
+            File uploadFile = convert(img);
+            log.info("fileUpload is : {}", uploadFile);
+            cloudinary.uploader().upload(uploadFile, ObjectUtils.asMap("public_id", publicValue));
+            cleanDisk(uploadFile);
+            return cloudinary.url().generate(StringUtils.join(publicValue,".", extension));
+        }
+        catch (IOException e){
+            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMG_INVALID));
+        }
+
     }
 
     private void cleanDisk(File file){
