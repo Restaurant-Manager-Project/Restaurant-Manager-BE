@@ -10,6 +10,10 @@ import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -22,7 +26,8 @@ import java.util.stream.Collectors;
 public class ConverterProductsImpl implements ConverterProducts {
     private final CategoryRepository categoryRepository;
     private final LocalizationUtils localizationUtils;
-
+    @Autowired
+    private final PagedResourcesAssembler<ProductDTO> pagedResourcesAssembler;
     @Override
     public ProductDTO toDTO(ProductEntity entity) {
         if(entity == null) return null;
@@ -62,6 +67,36 @@ public List<ProductDTO> toDTOList(List<ProductEntity> entities) {
             .collect(Collectors.toList());
 }
 
+    @Override
+    public Page<ProductDTO> toDTO_pagination(Page<ProductEntity> productEntityPage) {
+        List<ProductDTO> dtoList = productEntityPage.getContent().stream()
+                .map(entity -> {
+                    // Lấy thông tin từ detailsImportList (nếu có)
+                    DetailsImportEntity detail = (entity.getDetailsImportList() != null && !entity.getDetailsImportList().isEmpty())
+                            ? entity.getDetailsImportList().get(0)
+                            : null;
+
+                    // Đổi sang DTO
+                    return ProductDTO.builder()
+                            .id(entity.getId())
+                            .name(entity.getName())
+                            .img(entity.getImg())
+                            .description(entity.getDescription())
+                            .categoryName(entity.getCategory().getName())
+                            .price(detail != null ? detail.getPrice() : 0)
+                            .quantity_from_import(detail != null ? detail.getQuantity() : 0)
+                            .quantity(entity.getQuantity())
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        // Tạo Page<ProductDTO> từ List<ProductDTO>
+        return new PageImpl<>(
+                dtoList, // Nội dung
+                productEntityPage.getPageable(), // Pageable từ Page<ProductEntity>
+                productEntityPage.getTotalElements() // Tổng số phần tử
+        );
+    }
 
     @Override
     public ProductEntity toEntity(ProductDTO dto) {

@@ -23,11 +23,21 @@ public class ProductController {
     private final ProductService productService;
     private final LocalizationUtils localizationUtils;
 
+//    @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn ")
+//    @GetMapping("/api/products")
+//    public ResponseEntity<APIResponse> getAllProducts() {
+//        return productService.getAll();
+//    }
+//
     @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn ")
     @GetMapping("/api/products")
-    public ResponseEntity<APIResponse> getAllProducts() {
-        return productService.getAll();
-    }
+    public ResponseEntity<APIResponse> getAllProducts(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+    return productService.getAll(pageNo,pageSize,sortBy);
+}
 
     @PreAuthorize("hasRole('product.view')")
     @Operation(summary = "Tìm kiếm món ăn theo tiêu chí", description = "Tìm kiếm món ăn theo tiêu chí cụ thể {name, price, ...}")

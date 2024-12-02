@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface ProductService {
-    ResponseEntity<APIResponse> getAll();
+    ResponseEntity<APIResponse> getAll(Integer pageNo,Integer pageSize,String sortBy);
 
     ResponseEntity<APIResponse> getByName(String name);
     ResponseEntity<APIResponse> createProducts(ProductDTO productDTO);
