@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@EnableMethodSecurity(securedEnabled = true)
+@EnableMethodSecurity(prePostEnabled = false)
 public class SecurityConfig {
     @Value("${secretKey}")
     private String secretKey;
