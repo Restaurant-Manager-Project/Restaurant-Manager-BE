@@ -14,7 +14,7 @@ public class CustomClientRepositoryImpl implements CustomClientRepository {
     @Override
     public List<ClientDTO> findAll_fromClient_andInvoice(){
         String jpql = "SELECT new com.example.Restaurant_Manager_BE.dto.ClientDTO(" +
-                "c.id, c.firstName, c.lastName, c.phone,COALESCE( SUM(i.total),0L) )" +
+                "c.id, c.firstName, c.lastName, c.phone,COALESCE( SUM(i.total),0L) )," +
                 "FROM ClientEntity c " +
                 "LEFT JOIN InvoicesEntity i ON i.client.id = c.id " +
                 "WHERE c.isDeleted = false " +

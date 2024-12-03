@@ -64,12 +64,12 @@ public class ImportServiceImpl implements ImportService {
     @Override
     public ResponseEntity<APIResponse> updateImport(Long id, ImportDTO importDTO) {
         ImportEntity importEntity = importRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException(MessageKeys.IMPORT_NOT_EXISTED));
-        ImportEntity importEntityUpdate = converterImport.toEntity(importDTO);
+                .orElseThrow(() -> ate = converterImport.toEntity(importDTO);
         converterImport.mergeNonNullFields(importEntity, importEntityUpdate);
         importRepository.save(importEntity);
         APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.IMPORT_UPDATE_SUCCESS));
+        APIResponse.setMessage(localizationUtils.getLocalinew DataNotFoundException(MessageKeys.IMPORT_NOT_EXISTED));
+        ImportEntity importEntityUpdzedMessage(MessageKeys.IMPORT_UPDATE_SUCCESS));
         return ResponseEntity.ok(APIResponse);
     }
 }

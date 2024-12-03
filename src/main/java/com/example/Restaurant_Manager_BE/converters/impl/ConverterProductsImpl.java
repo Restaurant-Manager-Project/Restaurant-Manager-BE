@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 public class ConverterProductsImpl implements ConverterProducts {
     private final CategoryRepository categoryRepository;
     private final LocalizationUtils localizationUtils;
-    @Autowired
-    private final PagedResourcesAssembler<ProductDTO> pagedResourcesAssembler;
+//    @Autowired
+//    private PagedResourcesAssembler<ProductDTO> pagedResourcesAssembler;
     @Override
     public ProductDTO toDTO(ProductEntity entity) {
         if(entity == null) return null;

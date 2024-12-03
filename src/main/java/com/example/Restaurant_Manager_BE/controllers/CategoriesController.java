@@ -32,8 +32,11 @@ public class CategoriesController {
 
     @Operation(summary = "Lấy danh sách Loại ", description = "Lấy danh sách loại sản phẩm ")
     @GetMapping("/api/categories")
-    public ResponseEntity<APIResponse> getALLCategories(){
-        return categoriesService.getAll();
+    public ResponseEntity<APIResponse> getALLCategories(
+            @RequestParam(value = "pageNo",defaultValue = "0",required = false) int pageNo,
+            @RequestParam(value = "pageSize",defaultValue = "10",required = false) int pageSize
+    ){
+        return categoriesService.getAll(pageNo,pageSize);
     }
 
     @PreAuthorize("hasRole('category.update')")

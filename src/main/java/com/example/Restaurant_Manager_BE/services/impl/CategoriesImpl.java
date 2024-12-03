@@ -2,12 +2,17 @@ package com.example.Restaurant_Manager_BE.services.impl;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.converters.ConverterCategories;
 import com.example.Restaurant_Manager_BE.dto.CategoriesDTO;
+import com.example.Restaurant_Manager_BE.dto.PaginationDTO.CategoriesDTOPagination;
 import com.example.Restaurant_Manager_BE.entities.CategoryEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.CategoriesService;
 import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,7 +27,6 @@ public class CategoriesImpl implements CategoriesService {
     private final CategoryRepository categoryRepository;
     private final LocalizationUtils localizationUtils;
     private final ConverterCategories converterCategories;
-
     @Override
     public ResponseEntity<APIResponse> createCategories(CategoriesDTO categoriesDTO) {
         CategoryEntity categoryEntity = converterCategories.toEntity(categoriesDTO);
@@ -58,15 +62,24 @@ public class CategoriesImpl implements CategoriesService {
     }
 
     @Override
-    public ResponseEntity<APIResponse> getAll() {
-        List<CategoryEntity> categoryEntityList = categoryRepository.findAll();
-        List<CategoriesDTO> categoriesDTOList = categoryEntityList.stream()
-                .map(entity -> EntityDTOconverter.convertToDTO(entity, CategoriesDTO.class))
-                .collect(Collectors.toList());
-
+    public ResponseEntity<APIResponse> getAll(Integer pageNo,Integer pageSize) {
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+        Page<CategoryEntity> categoryEntityPage = categoryRepository.findAll(paging);
+        List<CategoryEntity> categoryEntityList = categoryEntityPage.getContent();
+        List<CategoriesDTO> categoryPageDTO = converterCategories.toDTOList(categoryEntityList);
+//        List<CategoriesDTO> categoriesDTOList = categoryEntityList.stream()
+//                .map(entity -> EntityDTOconverter.convertToDTO(entity, CategoriesDTO.class))
+//                .collect(Collectors.toList());
+        CategoriesDTOPagination result = new CategoriesDTOPagination();
+        result.setContent(categoryPageDTO);
+        result.setPageNo(categoryEntityPage.getNumber());
+        result.setPageSize(categoryEntityPage.getSize());
+        result.setTotalElements(categoryEntityPage.getTotalElements());
+        result.setTotalPages(categoryEntityPage.getTotalPages());
+        result.setLast(categoryEntityPage.isLast());
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_LIST_GET_SUCCESS));
-        APIResponse.setResult(categoriesDTOList);
+        APIResponse.setResult(result);
         return ResponseEntity.ok(APIResponse);
     }
 

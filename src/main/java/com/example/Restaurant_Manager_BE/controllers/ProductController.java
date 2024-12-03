@@ -37,7 +37,7 @@ public class ProductController {
     public ResponseEntity<APIResponse> getAllProducts(
             @RequestParam Integer pageNo,
             @RequestParam Integer pageSize,
-            @RequestParam String sortBy
+            @RequestParam(value = "sortBy",required = false) String sortBy
     ) {
         return productService.getAll(pageNo, pageSize, sortBy);
     }
