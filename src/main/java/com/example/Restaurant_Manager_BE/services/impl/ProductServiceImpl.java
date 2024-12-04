@@ -46,10 +46,20 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ConverterStatistic converterStatistic;
     private final UploadImgFile uploadImgFile;
-    @Override
-    public ResponseEntity<APIResponse> getAll(Integer pageNo,Integer pageSize,String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
+    @Override
+    public ResponseEntity<APIResponse> getAll() {
+        List<ProductEntity> productEntityList =productRepository.getProduct_with_Price_from_Import();
+        List<ProductDTO> productDTOList =converterProducts.toDTOList(productEntityList);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_LIST_GET_SUCCESS));
+        APIResponse.setResult(productDTOList);
+        return ResponseEntity.ok(APIResponse);
+
+    }
+    @Override
+    public ResponseEntity<APIResponse> getAll_pagination(Integer pageNo,Integer pageSize,String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         List<ProductEntity> productEntityList =productRepository.getProduct_with_Price_from_Import();
         Page<ProductEntity> pageProduct = productRepository.getProduct_with_Price_from_Import_Page(paging);
         List<ProductDTO> productDTOList =converterProducts.toDTOList(productEntityList);
@@ -57,7 +67,6 @@ public class ProductServiceImpl implements ProductService {
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_LIST_GET_SUCCESS));
         APIResponse.setResult(dtoPage);
-
         return ResponseEntity.ok(APIResponse);
 
     }

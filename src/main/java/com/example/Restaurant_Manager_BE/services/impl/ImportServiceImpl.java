@@ -5,10 +5,14 @@ import com.example.Restaurant_Manager_BE.converters.ConvertDetailsImport;
 import com.example.Restaurant_Manager_BE.converters.ConverterImport;
 import com.example.Restaurant_Manager_BE.dto.DetailsImportDTO;
 import com.example.Restaurant_Manager_BE.dto.ImportDTO;
+import com.example.Restaurant_Manager_BE.entities.DetailsImportEntity;
 import com.example.Restaurant_Manager_BE.entities.ImportEntity;
+import com.example.Restaurant_Manager_BE.entities.ProcessEntity;
+import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
 import com.example.Restaurant_Manager_BE.repositories.ImportRepository;
+import com.example.Restaurant_Manager_BE.repositories.ProductRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.ImportService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
@@ -26,7 +30,7 @@ public class ImportServiceImpl implements ImportService {
     private final ImportRepository importRepository;
     private final ConverterImport converterImport;
     private final LocalizationUtils localizationUtils;
-
+    private final ProductRepository productRepository;
     @Override
     public ResponseEntity<APIResponse> createImport(ImportDTO importDTO) {
         ImportEntity importEntity = converterImport.toEntity(importDTO);
@@ -37,7 +41,28 @@ public class ImportServiceImpl implements ImportService {
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.IMPORT_CREATE_SUCCESS));
         importRepository.save(importEntity);
+        updateProductQuantity(importEntity);
         return ResponseEntity.ok(APIResponse);
+    }
+
+    public void updateProductQuantity(ImportEntity importEntity) {
+        if(importEntity == null ) {return;}
+        List<DetailsImportEntity> listDetailImport = importEntity.getDetailsProductList();
+        listDetailImport.forEach(detailsImportEntity -> {
+            if(!checkValidDetailImport(detailsImportEntity)) {return;}
+            ProductEntity product = productRepository.findById(detailsImportEntity.getProduct().getId())
+                    .orElseThrow(()->new DataNotFoundException(MessageKeys.PRODUCT_NOT_EXISTED));
+            if(product.getQuantity()== null || product.getQuantity() <= 0) {
+                product.setQuantity(detailsImportEntity.getQuantity());
+                productRepository.save(product);
+            }
+
+        });
+    }
+    public boolean checkValidDetailImport(DetailsImportEntity detailsImportEntity) {
+        if(detailsImportEntity == null) {return false;}
+        else if(detailsImportEntity.getProduct() == null||detailsImportEntity.getQuantity()<=0) {return false;}
+        return true;
     }
 
     @Override
@@ -64,12 +89,12 @@ public class ImportServiceImpl implements ImportService {
     @Override
     public ResponseEntity<APIResponse> updateImport(Long id, ImportDTO importDTO) {
         ImportEntity importEntity = importRepository.findById(id)
-                .orElseThrow(() -> ate = converterImport.toEntity(importDTO);
+                .orElseThrow(() -> new DataNotFoundException(MessageKeys.IMPORT_NOT_EXISTED));
+        ImportEntity importEntityUpdate = converterImport.toEntity(importDTO);
         converterImport.mergeNonNullFields(importEntity, importEntityUpdate);
         importRepository.save(importEntity);
         APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalinew DataNotFoundException(MessageKeys.IMPORT_NOT_EXISTED));
-        ImportEntity importEntityUpdzedMessage(MessageKeys.IMPORT_UPDATE_SUCCESS));
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.IMPORT_UPDATE_SUCCESS));
         return ResponseEntity.ok(APIResponse);
     }
 }

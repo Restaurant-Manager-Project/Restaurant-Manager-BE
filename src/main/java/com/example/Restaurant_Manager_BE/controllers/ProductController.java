@@ -34,12 +34,18 @@ public class ProductController {
 
     @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn ")
     @GetMapping("/api/products")
+    public ResponseEntity<APIResponse> getAllProducts() {
+        return productService.getAll();
+    }
+
+    @Operation(summary = "Lấy danh sách món ăn có phân trang", description = "Lấy tất cả danh sách món ăn ")
+    @GetMapping("/api/products/pagination")
     public ResponseEntity<APIResponse> getAllProducts(
             @RequestParam Integer pageNo,
             @RequestParam Integer pageSize,
             @RequestParam(value = "sortBy",required = false) String sortBy
     ) {
-        return productService.getAll(pageNo, pageSize, sortBy);
+        return productService.getAll_pagination(pageNo, pageSize, sortBy);
     }
 
     @PreAuthorize("hasRole('product.view')")

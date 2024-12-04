@@ -8,6 +8,7 @@ import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.CategoriesService;
 import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
+import com.example.Restaurant_Manager_BE.services.UploadImgFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import com.example.Restaurant_Manager_BE.utils.EntityDTOconverter;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,9 +30,11 @@ public class CategoriesImpl implements CategoriesService {
     private final CategoryRepository categoryRepository;
     private final LocalizationUtils localizationUtils;
     private final ConverterCategories converterCategories;
+    private final UploadImgFile uploadImgFile;
     @Override
-    public ResponseEntity<APIResponse> createCategories(CategoriesDTO categoriesDTO) {
+    public ResponseEntity<APIResponse> createCategories(CategoriesDTO categoriesDTO, MultipartFile imgFile) {
         CategoryEntity categoryEntity = converterCategories.toEntity(categoriesDTO);
+        categoryEntity.setImg(uploadImgFile.uploadImg(imgFile));
         categoryRepository.save(categoryEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_CREATE_SUCCESS));

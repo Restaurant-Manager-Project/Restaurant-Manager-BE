@@ -9,8 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ProductService {
-    ResponseEntity<APIResponse> getAll(Integer pageNo,Integer pageSize,String sortBy);
-
+    ResponseEntity<APIResponse> getAll_pagination(Integer pageNo,Integer pageSize,String sortBy);
+    ResponseEntity<APIResponse> getAll();
     ResponseEntity<APIResponse> getByName(String name);
     ResponseEntity<APIResponse> createProducts(ProductDTO productDTO, MultipartFile img);
     ResponseEntity<APIResponse> getById(Long id);

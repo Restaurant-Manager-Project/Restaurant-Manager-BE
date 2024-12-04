@@ -14,6 +14,6 @@ public interface InvoiceService {
     ResponseEntity<APIResponse> getAll();
     ResponseEntity<APIResponse> deleteInvoice(Long id);
     ResponseEntity<APIResponse> updateInvoice(InvoiceDTO invoiceDTO);
-
+    ResponseEntity<APIResponse> getStatisticRevenue(int year);
 }
 
