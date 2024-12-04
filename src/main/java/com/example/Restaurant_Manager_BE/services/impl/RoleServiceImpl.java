@@ -43,6 +43,7 @@ public class RoleServiceImpl implements RoleService {
         APIResponse apiResponse = APIResponse.builder()
                 .result(listRoleDTO)
                 .message(localizationUtils.getLocalizedMessage(MessageKeys.ROLE_LIST_GET_SUCCESS))
+                .success(true)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
@@ -54,6 +55,7 @@ public class RoleServiceImpl implements RoleService {
         APIResponse apiResponse = APIResponse.builder()
                 .result(converterRole.toDTO(role))
                 .message(localizationUtils.getLocalizedMessage(MessageKeys.ROLE_CREATE_SUCCESS))
+                .success(true)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
@@ -69,6 +71,7 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.save(role);
         APIResponse apiResponse = APIResponse.builder()
                 .message(localizationUtils.getLocalizedMessage(MessageKeys.ROlE_UPDATED_SUCCESS))
+                .success(true)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
@@ -81,6 +84,7 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.save(role);
         APIResponse apiResponse = APIResponse.builder()
                 .message(localizationUtils.getLocalizedMessage(MessageKeys.ROlE_UPDATED_SUCCESS))
+                .success(true)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
