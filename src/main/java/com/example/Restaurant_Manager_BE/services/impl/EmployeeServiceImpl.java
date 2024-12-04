@@ -30,7 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_CREATE_FAILED));
         }
         EmployeeEntity employeeEntity = converterEmployee.toEntity(employeeDTO);
-        employeeEntity.setIsDeleted(false);
+//        employeeEntity.setIsDeleted(false);
         employeeRepository.save(employeeEntity);
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_CREATE_SUCCESS));

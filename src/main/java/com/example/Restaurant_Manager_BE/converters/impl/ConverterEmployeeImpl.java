@@ -1,14 +1,20 @@
 package com.example.Restaurant_Manager_BE.converters.impl;
+import com.example.Restaurant_Manager_BE.converters.ConverterAccount;
 import com.example.Restaurant_Manager_BE.converters.ConverterEmployee;
+import com.example.Restaurant_Manager_BE.dto.AccountDTO;
 import com.example.Restaurant_Manager_BE.dto.EmployeeDTO;
 import com.example.Restaurant_Manager_BE.entities.EmployeeEntity;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Component;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class ConverterEmployeeImpl implements ConverterEmployee {
+    private final ConverterAccount converterAccount;
     @Override
     public EmployeeDTO toDTO(EmployeeEntity entity) {
         if (entity == null) {
@@ -20,6 +26,7 @@ public class ConverterEmployeeImpl implements ConverterEmployee {
                 .lastName(entity.getLastName())
                 .phone(entity.getPhone())
                 .address(entity.getAddress())
+                .accountDTO(converterAccount.toDto(entity.getAccount()))
                 .build();
     }
 
@@ -28,15 +35,16 @@ public class ConverterEmployeeImpl implements ConverterEmployee {
         if (dto ==  null) {
             return null;
         }
-        return EmployeeEntity.builder()
+        EmployeeEntity entity = EmployeeEntity.builder()
                 .phone(dto.getPhone())
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .address(dto.getAddress())
                 .gender(dto.getGender())
                 .isDeleted(false)
-//                .account(dto.getAccountUsername())
                 .build();
+        entity.setAccount(converterAccount.toEntity(dto.getAccountDTO(),entity));
+        return entity;
     }
 
     @Override

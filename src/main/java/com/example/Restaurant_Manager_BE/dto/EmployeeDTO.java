@@ -22,10 +22,6 @@ public class EmployeeDTO {
     private String phone;
     private String address;
     private Boolean gender;
-    private String accountUsername;
-    @JsonProperty("importList")
-    private List<ImportDTO> importDTOList;
+    private AccountDTO accountDTO;
 
-    @JsonProperty("invoiceList")
-    private List<InvoiceDTO> invoiceDTOList;
 }
