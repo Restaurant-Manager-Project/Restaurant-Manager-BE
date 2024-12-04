@@ -6,6 +6,9 @@ import com.example.Restaurant_Manager_BE.repositories.Custom.CustomProductReposi
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +38,30 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         TypedQuery<ProductEntity> query=entityManager.createQuery(jpql, ProductEntity.class);
         return query.getResultList();
     }
+    @Override
+    public Page<ProductEntity> getProduct_with_Price_from_Import_Page(Pageable pageable) {
+        // Query chính để lấy sản phẩm
+        String jpql = "SELECT p FROM ProductEntity p WHERE p.isDeleted = false";
+        TypedQuery<ProductEntity> query = entityManager.createQuery(jpql, ProductEntity.class);
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
 
+        // Query để đếm tổng số bản ghi
+        String countJpql = "SELECT COUNT(p) FROM ProductEntity p WHERE p.isDeleted = false";
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql, Long.class);
+        long totalElements = countQuery.getSingleResult();
+
+        // Kết quả phân trang
+        List<ProductEntity> productEntities = query.getResultList();
+
+        // Lazy load các collection cần thiết (nếu cần)
+        productEntities.forEach(product -> {
+            product.getDetailsImportList().size();
+            product.getCategory().getName();
+        });
+
+        return new PageImpl<>(productEntities, pageable, totalElements);
+    }
     @Override
     public List<Object[]> getStatisticProductByCategoryAndSoldQuantity(Long categoryId) {
         String jpql = "SELECT " +

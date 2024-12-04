@@ -26,6 +26,6 @@ public class AccountEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
 
-    @OneToMany(mappedBy = "account")
-    private List<EmployeeEntity> employee;
+    @OneToOne(mappedBy = "account")
+    private EmployeeEntity employee;
 }

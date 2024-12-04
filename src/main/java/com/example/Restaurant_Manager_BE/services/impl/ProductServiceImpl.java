@@ -18,6 +18,10 @@ import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -42,15 +46,27 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ConverterStatistic converterStatistic;
     private final UploadImgFile uploadImgFile;
+
     @Override
     public ResponseEntity<APIResponse> getAll() {
         List<ProductEntity> productEntityList =productRepository.getProduct_with_Price_from_Import();
         List<ProductDTO> productDTOList =converterProducts.toDTOList(productEntityList);
-//        List<ProductDTO> productDTOList1 = productRepository.getProduct_with_Price_from_Import_price_notNUll();
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_LIST_GET_SUCCESS));
         APIResponse.setResult(productDTOList);
+        return ResponseEntity.ok(APIResponse);
 
+    }
+    @Override
+    public ResponseEntity<APIResponse> getAll_pagination(Integer pageNo,Integer pageSize,String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        List<ProductEntity> productEntityList =productRepository.getProduct_with_Price_from_Import();
+        Page<ProductEntity> pageProduct = productRepository.getProduct_with_Price_from_Import_Page(paging);
+        List<ProductDTO> productDTOList =converterProducts.toDTOList(productEntityList);
+        Page<ProductDTO> dtoPage = converterProducts.toDTO_pagination(pageProduct);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_LIST_GET_SUCCESS));
+        APIResponse.setResult(dtoPage);
         return ResponseEntity.ok(APIResponse);
 
     }

@@ -2,6 +2,7 @@ package com.example.Restaurant_Manager_BE.converters.impl;
 
 import com.example.Restaurant_Manager_BE.converters.ConverterStatistic;
 import com.example.Restaurant_Manager_BE.dto.StatisticDTO.ProductStatisticDTO;
+import com.example.Restaurant_Manager_BE.dto.StatisticDTO.RevenueStatisticDTO;
 import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,23 @@ public class ConverterStatisticImpl implements ConverterStatistic {
         return results.stream()
                 .map(this::toProductStatisticDTO) // Gọi lại hàm `toProductStatisticDTO`
                 .filter(Objects::nonNull) // Loại bỏ null nếu có
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public RevenueStatisticDTO toRevenueStatisticDTO(Object[] query_result) {
+       if (query_result == null) return null;
+       return RevenueStatisticDTO.builder()
+               .months(((Number) query_result[2]).intValue())
+               .revenue((Long) query_result[0])
+               .build();
+    }
+
+    @Override
+    public List<RevenueStatisticDTO> RevenueStatisticDTO_List(List<Object[]> results) {
+        if(results == null || results.isEmpty()) return List.of();
+        return results.stream()
+                .map(this::toRevenueStatisticDTO)
                 .collect(Collectors.toList());
     }
 }

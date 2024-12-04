@@ -104,7 +104,7 @@ public class ClientServiceImpl implements ClientService {
     public  ResponseEntity<APIResponse> getALL(){
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_GET_SUCCESS));
-        APIResponse.setResult(clientRepository.findAll_fromClient_andInvoice());
+        APIResponse.setResult(clientRepository.findAll());
         return ResponseEntity.ok(APIResponse);
     }
 

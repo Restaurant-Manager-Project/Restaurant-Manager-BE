@@ -5,6 +5,7 @@ import com.example.Restaurant_Manager_BE.dto.ProductDTO;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.repositories.ProductRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
+import com.example.Restaurant_Manager_BE.services.InvoiceService;
 import com.example.Restaurant_Manager_BE.services.ProductService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RequiredArgsConstructor
 public class StatisticController {
     private final ProductService productService;
+    private final InvoiceService invoiceService;
     private final LocalizationUtils localizationUtils;
     @PreAuthorize("hasRole('statistic.view')")
     @Operation(summary = "Thống kê sản phẩm theo số lượng bán được và xếp hạng chúng")
@@ -26,4 +28,14 @@ public class StatisticController {
                                                                           Long category_id) {
         return productService.StatisticProductByCategoryAndSoldQuantity(category_id);
     }
+    @PreAuthorize("hasRole('statistic.view')")
+    @Operation(summary = "Thóng kê doanh thu theo năm ( có 12 tháng )  ")
+    @GetMapping("api/statistic/revenue/{year}")
+    public ResponseEntity<APIResponse> getStatisticRevenueByYear(@PathVariable("year") int year)
+    {
+        return invoiceService.getStatisticRevenue(year);
+    }
+//    @PreAuthorize("hasRole('statistic.view')")
+//    @Operation(summary ="Thống kê doanh thu và hóa đơn theo ngày hoặc theo tháng hoăc theo năm")
+//    @GetMapping("api/statistic/revenue/")
 }

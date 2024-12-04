@@ -9,10 +9,14 @@ import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import com.example.Restaurant_Manager_BE.dto.CategoriesDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,17 +27,26 @@ public class CategoriesController {
     @PreAuthorize("hasRole('category.create')")
     @Operation(summary = "Thêm loại sản phẩm",description = "Thêm loại của món ăn sau khi nhập đầy đủ thông tin")
     @PostMapping("/api/categories")
-    public ResponseEntity<APIResponse> CreateCategories(@RequestBody CategoriesDTO  categoriesDTO){
-        if(categoriesDTO == null){
-            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_CREATE_FAILED ));
+    public ResponseEntity<APIResponse> CreateCategories(
+            @RequestParam Map<String,String> map,
+            @RequestParam(value = "img",required = false) MultipartFile imgFile
+    ){
+        CategoriesDTO dto = new CategoriesDTO();
+        try {
+            BeanUtils.populate(dto, map);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return categoriesService.createCategories(categoriesDTO);
+        return categoriesService.createCategories(dto, imgFile);
     }
 
     @Operation(summary = "Lấy danh sách Loại ", description = "Lấy danh sách loại sản phẩm ")
     @GetMapping("/api/categories")
-    public ResponseEntity<APIResponse> getALLCategories(){
-        return categoriesService.getAll();
+    public ResponseEntity<APIResponse> getALLCategories(
+            @RequestParam(value = "pageNo",defaultValue = "0",required = false) int pageNo,
+            @RequestParam(value = "pageSize",defaultValue = "10",required = false) int pageSize
+    ){
+        return categoriesService.getAll(pageNo,pageSize);
     }
 
     @PreAuthorize("hasRole('category.update')")

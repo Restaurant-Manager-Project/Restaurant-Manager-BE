@@ -1,7 +1,9 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.converters.ConverterStatistic;
 import com.example.Restaurant_Manager_BE.dto.InvoiceDTO;
+import com.example.Restaurant_Manager_BE.dto.StatisticDTO.RevenueStatisticDTO;
 import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.entities.InvoiceEntity;
 import com.example.Restaurant_Manager_BE.entities.RankEntity;
@@ -33,7 +35,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final ClientRepository ClientRepository;
     private final ClientRepository clientRepository;
     private final RankRepository rankRepository;
-
+    private final ConverterStatistic converterStatistic;
 
     public void updateClientPaid(InvoiceEntity invoiceEntity) {
         ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId())
@@ -129,6 +131,16 @@ public class InvoiceServiceImpl implements InvoiceService {
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_GET_SUCCESS));
         APIResponse.setResult(invoiceDTO);
+        return ResponseEntity.ok(APIResponse);
+    }
+
+    @Override
+    public ResponseEntity<APIResponse> getStatisticRevenue(int year) {
+        List<Object[]> invoiceEntity=invoiceRepository.RevenueStatisticByYear(year);
+        List<RevenueStatisticDTO> result = converterStatistic.RevenueStatisticDTO_List(invoiceEntity);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_GET_SUCCESS));
+        APIResponse.setResult(result);
         return ResponseEntity.ok(APIResponse);
     }
 }

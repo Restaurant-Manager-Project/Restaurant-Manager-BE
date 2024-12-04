@@ -1,14 +1,11 @@
 package com.example.Restaurant_Manager_BE.services.impl;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import com.example.Restaurant_Manager_BE.converters.ConverterEmployee;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.dto.EmployeeDTO;
 import com.example.Restaurant_Manager_BE.entities.EmployeeEntity;
@@ -18,7 +15,6 @@ import com.example.Restaurant_Manager_BE.repositories.EmployeeRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.EmployeeService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,13 +23,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final LocalizationUtils localizationUtils;
     private final ModelMapper modelMapper;
-
+    private final ConverterEmployee converterEmployee;
     @Override
     public ResponseEntity<APIResponse> createEmployee(EmployeeDTO employeeDTO) {
         if (employeeDTO == null) {
             throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_CREATE_FAILED));
         }
-        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
+        EmployeeEntity employeeEntity = converterEmployee.toEntity(employeeDTO);
         employeeEntity.setIsDeleted(false);
         employeeRepository.save(employeeEntity);
         APIResponse apiResponse = new APIResponse();
@@ -44,11 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public ResponseEntity<APIResponse> getAll() {
         List<EmployeeEntity> employeeEntityList = employeeRepository.findAll();
-        List<EmployeeDTO> employeeDTOList = new ArrayList<>();
-        employeeEntityList.forEach(employeeEntity -> {
-            EmployeeDTO employee = modelMapper.map(employeeEntity, EmployeeDTO.class);
-            employeeDTOList.add(employee);
-        });
+        List<EmployeeDTO> employeeDTOList = converterEmployee.toDTOList(employeeEntityList);
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_LIST_GET_SUCCESS));
         apiResponse.setResult(employeeDTOList);
@@ -60,9 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmployeeEntity employeeEntity = employeeRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(
                         localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED)));
-
-        EmployeeDTO employeeDTO = modelMapper.map(employeeEntity, EmployeeDTO.class);
-
+        EmployeeDTO employeeDTO =converterEmployee.toDTO(employeeEntity);
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_GET_SUCCESS));
         apiResponse.setResult(employeeDTO);
@@ -93,9 +83,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmployeeEntity employeeEntity = employeeRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(
                         localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED)));
-        modelMapper.typeMap(EmployeeDTO.class, EmployeeEntity.class)
-                .addMappings(mapper -> mapper.skip(EmployeeEntity::setId));
-        modelMapper.map(employeeDTO, employeeEntity);
+        EmployeeEntity employeeEntity_update=converterEmployee.toEntity(employeeDTO);
+        converterEmployee.mergeNonNullFields(employeeEntity, employeeEntity_update);
         employeeRepository.save(employeeEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_UPDATE_SUCCESS));
@@ -109,13 +98,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employeeEntityList.isEmpty()) {
             throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED));
         }
-
-        List<EmployeeDTO> employeeDTOList = new ArrayList<>();
-        employeeEntityList.forEach(employeeEntity -> {
-            EmployeeDTO employeeDTO = modelMapper.map(employeeEntity, EmployeeDTO.class);
-            employeeDTOList.add(employeeDTO);
-        });
-
+        List<EmployeeDTO> employeeDTOList = converterEmployee.toDTOList(employeeEntityList);
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_LIST_GET_SUCCESS));
         apiResponse.setResult(employeeDTOList);

@@ -38,10 +38,14 @@ public class ClientEntity {
     // Phương thức cập nhật rank
     public void updateRank(List<RankEntity> availableRanks) {
         // filter ranks that suit with paid
+        RankEntity bestRank = null;
         for (RankEntity r : availableRanks) {
             if (this.paid >= r.getEligible()) {
-                this.rank = r;
+                if (bestRank == null || r.getEligible() > bestRank.getEligible()) {
+                    bestRank = r;
+                }
             }
         }
+        this.rank = bestRank;
     }
 }
