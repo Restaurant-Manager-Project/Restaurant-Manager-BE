@@ -1,10 +1,7 @@
 package com.example.Restaurant_Manager_BE.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +12,9 @@ import java.util.Collection;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AccountDTO {
     private String username;
     private String password;
-
+    private Long role_id;
 }

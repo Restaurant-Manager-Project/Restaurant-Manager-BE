@@ -34,11 +34,11 @@ public class ConverterStatisticImpl implements ConverterStatistic {
     }
 
     @Override
-    public RevenueStatisticDTO toRevenueStatisticDTO(Object[] query_result) {
-       if (query_result == null) return null;
+    public RevenueStatisticDTO toRevenueStatisticDTO(Object[] queryResult) {
+       if (queryResult == null) return null;
        return RevenueStatisticDTO.builder()
-               .months(((Number) query_result[2]).intValue())
-               .revenue((Long) query_result[0])
+               .months(queryResult[2] instanceof Number ? ((Number) queryResult[2]).intValue() : 0) // Đảm bảo không lỗi ép kiểu
+               .revenue(queryResult[0] instanceof Number ? ((Number) queryResult[0]).longValue() : 0L)
                .build();
     }
 
