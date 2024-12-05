@@ -7,6 +7,10 @@ import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -37,8 +41,8 @@ public class ConverterStatisticImpl implements ConverterStatistic {
     public RevenueStatisticDTO toRevenueStatisticDTO(Object[] queryResult) {
        if (queryResult == null) return null;
        return RevenueStatisticDTO.builder()
-               .months(queryResult[2] instanceof Number ? ((Number) queryResult[2]).intValue() : 0) // Đảm bảo không lỗi ép kiểu
-               .revenue(queryResult[0] instanceof Number ? ((Number) queryResult[0]).longValue() : 0L)
+               .months((Integer) queryResult[0])  // Tháng đã được ép kiểu đúng ở custom repo
+               .revenue((Long) queryResult[1])
                .build();
     }
 

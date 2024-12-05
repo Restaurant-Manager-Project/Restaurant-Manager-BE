@@ -18,6 +18,6 @@ public class InvoiceDTO {
     private Date timeCreate;
     private Long total;
     @JsonProperty("orderList")
-    private List<OrderDTO> OrderDTOList;
+        private List<OrderDTO> OrderDTOList;
 
 }

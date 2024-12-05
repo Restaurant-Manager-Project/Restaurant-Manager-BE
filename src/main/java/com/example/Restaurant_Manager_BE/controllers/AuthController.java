@@ -30,14 +30,9 @@ public class AuthController {
     public ResponseEntity<APIResponse> login(@RequestBody AccountDTO accountDTO){
         // Nạp data từ request vào secuity
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(accountDTO.getUsername(), accountDTO.getPassword());
-
         // Xác thực người dùng
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
         String accessToken = securityUtil.createToken(authentication);
-
-
-
         APIResponse apiResponse = new APIResponse();
         apiResponse.setResult(accessToken);
 

@@ -69,7 +69,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.save(employeeEntity);
             APIResponse apiResponse = new APIResponse();
             apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_DELETE_SUCCESS));
-            apiResponse.setResult(employeeEntity);
             return ResponseEntity.ok(apiResponse);
         } else {
             APIResponse apiResponse = new APIResponse();

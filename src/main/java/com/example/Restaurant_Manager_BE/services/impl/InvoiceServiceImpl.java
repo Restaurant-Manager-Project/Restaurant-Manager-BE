@@ -1,16 +1,20 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.converters.ConverterOrder;
 import com.example.Restaurant_Manager_BE.converters.ConverterStatistic;
 import com.example.Restaurant_Manager_BE.dto.InvoiceDTO;
+import com.example.Restaurant_Manager_BE.dto.OrderDTO;
 import com.example.Restaurant_Manager_BE.dto.StatisticDTO.RevenueStatisticDTO;
 import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.entities.InvoiceEntity;
+import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 import com.example.Restaurant_Manager_BE.entities.RankEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
 import com.example.Restaurant_Manager_BE.repositories.ClientRepository;
 import com.example.Restaurant_Manager_BE.repositories.InvoiceRepository;
+import com.example.Restaurant_Manager_BE.repositories.OrderRepository;
 import com.example.Restaurant_Manager_BE.repositories.RankRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.InvoiceService;
@@ -36,6 +40,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final ClientRepository clientRepository;
     private final RankRepository rankRepository;
     private final ConverterStatistic converterStatistic;
+    private final OrderRepository orderRepository;
+    private final ConverterOrder converterOrder;
 
     public void updateClientPaid(InvoiceEntity invoiceEntity) {
         ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId())
@@ -62,6 +68,15 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoiceRepository.save(invoiceEntity);
         } catch (Exception e) {
             throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_FAILED));
+        }
+        List<OrderDTO> ordersListDTO = invoiceDTO.getOrderDTOList();
+        if(ordersListDTO == null || ordersListDTO.size() == 0) {
+            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
+        }
+        for(OrderDTO orderDTO : ordersListDTO) {
+            OrderEntity orderEntity = orderRepository.findById(orderDTO.getOrderId())
+                    .orElseThrow(()->new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
+            orderEntity.setInvoice(invoiceEntity);
         }
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
