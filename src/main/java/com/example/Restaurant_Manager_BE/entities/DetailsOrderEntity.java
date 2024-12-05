@@ -4,6 +4,7 @@ package com.example.Restaurant_Manager_BE.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "details_order")
@@ -12,6 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Where(clause = "is_deleted = false")
 public class DetailsOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
