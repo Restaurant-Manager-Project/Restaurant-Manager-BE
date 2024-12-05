@@ -37,10 +37,12 @@ public class ConverterAccountImpl implements ConverterAccount {
     @Override
     public AccountDTO toDto(AccountEntity entity) {
         if(entity == null) {return null;}
+        Long roleId = (entity.getRole() != null) ? entity.getRole().getId() : null;
+
         return AccountDTO.builder()
                 .username(entity.getUsername())
                 .password(entity.getPassword())
-                .role_id(entity.getRole().getId())
+                .role_id(roleId)
                 .build();
     }
 }

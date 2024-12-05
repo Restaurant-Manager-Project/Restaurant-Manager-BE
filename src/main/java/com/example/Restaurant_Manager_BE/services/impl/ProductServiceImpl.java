@@ -132,8 +132,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<APIResponse> StatisticProductByCategoryAndSoldQuantity(Long id) {
-        List<Object[]> productEntity = productRepository.getStatisticProductByCategoryAndSoldQuantity(id);
+    public ResponseEntity<APIResponse> StatisticProductByCategoryAndSoldQuantity(Long id,Long topRank) {
+        List<Object[]> productEntity = productRepository.getStatisticProductByCategoryAndSoldQuantity(id,topRank);
         List<ProductStatisticDTO> result = converterStatistic.ProductStatisticDTO_List(productEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_GET_SUCCESS));

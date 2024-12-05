@@ -63,24 +63,29 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         return new PageImpl<>(productEntities, pageable, totalElements);
     }
     @Override
-    public List<Object[]> getStatisticProductByCategoryAndSoldQuantity(Long categoryId) {
+    public List<Object[]> getStatisticProductByCategoryAndSoldQuantity(Long categoryId,Long topRank) {
+
         String jpql = "SELECT " +
                 "    p.id AS product_id, " +
                 "    p.name AS product_name, " +
                 "    COALESCE(SUM(d.quantity), 0) AS total_quantity_sold, " +
-                "    RANK() OVER (ORDER BY COALESCE(SUM(d.quantity), 0) DESC) AS rank " +
+                "    DENSE_RANK() OVER (ORDER BY COALESCE(SUM(d.quantity), 0) DESC) AS rank " +
                 "FROM ProductEntity p " +
-                "LEFT JOIN p.detailsOrderList d " +
-                "WHERE (:categoryId IS NULL OR p.category.id = :categoryId) " +
+                "LEFT JOIN p.detailsOrderList d "+
+                ((categoryId != null) ? "WHERE p.category.id = :categoryId " : "") +
+//                "WHERE (:categoryId IS NULL OR p.category.id = :categoryId) " +
                 "GROUP BY p.id, p.name " +
                 "ORDER BY total_quantity_sold DESC";
 
+        if (topRank != null) {
+            jpql += " LIMIT :topRank";
+        }
         // Tạo query với kết quả là kiểu Object[]
         TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
 
         // Gán tham số categoryId nếu không null
-        query.setParameter("categoryId", categoryId);
-
+        if(categoryId!=null) query.setParameter("categoryId", categoryId);
+        if(topRank!=null) query.setParameter("topRank", topRank);
         return query.getResultList();
     }
 
