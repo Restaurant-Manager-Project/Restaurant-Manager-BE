@@ -4,6 +4,7 @@ package com.example.Restaurant_Manager_BE.entities;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 //@JsonInclude(JsonInclude.Include.NON_NULL)
+@Where(clause = "is_deleted = false")
 public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

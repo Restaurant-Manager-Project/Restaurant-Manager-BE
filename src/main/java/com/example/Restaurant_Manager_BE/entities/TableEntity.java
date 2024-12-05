@@ -2,6 +2,7 @@ package com.example.Restaurant_Manager_BE.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Where(clause = "is_deleted = false")
 public class TableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
