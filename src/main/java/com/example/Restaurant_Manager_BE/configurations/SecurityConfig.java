@@ -47,32 +47,30 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         request -> request
-//                                .requestMatchers("/",
-//                                        "/login",
-//                                        "/swagger-ui/**",
-//                                        "/swagger-resources/*",
-//                                        "/v3/api-docs/**",
-//                                        "/tables",
-//                                        "/vnpay",
-//                                        "/vnpay-callback",
-//                                        String.format("%s/tables", prefix),
-//                                        String.format("%s/products", prefix),
-//                                        String.format("%s/categories", prefix),
-//                                        String.format("%s/orders", prefix),
-//                                        String.format("%s/order", prefix),
-//                                        String.format("%s/permission", prefix),
-//                                        String.format("%s/table/*/details-orders", prefix),
-//                                        String.format("%s/roles", prefix)).permitAll()
-//
-//                                .requestMatchers(HttpMethod.GET,
-//                                        String.format("%s/products", prefix),
-//                                         String.format("%s/categories", prefix),
-//                                        String.format("%s/permission",prefix)
-//                                        ).permitAll()
-////                                    .requestMatchers("api/products/**").hasAuthority("SCOPE_USER")
-//                                .anyRequest().authenticated()
+                                .requestMatchers("/",
+                                        "/login",
+                                        "/swagger-ui/**",
+                                        "/swagger-resources/*",
+                                        "/v3/api-docs/**",
+                                        "/tables",
+                                        "/vnpay",
+                                        "/vnpay-callback",
+                                        String.format("%s/tables", prefix),
+                                        String.format("%s/products", prefix),
+                                        String.format("%s/categories", prefix),
+                                        String.format("%s/orders", prefix),
+                                        String.format("%s/order", prefix),
+                                        String.format("%s/permission", prefix),
+                                        String.format("%s/table/*/details-orders", prefix),
+                                        String.format("%s/roles", prefix)).permitAll()
 
-                                .anyRequest().permitAll()
+                                .requestMatchers(HttpMethod.GET,
+                                        String.format("%s/products", prefix),
+                                         String.format("%s/categories", prefix),
+                                        String.format("%s/permission",prefix)).permitAll()
+                                .anyRequest().authenticated()
+
+//                                .anyRequest().permitAll()
 
                 )
                 .formLogin(login -> login.disable())
