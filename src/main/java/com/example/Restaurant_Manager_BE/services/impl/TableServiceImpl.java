@@ -34,6 +34,7 @@ public class TableServiceImpl implements TableService {
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
     private final LocalizationUtils localizationUtils;
+    private final QRcode qrCode;
 
 
     @Override
@@ -52,16 +53,16 @@ public class TableServiceImpl implements TableService {
     public void generateDirection(String direction) {
         TableEntity tableEntity = tableRepository.findByDirection(direction)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        String directionNew = QRcode.generatePassword(25);
+        String directionNew = qrCode.generatePassword(25);
         tableEntity.setDirection(directionNew);
         tableRepository.save(tableEntity);
     }
 
     @Override
-    public ResponseEntity<APIResponse> generateQRCode(String direction) {
-        TableEntity tableEntity = tableRepository.findByDirection(direction)
+    public ResponseEntity<APIResponse> generateQRCode(Long tableId) {
+        TableEntity tableEntity = tableRepository.findById(tableId)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        String linkQR = QRcode.generateQR(tableEntity.getDirection());;
+        String linkQR = qrCode.generateQR(tableEntity.getDirection());
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_CREATE_QR_SUCCESS));
         APIResponse.setResult(linkQR);

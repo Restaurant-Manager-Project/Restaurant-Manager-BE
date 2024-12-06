@@ -51,4 +51,13 @@ public class TableController {
     public ResponseEntity<APIResponse> deleteTable(@PathVariable Long table_id) {
         return tableService.deleteTableByID(table_id);
     }
+
+    @GetMapping("/api/tables/{id}/qrcode")
+    public ResponseEntity<APIResponse> generateQRCode(@PathVariable Long id) {
+        if (id == null) {
+            throw new InvalidParamException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND));
+        }
+        return tableService.generateQRCode(id);
+    }
+
 }
