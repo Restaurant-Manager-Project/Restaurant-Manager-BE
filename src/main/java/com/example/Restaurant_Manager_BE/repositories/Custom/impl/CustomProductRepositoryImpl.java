@@ -26,7 +26,7 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         TypedQuery<ProductDTO> query=entityManager.createQuery(jpql, ProductDTO.class);
         return query.getResultList();
     }
-
+    //important function right here
     @Override
     public List<ProductEntity> getProduct_with_Price_from_Import(){
         String jpql="SELECT  p " +
@@ -34,7 +34,10 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
                 "LEFT JOIN FETCH p.detailsImportList i " +
                 "LEFT JOIN FETCH p.category c "+
                 "WHERE p.isDeleted = false";
-        ;
+//        "  AND   i.importBill.dateCreate = (SELECT MAX(im.dateCreate) " +
+//                "                                   FROM ImportEntity im " +
+//                "                                   JOIN im.detailsProductList di " +
+//                "                                   WHERE di.product = p)";
         TypedQuery<ProductEntity> query=entityManager.createQuery(jpql, ProductEntity.class);
         return query.getResultList();
     }
