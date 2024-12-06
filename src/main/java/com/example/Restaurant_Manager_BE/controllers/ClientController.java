@@ -15,7 +15,7 @@ public class ClientController {
     private final ClientService clientService;
 
 
-    @PreAuthorize("hasRole('client.view')")
+
     @GetMapping("/api/clients/search")
     public ResponseEntity<APIResponse> findByPhone(@RequestParam String phone) {
         return clientService.findByPhone(phone);
