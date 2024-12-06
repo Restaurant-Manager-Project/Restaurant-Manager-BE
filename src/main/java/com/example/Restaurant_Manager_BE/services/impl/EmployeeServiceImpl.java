@@ -104,4 +104,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @Override
+    public EmployeeDTO findByUsername(String username) {
+        EmployeeEntity employee = employeeRepository.findByAccount_Username(username);
+        return modelMapper.map(employee, EmployeeDTO.class);
+    }
 }

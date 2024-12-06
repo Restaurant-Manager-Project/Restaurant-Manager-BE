@@ -2,10 +2,12 @@ package com.example.Restaurant_Manager_BE.controllers;
 
 
 import com.example.Restaurant_Manager_BE.dto.AccountDTO;
+import com.example.Restaurant_Manager_BE.dto.EmployeeDTO;
 import com.example.Restaurant_Manager_BE.entities.AccountEntity;
 import com.example.Restaurant_Manager_BE.entities.RoleEntity;
 import com.example.Restaurant_Manager_BE.repositories.AccountRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
+import com.example.Restaurant_Manager_BE.services.EmployeeService;
 import com.example.Restaurant_Manager_BE.services.RoleService;
 import com.example.Restaurant_Manager_BE.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class AuthController {
     private final AccountRepository accountRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final SecurityUtil securityUtil;
+    private final EmployeeService employeeService;
     @PostMapping("/login")
     public ResponseEntity<APIResponse> login(@RequestBody AccountDTO accountDTO){
         // Nạp data từ request vào secuity
@@ -33,8 +38,13 @@ public class AuthController {
         // Xác thực người dùng
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         String accessToken = securityUtil.createToken(authentication);
+
         APIResponse apiResponse = new APIResponse();
-        apiResponse.setResult(accessToken);
+        EmployeeDTO employeeDTO = employeeService.findByUsername(accountDTO.getUsername());
+        Map<String, Object> result = new HashMap<>();
+        result.put("accessToken", accessToken);
+        result.put("employeeID", employeeDTO.getId());
+        apiResponse.setResult(result);
 
         return ResponseEntity.ok(apiResponse);
     }
