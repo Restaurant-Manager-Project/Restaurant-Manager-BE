@@ -18,4 +18,6 @@ public interface EmployeeService {
 
     ResponseEntity<APIResponse> findEmployees(String name);
 
+    EmployeeDTO findByUsername(String username);
+
 }

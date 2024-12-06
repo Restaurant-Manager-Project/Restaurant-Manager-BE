@@ -12,4 +12,5 @@ public class TableDTO {
     private String name;
     private String statusId;
     private String statusName;
+    private String direction;
 }
