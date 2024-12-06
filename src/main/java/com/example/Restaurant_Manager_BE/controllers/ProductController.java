@@ -38,6 +38,13 @@ public class ProductController {
         return productService.getAll();
     }
 
+    @PreAuthorize("hasRole('product.view')")
+    @Operation(summary = " Láy sản phẩm khi import")
+    @GetMapping("api/import/products")
+    public ResponseEntity<APIResponse> getProductsWithQuantityIsEmpty(){
+        return productService.getProductsQuantityZero();
+    }
+
     @Operation(summary = "Lấy danh sách món ăn có phân trang", description = "Lấy tất cả danh sách món ăn ")
     @GetMapping("/api/products/pagination")
     public ResponseEntity<APIResponse> getAllProducts(

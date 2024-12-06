@@ -11,6 +11,7 @@ import com.example.Restaurant_Manager_BE.entities.ProcessEntity;
 import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
+import com.example.Restaurant_Manager_BE.repositories.DetailImportRepository;
 import com.example.Restaurant_Manager_BE.repositories.ImportRepository;
 import com.example.Restaurant_Manager_BE.repositories.ProductRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
@@ -31,6 +32,8 @@ public class ImportServiceImpl implements ImportService {
     private final ConverterImport converterImport;
     private final LocalizationUtils localizationUtils;
     private final ProductRepository productRepository;
+    private final DetailImportRepository detailImportRepository;
+
     @Override
     public ResponseEntity<APIResponse> createImport(ImportDTO importDTO) {
         ImportEntity importEntity = converterImport.toEntity(importDTO);
@@ -40,12 +43,12 @@ public class ImportServiceImpl implements ImportService {
         }
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.IMPORT_CREATE_SUCCESS));
+        updateProductQuantityAndSellPrice(importEntity);
         importRepository.save(importEntity);
-        updateProductQuantity(importEntity);
         return ResponseEntity.ok(APIResponse);
     }
 
-    public void updateProductQuantity(ImportEntity importEntity) {
+    public void updateProductQuantityAndSellPrice(ImportEntity importEntity) {
         if(importEntity == null ) {return;}
         List<DetailsImportEntity> listDetailImport = importEntity.getDetailsProductList();
         listDetailImport.forEach(detailsImportEntity -> {
@@ -56,9 +59,15 @@ public class ImportServiceImpl implements ImportService {
                 product.setQuantity(detailsImportEntity.getQuantity());
                 productRepository.save(product);
             }
-
         });
     }
+//    private void updateIsDeletedFromDetailImportByProduct(List<DetailsImportEntity> listDetailImport,Long import_id) {
+//        listDetailImport.forEach(detailImportEntity -> {
+//            if(detailImportEntity.getId().equals(import_id)) {return;}
+//            detailImportEntity.setIsDeleted(true);
+//            detailImportRepository.save(detailImportEntity);
+//        });
+//    }
     public boolean checkValidDetailImport(DetailsImportEntity detailsImportEntity) {
         if(detailsImportEntity == null) {return false;}
         else if(detailsImportEntity.getProduct() == null||detailsImportEntity.getQuantity()<=0) {return false;}

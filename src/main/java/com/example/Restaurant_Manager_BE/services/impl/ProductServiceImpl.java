@@ -140,4 +140,14 @@ public class ProductServiceImpl implements ProductService {
         APIResponse.setResult(result);
         return ResponseEntity.ok(APIResponse);
     }
+
+    @Override
+    public ResponseEntity<APIResponse> getProductsQuantityZero() {
+        List<ProductEntity> listProducts = productRepository.findByQuantityEquals(0);
+        List<ProductDTO> productDTOList =converterProducts.toDTOList(listProducts);
+        APIResponse APIResponse = new APIResponse();
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_LIST_GET_SUCCESS));
+        APIResponse.setResult(productDTOList);
+        return ResponseEntity.ok(APIResponse);
+    }
 }

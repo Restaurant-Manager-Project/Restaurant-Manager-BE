@@ -40,6 +40,7 @@ public class ConvertDetailsImportImpl implements ConvertDetailsImport {
                 .quantity(dto.getQuantity())
                 .importPrice(dto.getImportPrice())
                 .Price(dto.getSellPrice())
+                .isDeleted(false)
                 .build();
     }
 

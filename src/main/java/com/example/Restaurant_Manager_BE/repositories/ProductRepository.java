@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> , CustomProductRepository {
     List<ProductEntity> findByNameContaining(String name);
-
+    List<ProductEntity> findByQuantityEquals(int quantity);
 }
