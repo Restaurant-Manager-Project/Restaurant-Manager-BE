@@ -27,7 +27,7 @@ public class ClientController {
         return clientService.findById(id);
     }
 
-//    @PreAuthorize("hasRole('client.create')")
+
     @PostMapping("/api/clients")
     public ResponseEntity<APIResponse> createClient(@RequestBody ClientDTO clientDTO) {
         return clientService.createClient(clientDTO);
