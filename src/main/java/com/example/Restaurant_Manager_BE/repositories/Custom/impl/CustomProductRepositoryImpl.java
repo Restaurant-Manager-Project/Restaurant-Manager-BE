@@ -33,11 +33,10 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
                 "FROM ProductEntity p " +
                 "LEFT JOIN FETCH p.detailsImportList i " +
                 "LEFT JOIN FETCH p.category c "+
-                "WHERE p.isDeleted = false";
-//        "  AND   i.importBill.dateCreate = (SELECT MAX(im.dateCreate) " +
-//                "                                   FROM ImportEntity im " +
-//                "                                   JOIN im.detailsProductList di " +
-//                "                                   WHERE di.product = p)";
+                "WHERE p.isDeleted = false"+
+                "  AND i.importBill.id = (SELECT MAX(di2.importBill.id) " +
+                "                            FROM DetailsImportEntity di2 " +
+                "                            WHERE di2.product = p)";
         TypedQuery<ProductEntity> query=entityManager.createQuery(jpql, ProductEntity.class);
         return query.getResultList();
     }

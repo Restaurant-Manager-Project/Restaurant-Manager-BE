@@ -17,4 +17,5 @@ public interface ProductService {
     ResponseEntity<APIResponse> deleteProducts(Long id);
     ResponseEntity<APIResponse> updateProducts(Long id , ProductDTO productDTO);
     ResponseEntity<APIResponse> StatisticProductByCategoryAndSoldQuantity(Long id,Long topRank);
+    ResponseEntity<APIResponse> getProductsQuantityZero();
 }

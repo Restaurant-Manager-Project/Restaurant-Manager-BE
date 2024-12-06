@@ -58,22 +58,16 @@ public class ImportServiceImpl implements ImportService {
             if(product.getQuantity()== null || product.getQuantity() <= 0) {
                 product.setQuantity(detailsImportEntity.getQuantity());
                 productRepository.save(product);
-                List<DetailsImportEntity> detailImportlist = detailImportRepository.findByProductId(product.getId());
-                if(detailImportlist.isEmpty()) {return;}
-                else{
-                    updateIsDeletedFromDetailImportByProduct(detailImportlist, product.getId());
-                }
             }
-
         });
     }
-    private void updateIsDeletedFromDetailImportByProduct(List<DetailsImportEntity> listDetailImport,Long import_id) {
-        listDetailImport.forEach(detailImportEntity -> {
-            if(detailImportEntity.getId().equals(import_id)) {return;}
-            detailImportEntity.setIsDeleted(true);
-            detailImportRepository.save(detailImportEntity);
-        });
-    }
+//    private void updateIsDeletedFromDetailImportByProduct(List<DetailsImportEntity> listDetailImport,Long import_id) {
+//        listDetailImport.forEach(detailImportEntity -> {
+//            if(detailImportEntity.getId().equals(import_id)) {return;}
+//            detailImportEntity.setIsDeleted(true);
+//            detailImportRepository.save(detailImportEntity);
+//        });
+//    }
     public boolean checkValidDetailImport(DetailsImportEntity detailsImportEntity) {
         if(detailsImportEntity == null) {return false;}
         else if(detailsImportEntity.getProduct() == null||detailsImportEntity.getQuantity()<=0) {return false;}
