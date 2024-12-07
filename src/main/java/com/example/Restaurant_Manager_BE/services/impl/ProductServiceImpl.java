@@ -106,30 +106,34 @@ public class ProductServiceImpl implements ProductService {
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_CREATE_SUCCESS));
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
     }
-    //delete product
-    @Override
-    public ResponseEntity<APIResponse> deleteProducts(Long id){
-        ProductEntity productEntity = productRepository.findById(id)
-                .orElseThrow(()-> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
-        System.out.print(productEntity.getName());
-        productEntity.setIsDeleted(true);
-        productRepository.save(productEntity);
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_DELETE_SUCCESS));
-        return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
-    }
+
     //update product
     @Override
-    public ResponseEntity<APIResponse> updateProducts(Long id , ProductDTO productDTO){
+    public ResponseEntity<APIResponse> updateProducts(Long id , ProductDTO productDTO,MultipartFile img){
         ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
         ProductEntity productEntityUpdate = converterProducts.toEntity(productDTO);
+        productEntityUpdate.setImg(uploadImgFile.uploadImg(img));
         converterProducts.mergeNonNullFieldsProduct(productEntity, productEntityUpdate);
         productRepository.save(productEntity);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_UPDATE_SUCCESS));
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
     }
+
+    //delete product
+    @Override
+    public ResponseEntity<APIResponse> deleteProducts(Long id){
+        APIResponse APIResponse = new APIResponse();
+        ProductEntity productEntity = productRepository.findById(id)
+                .orElseThrow(()-> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
+        System.out.print(productEntity.getName());
+        productEntity.setIsDeleted(true);
+        productRepository.save(productEntity);
+        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_DELETE_SUCCESS));
+        return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
+    }
+
 
     @Override
     public ResponseEntity<APIResponse> StatisticProductByCategoryAndSoldQuantity(Long id,Long topRank) {

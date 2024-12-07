@@ -59,10 +59,16 @@ public class CategoriesController {
     @PreAuthorize("hasRole('category.delete')")
     @Operation(summary="Sửa categories")
     @PutMapping("api/categories/{id}")
-    public ResponseEntity<APIResponse> updateCategory(@PathVariable Long id, @RequestBody CategoriesDTO categoriesDTO){
-        if(categoriesDTO == null) {
-            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_NOT_EXISTED));
+    public ResponseEntity<APIResponse> updateCategory(
+            @PathVariable Long id,
+            @RequestParam Map<String,String> map,
+            @RequestParam(value = "img",required = false) MultipartFile imgFile){
+        CategoriesDTO dto = new CategoriesDTO();
+        try {
+            BeanUtils.populate(dto, map);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-            return categoriesService.updateCategory(id, categoriesDTO);
+            return categoriesService.updateCategory(id, dto,imgFile);
     }
 }
