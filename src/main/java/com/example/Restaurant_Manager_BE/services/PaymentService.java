@@ -17,15 +17,17 @@ public class PaymentService {
     public ResponseEntity<PaymentResponse> createVnPayPayment(Map<String, Object> reqData, HttpServletRequest request) {
         long amount = (Integer) (reqData.get("amount")) * 100L;
         String directionTable =  reqData.get("directionTable").toString();
+        String clientId = reqData.get("clientId").toString();
         String bankCode = reqData.getOrDefault("bankCode", "").toString();
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
+
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount));
         if (bankCode != null && !bankCode.isEmpty()) {
             vnpParamsMap.put("vnp_BankCode", bankCode);
         }
         vnpParamsMap.put("vnp_IpAddr", VNPAYUtil.getIpAddress(request));
         //
-        vnpParamsMap.put("vnp_OrderInfo", directionTable);
+        vnpParamsMap.put("vnp_OrderInfo", directionTable + "_" + clientId);
         vnpParamsMap.put("vnp_TxnRef", directionTable);
         //
         String queryUrl = VNPAYUtil.getPaymentURL(vnpParamsMap, true);

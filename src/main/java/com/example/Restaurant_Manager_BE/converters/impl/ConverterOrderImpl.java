@@ -1,12 +1,15 @@
 package com.example.Restaurant_Manager_BE.converters.impl;
 
+import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.converters.ConverterDetailsOrder;
 import com.example.Restaurant_Manager_BE.converters.ConverterOrder;
 import com.example.Restaurant_Manager_BE.dto.OrderDTO;
 import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 import com.example.Restaurant_Manager_BE.entities.TableEntity;
+import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.repositories.TableRepository;
 import com.example.Restaurant_Manager_BE.services.TableService;
+import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +20,7 @@ import java.util.List;
 public class ConverterOrderImpl implements ConverterOrder {
     private final ConverterDetailsOrder converterDetailsOrder;
     private final TableRepository tableRepository;
+    private final LocalizationUtils localizationUtils;
     @Override
     public OrderDTO toDTO(OrderEntity entity) {
         if (entity == null) {
@@ -40,12 +44,13 @@ public class ConverterOrderImpl implements ConverterOrder {
         if (dto == null) {
             return null;
         }
-        TableEntity tableEntity = tableRepository.findById(dto.getTableId()).get();
+        TableEntity tableEntity = tableRepository.findById(dto.getTableId())
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
         OrderEntity orderEntity = OrderEntity.builder()
             .dateCreate(dto.getDateCreate())
             .total(dto.getTotal())
             .table(tableEntity)
-            .directionTable(dto.getDirectionTable())
+            .directionTable(tableEntity.getDirection())
             .isDeleted(false)
             .build();
         orderEntity.setDetailsOrderList(converterDetailsOrder.toEntityList(dto.getDetailsOrderDTOList(), orderEntity));
