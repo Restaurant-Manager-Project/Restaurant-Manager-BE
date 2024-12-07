@@ -106,6 +106,7 @@ public List<ProductDTO> toDTOList(List<ProductEntity> entities) {
                 .name(dto.getName())
                 .img(dto.getImg())
                 .description(dto.getDescription())
+                .quantity(dto.getQuantity())
                 .isDeleted(false);
 
         // Only set the category if categoryId is provided

@@ -73,6 +73,7 @@ public class ProductController {
         ProductDTO ProductDTO = new ProductDTO();
         try {
             BeanUtils.populate(ProductDTO, map);
+            ProductDTO.setQuantity(0L);
         } catch (Exception e) {
             e.printStackTrace();
         }

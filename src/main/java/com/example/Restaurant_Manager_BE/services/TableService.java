@@ -9,7 +9,7 @@ import java.util.List;
 public interface TableService {
     ResponseEntity<APIResponse> findByDirection(String direction);
 
-    ResponseEntity<APIResponse> generateQRCode(String direction);
+    ResponseEntity<APIResponse> generateQRCode(Long tableId);
 
     ResponseEntity<APIResponse> mergeAllDetailsInOrderList(String direction);
 
