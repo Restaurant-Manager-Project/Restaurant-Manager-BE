@@ -93,7 +93,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             orderRepository.save(orderEntity);
         }
         tableService.generateDirection(direction);
-        tableService.updateStatusOfTableByID(tableId, StatusOrder.SERVED.getId());
+        tableService.updateStatusOfTableByID(tableId, 1L);
         APIResponse apiResponse = new APIResponse();
         updateClientPaid(invoiceEntity);
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
