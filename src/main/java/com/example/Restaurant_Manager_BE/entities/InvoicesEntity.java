@@ -33,4 +33,6 @@ public class InvoicesEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private ClientEntity client;
+
+
 }

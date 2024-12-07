@@ -17,7 +17,7 @@ public class PaymentService {
     public ResponseEntity<PaymentResponse> createVnPayPayment(Map<String, Object> reqData, HttpServletRequest request) {
         long amount = (Integer) (reqData.get("amount")) * 100L;
         String directionTable =  reqData.get("directionTable").toString();
-        String clientId = reqData.get("clientId").toString();
+        String clientId = reqData.get("clientId") == null ? "" : reqData.get("clientId").toString();
         String bankCode = reqData.getOrDefault("bankCode", "").toString();
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
 

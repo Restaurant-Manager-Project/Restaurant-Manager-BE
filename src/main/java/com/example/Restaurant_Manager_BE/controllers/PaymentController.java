@@ -22,7 +22,6 @@ public class PaymentController {
 
     private final PaymentService paymentService;
     private final OrderService orderService;
-    private final TableService tableService;
     private final InvoiceService invoiceService;
     private final ModelMapper modelMapper;
     @PostMapping("/vnpay")
@@ -34,7 +33,7 @@ public class PaymentController {
         String status = request.getParameter("vnp_ResponseCode");
         String[] listOrder = request.getParameter("vnp_OrderInfo").split("_");
         String direction = listOrder[0];
-        Long clientId = Long.parseLong(listOrder[1]);
+        Long clientId = listOrder.length == 2 ? Long.parseLong(listOrder[1]) : null;
         long amount = Long.parseLong(request.getParameter("vnp_Amount")) / 100;
         if (status.equals("00")) {
             List<OrderDTO> test = modelMapper.map(orderService.getOrdersByDirection(direction).getBody().getResult(), List.class);;
@@ -45,7 +44,6 @@ public class PaymentController {
                     .timeCreate(new Date())
                     .OrderDTOList(test)
                     .build();
-            tableService.generateDirection(direction);
             return ResponseEntity.ok(PaymentResponse.builder()
                     .code(status)
                     .message("Success")

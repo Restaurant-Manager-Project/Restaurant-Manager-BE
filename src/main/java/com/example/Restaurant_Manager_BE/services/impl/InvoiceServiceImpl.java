@@ -10,6 +10,7 @@ import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.entities.InvoiceEntity;
 import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 import com.example.Restaurant_Manager_BE.entities.RankEntity;
+import com.example.Restaurant_Manager_BE.enums.StatusOrder;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
 import com.example.Restaurant_Manager_BE.repositories.ClientRepository;
@@ -18,6 +19,7 @@ import com.example.Restaurant_Manager_BE.repositories.OrderRepository;
 import com.example.Restaurant_Manager_BE.repositories.RankRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.InvoiceService;
+import com.example.Restaurant_Manager_BE.services.TableService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,6 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,8 +45,13 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final ConverterStatistic converterStatistic;
     private final OrderRepository orderRepository;
     private final ConverterOrder converterOrder;
+    private final TableService tableService;
+
 
     public void updateClientPaid(InvoiceEntity invoiceEntity) {
+        if (invoiceEntity.getClient() == null) {
+            return;
+        }
         ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId())
                 .orElseThrow(()->new DataNotFoundException
                         (localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_NOT_EXISTS)));
@@ -64,23 +72,31 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         InvoiceEntity invoiceEntity = modelMapper.map(invoiceDTO, InvoiceEntity.class);
         invoiceEntity.setIsDeleted(false);
+
+        List<OrderDTO> ordersListDTO = invoiceDTO.getOrderDTOList();
+        if(ordersListDTO == null || ordersListDTO.size() == 0) {
+            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
+        }
         try {
             invoiceRepository.save(invoiceEntity);
         } catch (Exception e) {
             throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_FAILED));
         }
-        List<OrderDTO> ordersListDTO = invoiceDTO.getOrderDTOList();
-        if(ordersListDTO == null || ordersListDTO.size() == 0) {
-            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
-        }
+        String direction = "";
+        Long tableId = 0L;
         for(OrderDTO orderDTO : ordersListDTO) {
             OrderEntity orderEntity = orderRepository.findById(orderDTO.getOrderId())
                     .orElseThrow(()->new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
+            direction = orderEntity.getDirectionTable();
             orderEntity.setInvoice(invoiceEntity);
+            tableId = orderEntity.getTable().getId();
+            orderRepository.save(orderEntity);
         }
+        tableService.generateDirection(direction);
+        tableService.updateStatusOfTableByID(tableId, StatusOrder.SERVED.getId());
         APIResponse apiResponse = new APIResponse();
-        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
         updateClientPaid(invoiceEntity);
+        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
         apiResponse.setResult(invoiceEntity);
         return ResponseEntity.ok(apiResponse);
     }
