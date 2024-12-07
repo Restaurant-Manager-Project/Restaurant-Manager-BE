@@ -9,5 +9,5 @@ public interface CategoriesService {
     ResponseEntity<APIResponse> createCategories(CategoriesDTO categoryDTO, MultipartFile imgFile);
     ResponseEntity<APIResponse> getAll(Integer pageNo,Integer pageSize);
     ResponseEntity<APIResponse> deleteCategory(Long id);
-    ResponseEntity<APIResponse> updateCategory(Long id, CategoriesDTO categoriesDTO);
+    ResponseEntity<APIResponse> updateCategory(Long id, CategoriesDTO categoriesDTO,MultipartFile imgFile);
 }

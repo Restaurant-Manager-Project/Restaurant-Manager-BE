@@ -53,11 +53,12 @@ public class CategoriesImpl implements CategoriesService {
     }
 
     @Override
-    public ResponseEntity<APIResponse> updateCategory(Long id, CategoriesDTO categoriesDTO) {
+    public ResponseEntity<APIResponse> updateCategory(Long id, CategoriesDTO categoriesDTO,MultipartFile imgFile) {
         CategoryEntity categoryEntity = categoryRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(
                         localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_UPDATE_FAILED)));
         CategoryEntity categoryEntityUpdate = converterCategories.toEntity(categoriesDTO);
+        categoryEntity.setImg(uploadImgFile.uploadImg(imgFile));
         converterCategories.mergeNonNullFields(categoryEntity,categoryEntityUpdate);
         APIResponse APIResponse = new APIResponse();
         APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_UPDATE_SUCCESS));

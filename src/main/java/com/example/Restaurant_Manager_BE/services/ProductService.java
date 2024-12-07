@@ -15,7 +15,7 @@ public interface ProductService {
     ResponseEntity<APIResponse> createProducts(ProductDTO productDTO, MultipartFile img);
     ResponseEntity<APIResponse> getById(Long id);
     ResponseEntity<APIResponse> deleteProducts(Long id);
-    ResponseEntity<APIResponse> updateProducts(Long id , ProductDTO productDTO);
+    ResponseEntity<APIResponse> updateProducts(Long id , ProductDTO productDTO,MultipartFile img);
     ResponseEntity<APIResponse> StatisticProductByCategoryAndSoldQuantity(Long id,Long topRank);
     ResponseEntity<APIResponse> getProductsQuantityZero();
 }

@@ -92,13 +92,18 @@ public class ProductController {
     @PreAuthorize("hasRole('product.update')")
     @Operation(summary = "Sửa sản phẩm ",description = "Sửa sản phẩm theo thông tin nhập ")
     @PutMapping("/api/products/{id}")
-    public ResponseEntity<APIResponse> updateProduct(@RequestBody ProductDTO ProductDTO,@PathVariable("id") Long id){
-        if(ProductDTO == null){
-            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_UPDATE_FAILED));
+    public ResponseEntity<APIResponse> updateProduct(
+            @RequestParam Map<String, String> map, @RequestParam(value = "img", required = false) MultipartFile img
+            ,@PathVariable("id") Long id){
+        ProductDTO ProductDTO = new ProductDTO();
+        try {
+            BeanUtils.populate(ProductDTO, map);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 //        Long id = ProductDTO.getId();
 //        productService.SkipNullFields(ProductDTO);
-        return productService.updateProducts(id,ProductDTO);
+        return productService.updateProducts(id,ProductDTO,img);
     }
 }
     
