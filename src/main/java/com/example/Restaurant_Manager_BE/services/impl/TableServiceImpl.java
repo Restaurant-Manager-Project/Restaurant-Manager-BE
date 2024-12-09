@@ -94,7 +94,7 @@ public class TableServiceImpl implements TableService {
         return ResponseEntity.ok(APIResponse);
     }
     @Override
-    public ResponseEntity<APIResponse> updateStatusOfTableByID(Long id,Long status_id){
+    public ResponseEntity<APIResponse> updateStatusOfTableByID(Long id, Long status_id){
         TableEntity tableEntity = tableRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
         StatusTableEntity statusTableEntity= statusTableRepository.findById(status_id)

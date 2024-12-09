@@ -6,6 +6,7 @@ import com.example.Restaurant_Manager_BE.dto.DetailsOrderDTO;
 import com.example.Restaurant_Manager_BE.entities.*;
 import com.example.Restaurant_Manager_BE.dto.OrderDTO;
 import com.example.Restaurant_Manager_BE.enums.StatusOrder;
+import com.example.Restaurant_Manager_BE.enums.StatusTable;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.OutOfStockException;
 import com.example.Restaurant_Manager_BE.repositories.*;
@@ -33,6 +34,7 @@ public class OrderServiceImpl implements OrderService {
     private final LocalizationUtils localizationUtils;
     private final ConverterOrder converterOrder;
     private final ProcessRepository processRepository;
+    private final StatusTableRepository statusTableRepository;
 
 
     private void updateStockProduct(List<DetailsOrderEntity> listDetail) {
@@ -52,9 +54,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public ResponseEntity<APIResponse> createOrder(OrderDTO orderDTO) {
-
         OrderEntity orderEntity = converterOrder.toEntity(orderDTO);
         orderEntity.setProcess(processRepository.getById(StatusOrder.RECEIVED.getId()));
+        TableEntity tableEntity = tableRepository.findById(orderEntity.getTable().getId())
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
+        StatusTableEntity statusTableEntity = statusTableRepository.findById(StatusTable.OCCUPIED.getId())
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.STATUS_TABLE_NOT_FOUND)));
+        tableEntity.setStatusTable(statusTableEntity);
+        tableRepository.save(tableEntity);
         updateStockProduct(orderEntity.getDetailsOrderList());
         orderRepository.save(orderEntity);
         APIResponse APIResponse = new APIResponse();

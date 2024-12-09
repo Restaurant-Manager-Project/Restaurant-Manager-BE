@@ -11,6 +11,7 @@ import com.example.Restaurant_Manager_BE.entities.InvoiceEntity;
 import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 import com.example.Restaurant_Manager_BE.entities.RankEntity;
 import com.example.Restaurant_Manager_BE.enums.StatusOrder;
+import com.example.Restaurant_Manager_BE.enums.StatusTable;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
 import com.example.Restaurant_Manager_BE.repositories.ClientRepository;
@@ -26,6 +27,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,6 +68,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<APIResponse> createInvoice(InvoiceDTO invoiceDTO) {
         if (invoiceDTO == null || invoiceDTO.getTotal() == null || invoiceDTO.getTimeCreate() == null) {
             throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
@@ -92,8 +95,10 @@ public class InvoiceServiceImpl implements InvoiceService {
             tableId = orderEntity.getTable().getId();
             orderRepository.save(orderEntity);
         }
+
         tableService.generateDirection(direction);
-        tableService.updateStatusOfTableByID(tableId, 1L);
+        tableService.updateStatusOfTableByID(tableId, StatusTable.AVAILABLE.getId());
+
         APIResponse apiResponse = new APIResponse();
         updateClientPaid(invoiceEntity);
         apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
