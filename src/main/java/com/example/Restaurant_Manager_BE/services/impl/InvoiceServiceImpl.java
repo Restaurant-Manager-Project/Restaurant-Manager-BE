@@ -46,7 +46,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final RankRepository rankRepository;
     private final ConverterStatistic converterStatistic;
     private final OrderRepository orderRepository;
-    private final ConverterOrder converterOrder;
+
     private final TableService tableService;
 
 
@@ -98,6 +98,16 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         tableService.generateDirection(direction);
         tableService.updateStatusOfTableByID(tableId, StatusTable.AVAILABLE.getId());
+
+
+        ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId()).orElse(null);
+        if (client != null) {
+            client.setPaid(client.getPaid() + invoiceEntity.getTotal());
+            List<RankEntity> AllRank = rankRepository.findAll();
+            client.updateRank(AllRank);
+            ClientRepository.save(client);
+        }
+
 
         APIResponse apiResponse = new APIResponse();
         updateClientPaid(invoiceEntity);
