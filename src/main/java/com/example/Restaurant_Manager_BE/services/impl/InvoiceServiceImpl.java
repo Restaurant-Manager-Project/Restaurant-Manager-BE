@@ -100,8 +100,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         tableService.updateStatusOfTableByID(tableId, StatusTable.AVAILABLE.getId());
 
 
-        ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId()).orElse(null);
-        if (client != null) {
+
+        if (invoiceEntity.getClient() != null) {
+            ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId()).orElse(null);
             client.setPaid(client.getPaid() + invoiceEntity.getTotal());
             List<RankEntity> AllRank = rankRepository.findAll();
             client.updateRank(AllRank);
