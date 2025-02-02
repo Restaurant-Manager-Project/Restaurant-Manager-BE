@@ -1,13 +1,20 @@
 package com.example.Restaurant_Manager_BE.configurations;
 
+import com.example.Restaurant_Manager_BE.services.AccountService;
 import com.example.Restaurant_Manager_BE.utils.SecurityUtil;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
@@ -21,8 +28,10 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -30,12 +39,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled = false)
+@RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    @Value("${secretKey}")
-    private String secretKey;
-
     private String prefix = "/api";
+    private final AccountService accountService;
+    private final PreFilter preFilter;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
@@ -43,7 +52,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
                                 .requestMatchers("/",
-                                        "/login",
+                                        "/api/auth/access",
                                         "/swagger-ui/**",
                                         "/swagger-resources/*",
                                         "/v3/api-docs/**",
@@ -68,28 +77,31 @@ public class SecurityConfig {
                                         String.format("%s/permission",prefix)).permitAll()
                                 .anyRequest().authenticated()
 
-//                                .anyRequest().permitAll()
 
                 )
                 .formLogin(login -> login.disable())
-                .oauth2ResourceServer((oauth2) -> oauth2.jwt(jwt -> jwt
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter())))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors(new Customizer<CorsConfigurer<HttpSecurity>>() {
-                    @Override
-                    public void customize(CorsConfigurer<HttpSecurity> httpSecurityCorsConfigurer) {
-                        CorsConfiguration configuration = new CorsConfiguration();
-                        configuration.setAllowedOrigins(List.of("*"));
-                        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-                        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
-                        configuration.setExposedHeaders(List.of("x-auth-token"));
-                        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                        source.registerCorsConfiguration("/**", configuration);
-                        httpSecurityCorsConfigurer.configurationSource(source);
-                    }
-                });
+//                .oauth2ResourceServer((oauth2) -> oauth2.jwt(jwt -> jwt
+//                        .jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Khong luu token o phia server
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(preFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
+    }
+
+    @Bean
+    WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                        .allowedHeaders("authorization", "content-type", "x-auth-token")
+                        .exposedHeaders("x-auth-token");
+            }
+        };
     }
 
     @Bean
@@ -98,39 +110,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-        return jwtAuthenticationConverter;
+    public AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(accountService.userDetailsService());
+        return provider;
     }
 
-    private SecretKey getSecretKey() {
-        byte[] keyBytes = Base64.from(secretKey).decode();
-        return new SecretKeySpec(keyBytes, 0, keyBytes.length, SecurityUtil.JWT_ALGORITHM.getName());
-    }
 
+    // Quan li cac role/user khi access vao he thong
     @Bean
-    public JwtEncoder jwtEncoder() {
-        return new NimbusJwtEncoder(new ImmutableSecret<>(getSecretKey()));
-    }
-
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder =  NimbusJwtDecoder
-                .withSecretKey(getSecretKey())
-                .macAlgorithm(SecurityUtil.JWT_ALGORITHM)
-                .build();
-        return token -> {
-            try {
-                return jwtDecoder.decode(token);
-            }
-            catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
 }

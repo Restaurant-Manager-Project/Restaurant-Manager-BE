@@ -29,28 +29,28 @@ public class SupplierController {
     private final SupplierService supplierService;
     private final LocalizationUtils localizationUtils;
 
-    @PreAuthorize("hasRole('supplier.view')")
+    @PreAuthorize("hasAuthority('supplier.view')")
     @Operation(summary = "Lấy danh sách nhà cung cấp", description = "Lấy tất cả danh sách nhà cung cấp")
     @GetMapping("/api/suppliers")
     public ResponseEntity<APIResponse> getAllSuppliers() {
         return supplierService.getAll();
     }
 
-    @PreAuthorize("hasRole('supplier.view')")
+    @PreAuthorize("hasAuthority('supplier.view')")
     @Operation(summary = "Tìm kiếm nhà cung cấp tiêu chí", description = "Tìm kiếm nhà cung cấp theo tiêu chí {name, address,...}")
     @GetMapping("/api/suppliers/search")
     public ResponseEntity<APIResponse> getSupplierByName(@RequestParam Map<String, String> params) {
         return supplierService.getByName(params.get("name"));
     }
 
-    @PreAuthorize("hasRole('supplier.view')")
+    @PreAuthorize("hasAuthority('supplier.view')")
     @Operation(summary = "Tìm kiếm nhà cung cấp theo id")
     @GetMapping("/api/supplier/{id}")
     public ResponseEntity<APIResponse> getSupplierById(@PathVariable("id") Long id) {
         return supplierService.getById(id);
     }
 
-    @PreAuthorize("hasRole('supplier.create')")
+    @PreAuthorize("hasAuthority('supplier.create')")
     @Operation(summary = "Tạo nhà cung cấp mới")
     @PostMapping("/api/suppliers")
     public ResponseEntity<APIResponse> createSupplier(@RequestBody SupplierDTO supplierDTO) {

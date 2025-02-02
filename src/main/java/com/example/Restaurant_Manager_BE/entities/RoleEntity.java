@@ -36,7 +36,7 @@ public class RoleEntity {
     private List<AccountEntity> accounts;
 
     @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(
             name = "role_permission",
             joinColumns = @JoinColumn(name = "role_id"),

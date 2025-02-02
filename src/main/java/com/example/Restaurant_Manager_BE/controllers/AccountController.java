@@ -18,7 +18,10 @@ public class AccountController {
     private final AccountService accountService;
     @PostMapping("/accounts")
     public ResponseEntity<APIResponse> createAccount(@RequestBody AccountDTO accountDTO) {
-        return accountService.createAccount(accountDTO);
+//        return ResponseEntity.ok(APIResponse.builder()
+//                .result(accountService.createAccount(accountDTO))
+//                .build());
+        return null;
     }
 
     @GetMapping("/accounts/test")
