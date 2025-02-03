@@ -38,7 +38,7 @@ public class ProductController {
         return productService.getAll();
     }
 
-    @PreAuthorize("hasRole('product.view')")
+    @PreAuthorize("hasAuthority('product.view')")
     @Operation(summary = " Láy sản phẩm khi import")
     @GetMapping("api/import/products")
     public ResponseEntity<APIResponse> getProductsWithQuantityIsEmpty(){
@@ -55,7 +55,7 @@ public class ProductController {
         return productService.getAll_pagination(pageNo, pageSize, sortBy);
     }
 
-    @PreAuthorize("hasRole('product.view')")
+    @PreAuthorize("hasAuthority('product.view')")
     @Operation(summary = "Tìm kiếm món ăn theo tiêu chí", description = "Tìm kiếm món ăn theo tiêu chí cụ thể {name, price, ...}")
     @GetMapping("/api/products/search")
     public ResponseEntity<APIResponse> findProducts(@RequestParam Map<String, String> params) {
@@ -80,7 +80,7 @@ public class ProductController {
         return productService.createProducts(ProductDTO, img);
     }
 
-    @PreAuthorize("hasRole('product.delete')")
+    @PreAuthorize("hasAuthority('product.delete')")
     @Operation(summary = "Xóa sản phẩm",description = "Xóa món ăn theo mã món ăn")
     @DeleteMapping("/api/products/{id}")
     public ResponseEntity<APIResponse> deleteProduct(@PathVariable("id") Long id){
@@ -89,7 +89,7 @@ public class ProductController {
         }
         return productService.deleteProducts(id);
     }
-    @PreAuthorize("hasRole('product.update')")
+    @PreAuthorize("hasAuthority('product.update')")
     @Operation(summary = "Sửa sản phẩm ",description = "Sửa sản phẩm theo thông tin nhập ")
     @PutMapping("/api/products/{id}")
     public ResponseEntity<APIResponse> updateProduct(

@@ -60,7 +60,7 @@ public class SupplierController {
         return supplierService.createSupplier(supplierDTO);
     }
 
-    @PreAuthorize("hasRole('supplier.delete')")
+    @PreAuthorize("hasAuthority('supplier.delete')")
     @Operation(summary = "Xóa nhà cung cấp")
     @DeleteMapping("/api/supplier/{id}")
     public ResponseEntity<APIResponse> deleteSupplier(@PathVariable("id") Long supplierId) {
@@ -69,7 +69,7 @@ public class SupplierController {
 
     @Operation(summary = "Chỉnh sửa thông tin nhà cung cấp")
     @PutMapping("/api/supplier")
-
+    @PreAuthorize("hasAuthority('supplier.update')")
     public ResponseEntity<APIResponse> updateSupplier(@RequestBody SupplierDTO supplierDTO) {
         if (supplierDTO == null) {
             throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED));

@@ -21,7 +21,7 @@ public class StatisticController {
     private final ProductService productService;
     private final InvoiceService invoiceService;
     private final LocalizationUtils localizationUtils;
-    @PreAuthorize("hasRole('statistic.view')")
+    @PreAuthorize("hasAuthority('statistic.view')")
     @Operation(summary = "Thống kê sản phẩm (theo loại) theo số lượng bán được và xếp hạng chúng")
     @GetMapping("api/statistic/products/{category_id}")
     public ResponseEntity<APIResponse> getStatisticProductsByCategory(@PathVariable(value = "category_id",required = false)
@@ -31,14 +31,14 @@ public class StatisticController {
     ) {
         return productService.StatisticProductByCategoryAndSoldQuantity(category_id,topRank);
     }
-    @PreAuthorize("hasRole('statistic.view')")
+    @PreAuthorize("hasAuthority('statistic.view')")
     @Operation(summary = "Thống kê sản phẩm theo số lượng bán được và xếp hạng chúng")
     @GetMapping("api/statistic/products/all")
     public ResponseEntity<APIResponse> getStatisticProducts(@RequestParam(value = "topRank",required = false)
                                                             Long topRank) {
         return productService.StatisticProductByCategoryAndSoldQuantity(null,topRank);
     }
-    @PreAuthorize("hasRole('statistic.view')")
+    @PreAuthorize("hasAuthority('statistic.view')")
     @Operation(summary = "Thóng kê doanh thu theo năm ( có 12 tháng )  ")
     @GetMapping("api/statistic/revenue/{year}")
     public ResponseEntity<APIResponse> getStatisticRevenueByYear(@PathVariable("year") int year)

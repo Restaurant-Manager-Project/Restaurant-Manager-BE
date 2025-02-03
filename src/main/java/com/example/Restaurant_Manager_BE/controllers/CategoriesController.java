@@ -24,7 +24,7 @@ public class CategoriesController {
     private final CategoriesService categoriesService;
     private final LocalizationUtils localizationUtils;
 
-    @PreAuthorize("hasRole('category.create')")
+    @PreAuthorize("hasAuthority('category.create')")
     @Operation(summary = "Thêm loại sản phẩm",description = "Thêm loại của món ăn sau khi nhập đầy đủ thông tin")
     @PostMapping("/api/categories")
     public ResponseEntity<APIResponse> CreateCategories(
@@ -49,14 +49,14 @@ public class CategoriesController {
         return categoriesService.getAll(pageNo,pageSize);
     }
 
-    @PreAuthorize("hasRole('category.update')")
+    @PreAuthorize("hasAuthority('category.update')")
     @Operation(summary = "Xóa categories")
     @DeleteMapping("api/categories/{id}")
     public ResponseEntity<APIResponse> deleteCategory(@PathVariable Long id){
         return categoriesService.deleteCategory(id);
     }
 
-    @PreAuthorize("hasRole('category.delete')")
+    @PreAuthorize("hasAuthority('category.delete')")
     @Operation(summary="Sửa categories")
     @PutMapping("api/categories/{id}")
     public ResponseEntity<APIResponse> updateCategory(

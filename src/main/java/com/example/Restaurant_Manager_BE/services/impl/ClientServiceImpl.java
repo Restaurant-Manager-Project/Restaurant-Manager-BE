@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final LocalizationUtils localizationUtils;
-    private final ModelMapper modelMapper;
+//    private final ModelMapper modelMapper;
     private final ClientConverter clientConverter;
     @Override
     public ResponseEntity<APIResponse> findByPhone(String phone) {
@@ -48,14 +48,15 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ResponseEntity<APIResponse> createClient(ClientDTO clientDTO) {
-        ClientEntity clientEntity = modelMapper.map(clientDTO, ClientEntity.class);
-        clientEntity.setIsDeleted(false);
-        if (clientRepository.save(clientEntity) == null) {
-            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_CREATE_FALIED));
-        }
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_CREATE_SUCCESS));
-        return ResponseEntity.ok(APIResponse);
+//        ClientEntity clientEntity = modelMapper.map(clientDTO, ClientEntity.class);
+//        clientEntity.setIsDeleted(false);
+//        if (clientRepository.save(clientEntity) == null) {
+//            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_CREATE_FALIED));
+//        }
+//        APIResponse APIResponse = new APIResponse();
+//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_CREATE_SUCCESS));
+//        return ResponseEntity.ok(APIResponse);
+        return null;
     }
     @Override
     public ResponseEntity<APIResponse> deleteClient(Long client_id) {

@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
     private final ConverterProducts converterProducts;
     private final ProductRepository productRepository;
     private final DetailImportRepository importRepository;
-    private final ModelMapper modelMapper;
+//    private final ModelMapper modelMapper;
     private final LocalizationUtils localizationUtils;
     private final CategoryRepository categoryRepository;
     private final ConverterStatistic converterStatistic;
@@ -73,28 +73,30 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<APIResponse> getByName(String name) {
-        List<ProductEntity> productEntityList = productRepository.findByNameContaining(name);
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        productEntityList.forEach(productEntity -> {
-            ProductDTO product = modelMapper.map(productEntity, ProductDTO.class);
-            productDTOList.add(product);
-        });
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_GET_SUCCESS));
-        APIResponse.setResult(productDTOList);
-        return ResponseEntity.ok(APIResponse);
+//        List<ProductEntity> productEntityList = productRepository.findByNameContaining(name);
+//        List<ProductDTO> productDTOList = new ArrayList<>();
+//        productEntityList.forEach(productEntity -> {
+//            ProductDTO product = modelMapper.map(productEntity, ProductDTO.class);
+//            productDTOList.add(product);
+//        });
+//        APIResponse APIResponse = new APIResponse();
+//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_GET_SUCCESS));
+//        APIResponse.setResult(productDTOList);
+//        return ResponseEntity.ok(APIResponse);
+        return null;
     }
 
     @Override
     public ResponseEntity<APIResponse> getById(Long id) {
-        ProductEntity productEntity = productRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
-        ProductDTO product = modelMapper.map(productEntity, ProductDTO.class);
-//        product.setCategoryName(productEntity.getCategory().getName());
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_GET_SUCCESS));
-        APIResponse.setResult(product);
-        return ResponseEntity.ok(APIResponse);
+//        ProductEntity productEntity = productRepository.findById(id)
+//                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
+//        ProductDTO product = modelMapper.map(productEntity, ProductDTO.class);
+////        product.setCategoryName(productEntity.getCategory().getName());
+//        APIResponse APIResponse = new APIResponse();
+//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_GET_SUCCESS));
+//        APIResponse.setResult(product);
+//        return ResponseEntity.ok(APIResponse);
+        return null;
     }
     //create new product
     @Override

@@ -1,18 +1,15 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 import java.util.List;
-import java.util.Optional;
-import com.example.Restaurant_Manager_BE.converters.ConverterEmployee;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
+import com.example.Restaurant_Manager_BE.dto.request.EmployeeRequest;
+import com.example.Restaurant_Manager_BE.dto.response.EmployeeResponse;
+import com.example.Restaurant_Manager_BE.mapper.EmployeeMapper;
 import org.springframework.stereotype.Service;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
-import com.example.Restaurant_Manager_BE.dto.EmployeeDTO;
 import com.example.Restaurant_Manager_BE.entities.EmployeeEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
 import com.example.Restaurant_Manager_BE.repositories.EmployeeRepository;
-import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.EmployeeService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
@@ -22,91 +19,92 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final LocalizationUtils localizationUtils;
-    private final ModelMapper modelMapper;
-    private final ConverterEmployee converterEmployee;
+    private final EmployeeMapper employeeMapper;
     @Override
-    public ResponseEntity<APIResponse> createEmployee(EmployeeDTO employeeDTO) {
-        if (employeeDTO == null) {
+    public EmployeeResponse createEmployee(EmployeeRequest request) {
+        if (request == null) {
             throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_CREATE_FAILED));
         }
-        EmployeeEntity employeeEntity = converterEmployee.toEntity(employeeDTO);
-//        employeeEntity.setIsDeleted(false);
-        employeeRepository.save(employeeEntity);
-        APIResponse apiResponse = new APIResponse();
-        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_CREATE_SUCCESS));
-        return ResponseEntity.ok(apiResponse);
+        EmployeeEntity employeeEntity = employeeMapper.toEntity(request);
+        EmployeeEntity result = employeeRepository.save(employeeEntity);
+        return EmployeeResponse.builder()
+                .id(result.getId())
+                .firstName(result.getFirstName())
+                .lastName(result.getLastName())
+                .phone(result.getPhone())
+                .address(result.getAddress())
+                .gender(result.getGender())
+                .build();
     }
 
     @Override
-    public ResponseEntity<APIResponse> getAll() {
+    public List<EmployeeResponse> getAll() {
         List<EmployeeEntity> employeeEntityList = employeeRepository.findAll();
-        List<EmployeeDTO> employeeDTOList = converterEmployee.toDTOList(employeeEntityList);
-        APIResponse apiResponse = new APIResponse();
-        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_LIST_GET_SUCCESS));
-        apiResponse.setResult(employeeDTOList);
-        return ResponseEntity.ok(apiResponse);
+        List<EmployeeResponse> listResponse = employeeMapper.toListDto(employeeEntityList);
+        return listResponse;
     }
 
     @Override
-    public ResponseEntity<APIResponse> getById(Long id) {
+    public EmployeeResponse getById(Long id) {
         EmployeeEntity employeeEntity = employeeRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(
                         localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED)));
-        EmployeeDTO employeeDTO =converterEmployee.toDTO(employeeEntity);
-        APIResponse apiResponse = new APIResponse();
-        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_GET_SUCCESS));
-        apiResponse.setResult(employeeDTO);
-        return ResponseEntity.ok(apiResponse);
+        EmployeeResponse response = employeeMapper.toDto(employeeEntity);
+        return response;
     }
 
     @Override
-    public ResponseEntity<APIResponse> deleteEmployee(Long id) {
-        Optional<EmployeeEntity> emOptional = employeeRepository.findById(id);
-
-        if (emOptional.isPresent()) {
-            EmployeeEntity employeeEntity = emOptional.get();
-            employeeEntity.setIsDeleted(true);
-            employeeRepository.save(employeeEntity);
-            APIResponse apiResponse = new APIResponse();
-            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_DELETE_SUCCESS));
-            return ResponseEntity.ok(apiResponse);
-        } else {
-            APIResponse apiResponse = new APIResponse();
-            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_DELETE_FAILED));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
-        }
+    public EmployeeResponse deleteEmployee(Long id) {
+        EmployeeEntity employeeEntity = employeeRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED)));
+        employeeEntity.setIsDeleted(true);
+        EmployeeEntity result = employeeRepository.save(employeeEntity);
+        return EmployeeResponse.builder()
+                .id(result.getId())
+                .firstName(result.getFirstName())
+                .lastName(result.getLastName())
+                .phone(result.getPhone())
+                .address(result.getAddress())
+                .gender(result.getGender())
+                .build();
     }
 
     @Override
-    public ResponseEntity<APIResponse> updateEmployee(Long id, EmployeeDTO employeeDTO) {
+    public EmployeeResponse updateEmployee(Long id, EmployeeRequest request) {
         EmployeeEntity employeeEntity = employeeRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(
                         localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED)));
-        EmployeeEntity employeeEntity_update=converterEmployee.toEntity(employeeDTO);
-        converterEmployee.mergeNonNullFields(employeeEntity, employeeEntity_update);
-        employeeRepository.save(employeeEntity);
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_UPDATE_SUCCESS));
-        return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
+        EmployeeEntity employeeEntityNew = employeeMapper.update(employeeEntity, request);
+        EmployeeEntity result = employeeRepository.save(employeeEntityNew);
+        return EmployeeResponse.builder()
+                .id(result.getId())
+                .firstName(result.getFirstName())
+                .lastName(result.getLastName())
+                .phone(result.getPhone())
+                .address(result.getAddress())
+                .gender(result.getGender())
+                .build();
     }
 
     @Override
-    public ResponseEntity<APIResponse> findEmployees(String name) {
-        List<EmployeeEntity> employeeEntityList = employeeRepository.findByFirstNameContainingOrLastNameContaining(name,
-                name);
-        if (employeeEntityList.isEmpty()) {
-            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED));
-        }
-        List<EmployeeDTO> employeeDTOList = converterEmployee.toDTOList(employeeEntityList);
-        APIResponse apiResponse = new APIResponse();
-        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_LIST_GET_SUCCESS));
-        apiResponse.setResult(employeeDTOList);
-        return ResponseEntity.ok(apiResponse);
+    public EmployeeResponse findEmployees(String name) {
+//        List<EmployeeEntity> employeeEntityList = employeeRepository.findByFirstNameContainingOrLastNameContaining(name,
+//                name);
+//        if (employeeEntityList.isEmpty()) {
+//            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED));
+//        }
+//        List<EmployeeDTO> employeeDTOList = converterEmployee.toDTOList(employeeEntityList);
+//        APIResponse apiResponse = new APIResponse();
+//        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_LIST_GET_SUCCESS));
+//        apiResponse.setResult(employeeDTOList);
+//        return ResponseEntity.ok(apiResponse);
+        return null;
     }
 
     @Override
-    public EmployeeDTO findByUsername(String username) {
+    public EmployeeResponse findByUsername(String username) {
         EmployeeEntity employee = employeeRepository.findByAccount_Username(username);
-        return modelMapper.map(employee, EmployeeDTO.class);
+//        return modelMapper.map(employee, EmployeeDTO.class);
+        return null;
     }
 }

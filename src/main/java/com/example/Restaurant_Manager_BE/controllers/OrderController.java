@@ -37,19 +37,19 @@ import org.springframework.web.bind.annotation.*;
             return orderService.getOrdersByDirection(direction);
         }
 
-        @PreAuthorize("hasRole('order.view')")
+        @PreAuthorize("hasAuthority('order.view')")
         @GetMapping("/api/orders/{id}")
         public ResponseEntity<APIResponse> getOrderById(@PathVariable Long id) {
             return orderService.getOrderById(id);
         }
 
-        @PreAuthorize("hasRole('order.view')")
+        @PreAuthorize("hasAuthority('order.view')")
         @GetMapping("/api/orders/")
         public ResponseEntity<APIResponse> getAllOrders() {
             return orderService.getAllOrders();
         }
 
-        @PreAuthorize("hasRole('order.update')")
+        @PreAuthorize("hasAuthority('order.update')")
         @PutMapping("/api/orders/{id}")
         public ResponseEntity<APIResponse> updateOrder(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
             return orderService.updateOrder(id, orderDTO);

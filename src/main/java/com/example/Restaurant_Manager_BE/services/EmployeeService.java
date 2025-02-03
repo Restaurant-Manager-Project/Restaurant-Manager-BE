@@ -1,23 +1,23 @@
 package com.example.Restaurant_Manager_BE.services;
 
-import org.springframework.http.ResponseEntity;
+import com.example.Restaurant_Manager_BE.dto.request.EmployeeRequest;
+import com.example.Restaurant_Manager_BE.dto.response.EmployeeResponse;
 
-import com.example.Restaurant_Manager_BE.dto.EmployeeDTO;
-import com.example.Restaurant_Manager_BE.responses.APIResponse;
+import java.util.List;
 
 public interface EmployeeService {
-    ResponseEntity<APIResponse> createEmployee(EmployeeDTO employeeDTO);
+    EmployeeResponse createEmployee(EmployeeRequest request);
 
-    ResponseEntity<APIResponse> getAll();
+    List<EmployeeResponse> getAll();
 
-    ResponseEntity<APIResponse> getById(Long id);
+    EmployeeResponse getById(Long id);
 
-    ResponseEntity<APIResponse> deleteEmployee(Long id);
+    EmployeeResponse deleteEmployee(Long id);
 
-    ResponseEntity<APIResponse> updateEmployee(Long id, EmployeeDTO employeeDTO);
+    EmployeeResponse updateEmployee(Long id, EmployeeRequest request);
 
-    ResponseEntity<APIResponse> findEmployees(String name);
+    EmployeeResponse findEmployees(String name);
 
-    EmployeeDTO findByUsername(String username);
+    EmployeeResponse findByUsername(String username);
 
 }

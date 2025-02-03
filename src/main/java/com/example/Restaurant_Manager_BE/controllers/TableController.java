@@ -30,7 +30,7 @@ public class TableController {
         return tableService.getALLTables();
     }
 
-    @PreAuthorize("hasRole('table_status.update')")
+    @PreAuthorize("hasAuthority('table_status.update')")
     @Operation(summary = "Chỉnh sửa trạng thái của bàn")
     @PutMapping("/api/table/{table_id}/status")
     public ResponseEntity<APIResponse> updateStatusOfTable(@PathVariable Long table_id, @RequestParam("statusID") Long statusID) {
@@ -45,7 +45,7 @@ public class TableController {
         }
         return tableService.mergeAllDetailsInOrderList(direction);
     }
-    @PreAuthorize("hasRole('table.delete')")
+    @PreAuthorize("hasAuthority('table.delete')")
     @Operation(summary = "Xóa table")
     @DeleteMapping("/api/table/{table_id}")
     public ResponseEntity<APIResponse> deleteTable(@PathVariable Long table_id) {

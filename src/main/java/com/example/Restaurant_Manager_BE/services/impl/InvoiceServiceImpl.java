@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
-    private final ModelMapper modelMapper;
+//    private final ModelMapper modelMapper;
     private final LocalizationUtils localizationUtils;
     private final ClientRepository ClientRepository;
     private final ClientRepository clientRepository;
@@ -70,51 +70,52 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     @Transactional
     public ResponseEntity<APIResponse> createInvoice(InvoiceDTO invoiceDTO) {
-        if (invoiceDTO == null || invoiceDTO.getTotal() == null || invoiceDTO.getTimeCreate() == null) {
-            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
-        }
-        InvoiceEntity invoiceEntity = modelMapper.map(invoiceDTO, InvoiceEntity.class);
-        invoiceEntity.setIsDeleted(false);
-
-        List<OrderDTO> ordersListDTO = invoiceDTO.getOrderDTOList();
-        if(ordersListDTO == null || ordersListDTO.size() == 0) {
-            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
-        }
-        try {
-            invoiceRepository.save(invoiceEntity);
-        } catch (Exception e) {
-            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_FAILED));
-        }
-        String direction = "";
-        Long tableId = 0L;
-        for(OrderDTO orderDTO : ordersListDTO) {
-            OrderEntity orderEntity = orderRepository.findById(orderDTO.getOrderId())
-                    .orElseThrow(()->new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
-            direction = orderEntity.getDirectionTable();
-            orderEntity.setInvoice(invoiceEntity);
-            tableId = orderEntity.getTable().getId();
-            orderRepository.save(orderEntity);
-        }
-
-        tableService.generateDirection(direction);
-        tableService.updateStatusOfTableByID(tableId, StatusTable.AVAILABLE.getId());
-
-
-
-        if (invoiceEntity.getClient() != null) {
-            ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId()).orElse(null);
-            client.setPaid(client.getPaid() + invoiceEntity.getTotal());
-            List<RankEntity> AllRank = rankRepository.findAll();
-            client.updateRank(AllRank);
-            ClientRepository.save(client);
-        }
-
-
-        APIResponse apiResponse = new APIResponse();
-        updateClientPaid(invoiceEntity);
-        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
-        apiResponse.setResult(invoiceEntity);
-        return ResponseEntity.ok(apiResponse);
+//        if (invoiceDTO == null || invoiceDTO.getTotal() == null || invoiceDTO.getTimeCreate() == null) {
+//            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
+//        }
+//        InvoiceEntity invoiceEntity = modelMapper.map(invoiceDTO, InvoiceEntity.class);
+//        invoiceEntity.setIsDeleted(false);
+//
+//        List<OrderDTO> ordersListDTO = invoiceDTO.getOrderDTOList();
+//        if(ordersListDTO == null || ordersListDTO.size() == 0) {
+//            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
+//        }
+//        try {
+//            invoiceRepository.save(invoiceEntity);
+//        } catch (Exception e) {
+//            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_FAILED));
+//        }
+//        String direction = "";
+//        Long tableId = 0L;
+//        for(OrderDTO orderDTO : ordersListDTO) {
+//            OrderEntity orderEntity = orderRepository.findById(orderDTO.getOrderId())
+//                    .orElseThrow(()->new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
+//            direction = orderEntity.getDirectionTable();
+//            orderEntity.setInvoice(invoiceEntity);
+//            tableId = orderEntity.getTable().getId();
+//            orderRepository.save(orderEntity);
+//        }
+//
+//        tableService.generateDirection(direction);
+//        tableService.updateStatusOfTableByID(tableId, StatusTable.AVAILABLE.getId());
+//
+//
+//
+//        if (invoiceEntity.getClient() != null) {
+//            ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId()).orElse(null);
+//            client.setPaid(client.getPaid() + invoiceEntity.getTotal());
+//            List<RankEntity> AllRank = rankRepository.findAll();
+//            client.updateRank(AllRank);
+//            ClientRepository.save(client);
+//        }
+//
+//
+//        APIResponse apiResponse = new APIResponse();
+//        updateClientPaid(invoiceEntity);
+//        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
+//        apiResponse.setResult(invoiceEntity);
+//        return ResponseEntity.ok(apiResponse);
+        return null;
     }
 
     @Override
@@ -158,27 +159,29 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public ResponseEntity<APIResponse> getAll() {
-        List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
-        List<InvoiceDTO> invoiceDTOList = invoiceEntityList.stream()
-                .map(entity -> modelMapper.map(entity, InvoiceDTO.class))
-                .collect(Collectors.toList());
-        APIResponse apiResponse = new APIResponse();
-        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_LIST_GET_SUCCESS));
-        apiResponse.setResult(invoiceDTOList);
-
-        return ResponseEntity.ok(apiResponse);
+//        List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
+//        List<InvoiceDTO> invoiceDTOList = invoiceEntityList.stream()
+//                .map(entity -> modelMapper.map(entity, InvoiceDTO.class))
+//                .collect(Collectors.toList());
+//        APIResponse apiResponse = new APIResponse();
+//        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_LIST_GET_SUCCESS));
+//        apiResponse.setResult(invoiceDTOList);
+//
+//        return ResponseEntity.ok(apiResponse);
+        return null;
     }
 
     @Override
     public ResponseEntity<APIResponse> findByTimeCreate(Date timeCreate) {
-        InvoiceEntity invoiceEntity = invoiceRepository.findByTimeCreate(timeCreate)
-                .orElseThrow(() -> new DataNotFoundException(
-                        localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_NOT_EXISTED)));
-        InvoiceDTO invoiceDTO = modelMapper.map(invoiceEntity, InvoiceDTO.class);
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_GET_SUCCESS));
-        APIResponse.setResult(invoiceDTO);
-        return ResponseEntity.ok(APIResponse);
+//        InvoiceEntity invoiceEntity = invoiceRepository.findByTimeCreate(timeCreate)
+//                .orElseThrow(() -> new DataNotFoundException(
+//                        localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_NOT_EXISTED)));
+//        InvoiceDTO invoiceDTO = modelMapper.map(invoiceEntity, InvoiceDTO.class);
+//        APIResponse APIResponse = new APIResponse();
+//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_GET_SUCCESS));
+//        APIResponse.setResult(invoiceDTO);
+//        return ResponseEntity.ok(APIResponse);
+        return null;
     }
 
     @Override

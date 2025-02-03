@@ -21,7 +21,7 @@ public class ClientController {
         return clientService.findByPhone(phone);
     }
 
-    @PreAuthorize("hasRole('client.view')")
+    @PreAuthorize("hasAuthority('client.view')")
     @GetMapping("/api/clients/{id}")
     public ResponseEntity<APIResponse> findById(@PathVariable Long id) {
         return clientService.findById(id);
@@ -33,17 +33,17 @@ public class ClientController {
         return clientService.createClient(clientDTO);
     }
 
-    @PreAuthorize("hasRole('client.delete')")
+    @PreAuthorize("hasAuthority('client.delete')")
     @DeleteMapping("/api/clients/{id}")
     public ResponseEntity<APIResponse> deleteClient(@PathVariable("id") Long client_id) {
         return clientService.deleteClient(client_id);
     }
-    @PreAuthorize("hasRole('client.update')")
+    @PreAuthorize("hasAuthority('client.update')")
     @PutMapping("/api/clients/{id}")
     public ResponseEntity<APIResponse> updateClient(@PathVariable("id") Long id, @RequestBody ClientDTO clientDTO) {
         return clientService.updateClient(id, clientDTO);
     }
-    @PreAuthorize("hasRole('client.view')")
+    @PreAuthorize("hasAuthority('client.view')")
     @GetMapping("api/clients")
     public ResponseEntity<APIResponse> findAll() {
         return clientService.getALL();

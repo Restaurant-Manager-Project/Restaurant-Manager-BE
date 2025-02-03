@@ -32,21 +32,22 @@ public class TableServiceImpl implements TableService {
     private final TableRepository tableRepository;
     private final DetailsOrderRepository detailsOrderRepository;
     private final OrderRepository orderRepository;
-    private final ModelMapper modelMapper;
+//    private final ModelMapper modelMapper;
     private final LocalizationUtils localizationUtils;
     private final QRcode qrCode;
 
 
     @Override
     public ResponseEntity<APIResponse> findByDirection(String direction) {
-        TableEntity tableEntity = tableRepository.findByDirection(direction)
-                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        TableDTO tableModel = modelMapper.map(tableEntity, TableDTO.class);
-        tableModel.setStatusName(tableEntity.getStatusTable().getName());
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_GET_SUCCESS));
-        APIResponse.setResult(tableModel);
-        return ResponseEntity.ok(APIResponse);
+//        TableEntity tableEntity = tableRepository.findByDirection(direction)
+//                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
+//        TableDTO tableModel = modelMapper.map(tableEntity, TableDTO.class);
+//        tableModel.setStatusName(tableEntity.getStatusTable().getName());
+//        APIResponse APIResponse = new APIResponse();
+//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_GET_SUCCESS));
+//        APIResponse.setResult(tableModel);
+//        return ResponseEntity.ok(APIResponse);
+        return null;
     }
 
     @Override
@@ -118,15 +119,16 @@ public class TableServiceImpl implements TableService {
     }
     @Override
     public ResponseEntity<APIResponse> getALLTables(){
-        List<TableEntity> tableEntityList = tableRepository.findAllWithStatusTable();
-        List<TableDTO> tableDTOList = new ArrayList<>();
-        tableEntityList.forEach(tableEntity -> {
-            TableDTO tableDTO = modelMapper.map(tableEntity, TableDTO.class);
-            tableDTOList.add(tableDTO);
-        });
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_GET_SUCCESS));
-        APIResponse.setResult(tableDTOList);
-        return ResponseEntity.ok(APIResponse);
+//        List<TableEntity> tableEntityList = tableRepository.findAllWithStatusTable();
+//        List<TableDTO> tableDTOList = new ArrayList<>();
+//        tableEntityList.forEach(tableEntity -> {
+//            TableDTO tableDTO = modelMapper.map(tableEntity, TableDTO.class);
+//            tableDTOList.add(tableDTO);
+//        });
+//        APIResponse APIResponse = new APIResponse();
+//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_GET_SUCCESS));
+//        APIResponse.setResult(tableDTOList);
+//        return ResponseEntity.ok(APIResponse);
+        return null;
     }
 }

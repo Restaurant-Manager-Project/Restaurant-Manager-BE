@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class ConverterImportImpl implements ConverterImport {
-    private final ModelMapper modelMapper;
+//    private final ModelMapper modelMapper;
     private final ConvertDetailsImport convertDetailsImport;
 
     @Override
