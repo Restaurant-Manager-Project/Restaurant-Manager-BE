@@ -3,21 +3,16 @@ import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.converters.ConverterProducts;
 import com.example.Restaurant_Manager_BE.converters.ConverterStatistic;
 import com.example.Restaurant_Manager_BE.dto.StatisticDTO.ProductStatisticDTO;
-import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import com.example.Restaurant_Manager_BE.dto.ProductDTO;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
-import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
 import com.example.Restaurant_Manager_BE.repositories.ProductRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.ProductService;
-import com.example.Restaurant_Manager_BE.services.UploadImgFile;
+import com.example.Restaurant_Manager_BE.services.CloudinaryService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
-import com.example.Restaurant_Manager_BE.entities.CategoryEntity;
 import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,14 +20,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.example.Restaurant_Manager_BE.entities.DetailsImportEntity;
 import com.example.Restaurant_Manager_BE.repositories.DetailImportRepository;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -45,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
     private final LocalizationUtils localizationUtils;
     private final CategoryRepository categoryRepository;
     private final ConverterStatistic converterStatistic;
-    private final UploadImgFile uploadImgFile;
+    private final CloudinaryService uploadImgFile;
 
     @Override
     public ResponseEntity<APIResponse> getAll() {

@@ -1,33 +1,22 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
-import com.example.Restaurant_Manager_BE.dto.DetailsOrderDTO;
-import com.example.Restaurant_Manager_BE.dto.ProductDTO;
-import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 import com.example.Restaurant_Manager_BE.entities.TableEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.mapper.TableMapper;
-import com.example.Restaurant_Manager_BE.dto.TableDTO;
 import com.example.Restaurant_Manager_BE.repositories.DetailsOrderRepository;
 import com.example.Restaurant_Manager_BE.repositories.OrderRepository;
 import com.example.Restaurant_Manager_BE.repositories.TableRepository;
-import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.TableService;
+import com.example.Restaurant_Manager_BE.services.ZxingService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
-import com.example.Restaurant_Manager_BE.utils.QRcode;
 
-import jakarta.persistence.Table;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.Restaurant_Manager_BE.repositories.StatusTableRepository;
 import com.example.Restaurant_Manager_BE.entities.StatusTableEntity;
-import com.example.Restaurant_Manager_BE.dto.request.TableRequest;
-import com.example.Restaurant_Manager_BE.dto.response.StatusTableResponse;
 import com.example.Restaurant_Manager_BE.dto.response.TableResponse;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -40,7 +29,7 @@ public class TableServiceImpl implements TableService {
 //    private final ModelMapper modelMapper;
     private final LocalizationUtils localizationUtils;
     private final TableMapper tableMapper;
-    private final QRcode qrCode;
+    private final ZxingService zxingService;
 
 
     @Override
@@ -60,7 +49,7 @@ public class TableServiceImpl implements TableService {
     public void generateDirection(String direction) {
         TableEntity tableEntity = tableRepository.findByDirection(direction)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        String directionNew = qrCode.generatePassword(25);
+        String directionNew = zxingService.generatePassword(25);
         tableEntity.setDirection(directionNew);
         tableRepository.save(tableEntity);
     }
@@ -69,7 +58,7 @@ public class TableServiceImpl implements TableService {
     public String generateQRCode(Long tableId) {
         TableEntity tableEntity = tableRepository.findById(tableId)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        String linkQR = qrCode.generateQR(tableEntity.getDirection());
+        String linkQR = zxingService.generateQrCode(tableEntity.getDirection());
         return linkQR;
     }
 

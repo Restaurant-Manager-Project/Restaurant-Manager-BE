@@ -4,13 +4,11 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
-import com.example.Restaurant_Manager_BE.responses.APIResponse;
-import com.example.Restaurant_Manager_BE.services.UploadImgFile;
+import com.example.Restaurant_Manager_BE.services.CloudinaryService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +22,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UploadImgFileImpl implements UploadImgFile {
+public class CloudinaryServiceImp implements CloudinaryService {
     private final Cloudinary cloudinary;
     private final LocalizationUtils localizationUtils;
     @Override

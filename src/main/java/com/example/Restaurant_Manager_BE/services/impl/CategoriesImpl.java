@@ -8,12 +8,11 @@ import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.CategoriesService;
 import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
-import com.example.Restaurant_Manager_BE.services.UploadImgFile;
+import com.example.Restaurant_Manager_BE.services.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +27,7 @@ public class CategoriesImpl implements CategoriesService {
     private final CategoryRepository categoryRepository;
     private final LocalizationUtils localizationUtils;
     private final ConverterCategories converterCategories;
-    private final UploadImgFile uploadImgFile;
+    private final CloudinaryService uploadImgFile;
     @Override
     public ResponseEntity<APIResponse> createCategories(CategoriesDTO categoriesDTO, MultipartFile imgFile) {
         CategoryEntity categoryEntity = converterCategories.toEntity(categoriesDTO);
