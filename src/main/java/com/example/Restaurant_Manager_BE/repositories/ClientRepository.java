@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ClientRepository extends JpaRepository<ClientEntity, Long> , CustomClientRepository {
+public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
     Optional<ClientEntity> findByPhone(String phone);
 }

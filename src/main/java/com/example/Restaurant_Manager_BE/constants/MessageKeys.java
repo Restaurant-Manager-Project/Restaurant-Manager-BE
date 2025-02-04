@@ -10,7 +10,10 @@ public class MessageKeys {
     public static final String CLIENT_CREATE_SUCCESS = "client.create_success";
     public static final String CLIENT_CREATE_FALIED = "client.create_failed";
     public static final String CLIENT_DELETE_SUCCESS = "client.delete_success";
+    public static final String CLIENT_DELETE_FAILED = "client.delete_failed";
     public static final String CLIENT_UPDATE_SUCCESS = "client.update_success";
+    public static final String CLIENT_UPDATE_FAILED = "client.update_failed";
+    public static final String CLIENT_GET_LIST_SUCCESS = "client.get_list_success";
 
     // CATEGORY
     public static final String CATEGORY_NOT_EXISTED = "category.not_existed";

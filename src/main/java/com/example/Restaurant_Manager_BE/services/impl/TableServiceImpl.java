@@ -2,7 +2,8 @@ package com.example.Restaurant_Manager_BE.services.impl;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.entities.TableEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
-import com.example.Restaurant_Manager_BE.mapper.TableMapper;
+import com.example.Restaurant_Manager_BE.mapper.request.TableRequestMapper;
+import com.example.Restaurant_Manager_BE.mapper.response.TableResponseMapper;
 import com.example.Restaurant_Manager_BE.repositories.DetailsOrderRepository;
 import com.example.Restaurant_Manager_BE.repositories.OrderRepository;
 import com.example.Restaurant_Manager_BE.repositories.TableRepository;
@@ -26,9 +27,9 @@ public class TableServiceImpl implements TableService {
     private final TableRepository tableRepository;
     private final DetailsOrderRepository detailsOrderRepository;
     private final OrderRepository orderRepository;
-//    private final ModelMapper modelMapper;
     private final LocalizationUtils localizationUtils;
-    private final TableMapper tableMapper;
+    private final TableRequestMapper tableRequestMapper;
+    private final TableResponseMapper tableResponseMapper;
     private final ZxingService zxingService;
 
 
@@ -120,7 +121,7 @@ public class TableServiceImpl implements TableService {
     public List<TableResponse> getALLTables(){
        List<TableEntity> tableEntityList = tableRepository.findAllWithStatusTable();
        System.out.println(tableEntityList.get(0).getStatusTable().getName());
-       List<TableResponse> tableResponsesList = tableMapper.toListDto(tableEntityList);
+       List<TableResponse> tableResponsesList = tableResponseMapper.toListDto(tableEntityList);
        
         return tableResponsesList;
     }

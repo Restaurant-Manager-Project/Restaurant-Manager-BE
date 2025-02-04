@@ -3,7 +3,8 @@ import java.util.List;
 
 import com.example.Restaurant_Manager_BE.dto.request.EmployeeRequest;
 import com.example.Restaurant_Manager_BE.dto.response.EmployeeResponse;
-import com.example.Restaurant_Manager_BE.mapper.EmployeeMapper;
+import com.example.Restaurant_Manager_BE.mapper.request.EmployeeRequestMapper;
+import com.example.Restaurant_Manager_BE.mapper.response.EmployeeResponseMapper;
 import org.springframework.stereotype.Service;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.entities.EmployeeEntity;
@@ -19,13 +20,15 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final LocalizationUtils localizationUtils;
-    private final EmployeeMapper employeeMapper;
+    private final EmployeeRequestMapper employeeRequestMapper;
+    private final EmployeeResponseMapper employeeResponseMapper;
+
     @Override
     public EmployeeResponse createEmployee(EmployeeRequest request) {
         if (request == null) {
             throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_CREATE_FAILED));
         }
-        EmployeeEntity employeeEntity = employeeMapper.toEntity(request);
+        EmployeeEntity employeeEntity = employeeRequestMapper.toEntity(request);
         EmployeeEntity result = employeeRepository.save(employeeEntity);
         return EmployeeResponse.builder()
                 .id(result.getId())
@@ -40,7 +43,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeResponse> getAll() {
         List<EmployeeEntity> employeeEntityList = employeeRepository.findAll();
-        List<EmployeeResponse> listResponse = employeeMapper.toListDto(employeeEntityList);
+        List<EmployeeResponse> listResponse = employeeResponseMapper.toListDto(employeeEntityList);
         return listResponse;
     }
 
@@ -49,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmployeeEntity employeeEntity = employeeRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(
                         localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED)));
-        EmployeeResponse response = employeeMapper.toDto(employeeEntity);
+        EmployeeResponse response = employeeResponseMapper.toDto(employeeEntity);
         return response;
     }
 
@@ -74,8 +77,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmployeeEntity employeeEntity = employeeRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(
                         localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED)));
-        EmployeeEntity employeeEntityNew = employeeMapper.update(employeeEntity, request);
-        EmployeeEntity result = employeeRepository.save(employeeEntityNew);
+        employeeRequestMapper.update(employeeEntity, request);
+        EmployeeEntity result = employeeRepository.save(employeeEntity);
         return EmployeeResponse.builder()
                 .id(result.getId())
                 .firstName(result.getFirstName())
