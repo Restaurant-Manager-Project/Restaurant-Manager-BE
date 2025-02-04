@@ -33,7 +33,7 @@ public class ZxingServiceImpl implements ZxingService {
             BitMatrix bitMatrix =  qrCodeWriter.encode(domain + "/" + direction, BarcodeFormat.QR_CODE, 200, 200);
             ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
             MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
-            MultipartFile file = new MockMultipartFile("QRCode.png", "QRCode.png", "image/png", pngOutputStream.toByteArray());
+            MultipartFile file = new MockMultipartFile(direction, "QRCode.png", "image/png", pngOutputStream.toByteArray());
             return cloudinaryService.uploadImg(file);
         } catch (WriterException we) {
             we.printStackTrace();

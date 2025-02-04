@@ -37,14 +37,13 @@ public class CloudinaryServiceImp implements CloudinaryService {
         }
 
         assert img.getOriginalFilename() != null;
-        String publicValue = generatePublicValue(img.getOriginalFilename());
-        String extension = getFileName(img.getOriginalFilename())[1];
+        String nameFile = img.getName();
         try {
             File uploadFile = convert(img);
             log.info("fileUpload is : {}", uploadFile);
-            cloudinary.uploader().upload(uploadFile, ObjectUtils.asMap("public_id", publicValue));
+            cloudinary.uploader().upload(uploadFile, ObjectUtils.asMap("public_id", nameFile));
             cleanDisk(uploadFile);
-            return cloudinary.url().generate(StringUtils.join(publicValue,".", extension));
+            return cloudinary.url().generate(StringUtils.join(nameFile));
         }
         catch (IOException e){
             throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMG_INVALID));
