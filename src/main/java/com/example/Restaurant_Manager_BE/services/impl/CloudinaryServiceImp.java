@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.api.ApiResponse;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -25,6 +27,20 @@ import java.util.UUID;
 public class CloudinaryServiceImp implements CloudinaryService {
     private final Cloudinary cloudinary;
     private final LocalizationUtils localizationUtils;
+
+    @Override
+    public String findImage(String name) {
+        String url = "";
+        try {
+            ApiResponse apiResponse = cloudinary.api().resource(name, ObjectUtils.emptyMap());
+            url = apiResponse.get("secure_url").toString();
+        }
+        catch (Exception e){
+            log.error("error");
+        }
+        return url;
+    }
+
     @Override
     public String uploadImg(MultipartFile img) {
         if (img == null) {
@@ -48,7 +64,6 @@ public class CloudinaryServiceImp implements CloudinaryService {
         catch (IOException e){
             throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMG_INVALID));
         }
-
     }
 
     private void cleanDisk(File file){

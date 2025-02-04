@@ -7,6 +7,7 @@ import com.example.Restaurant_Manager_BE.mapper.response.TableResponseMapper;
 import com.example.Restaurant_Manager_BE.repositories.DetailsOrderRepository;
 import com.example.Restaurant_Manager_BE.repositories.OrderRepository;
 import com.example.Restaurant_Manager_BE.repositories.TableRepository;
+import com.example.Restaurant_Manager_BE.services.CloudinaryService;
 import com.example.Restaurant_Manager_BE.services.TableService;
 import com.example.Restaurant_Manager_BE.services.ZxingService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
@@ -31,6 +32,7 @@ public class TableServiceImpl implements TableService {
     private final TableRequestMapper tableRequestMapper;
     private final TableResponseMapper tableResponseMapper;
     private final ZxingService zxingService;
+    private final CloudinaryService cloudinaryService;
 
 
     @Override
@@ -59,8 +61,11 @@ public class TableServiceImpl implements TableService {
     public String generateQRCode(Long tableId) {
         TableEntity tableEntity = tableRepository.findById(tableId)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        String linkQR = zxingService.generateQrCode(tableEntity.getDirection());
-        return linkQR;
+        String url = cloudinaryService.findImage(tableEntity.getDirection());
+        if (url.isEmpty()) {
+            url = zxingService.generateQrCode(tableEntity.getDirection());
+        }
+        return url;
     }
 
     // @Override

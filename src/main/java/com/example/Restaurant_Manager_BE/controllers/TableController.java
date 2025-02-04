@@ -3,7 +3,9 @@ package com.example.Restaurant_Manager_BE.controllers;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.dto.response.TableResponse;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
+import com.example.Restaurant_Manager_BE.services.CloudinaryService;
 import com.example.Restaurant_Manager_BE.services.TableService;
+import com.example.Restaurant_Manager_BE.services.ZxingService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TableController {
     private final TableService tableService;
+    private final CloudinaryService cloudinaryService;
     private final LocalizationUtils localizationUtils;
 
     @Operation(summary= "Lấy tất cả bản trong db")
