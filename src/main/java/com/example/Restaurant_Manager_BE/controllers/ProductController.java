@@ -29,75 +29,79 @@ public class ProductController {
     @Operation(summary = "Lấy danh sách món ăn", description = "Lấy tất cả danh sách món ăn ")
     @GetMapping("/api/products")
     public ResponseEntity<APIResponse> getAllProducts() {
-        return productService.getAll();
+        APIResponse apiResponse = APIResponse.builder()
+                .message(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_LIST_GET_SUCCESS))
+                .result(productService.getAll())
+                .build();
+        return ResponseEntity.ok(apiResponse);
     }
 
-    @PreAuthorize("hasAuthority('product.view')")
-    @Operation(summary = " Láy sản phẩm khi import")
-    @GetMapping("api/import/products")
-    public ResponseEntity<APIResponse> getProductsWithQuantityIsEmpty(){
-        return productService.getProductsQuantityZero();
-    }
-
-    @Operation(summary = "Lấy danh sách món ăn có phân trang", description = "Lấy tất cả danh sách món ăn ")
-    @GetMapping("/api/products/pagination")
-    public ResponseEntity<APIResponse> getAllProducts(
-            @RequestParam Integer pageNo,
-            @RequestParam Integer pageSize,
-            @RequestParam(value = "sortBy",required = false) String sortBy
-    ) {
-        return productService.getAll_pagination(pageNo, pageSize, sortBy);
-    }
-
-    @PreAuthorize("hasAuthority('product.view')")
-    @Operation(summary = "Tìm kiếm món ăn theo tiêu chí", description = "Tìm kiếm món ăn theo tiêu chí cụ thể {name, price, ...}")
-    @GetMapping("/api/products/search")
-    public ResponseEntity<APIResponse> findProducts(@RequestParam Map<String, String> params) {
-        return productService.getByName(params.get("name"));
-    }
-
-    //Phần Create trong CRUD
-//    @PreAuthorize("hasRole('product.create')")
-    @Operation(summary = "Thêm sản phẩm",description = "Thêm món ăn sau khi nhập đầy đủ thông tin")
-    @PostMapping("/api/products")
-    public ResponseEntity<APIResponse> CreateProduct(@RequestParam Map<String, String> map, @RequestParam(value = "img", required = false) MultipartFile img) throws IOException {
-//        if( ProductDTO == null){
-//            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_CREATE_FAILED ));
+//    @PreAuthorize("hasAuthority('product.view')")
+//    @Operation(summary = " Láy sản phẩm khi import")
+//    @GetMapping("api/import/products")
+//    public ResponseEntity<APIResponse> getProductsWithQuantityIsEmpty(){
+//        return productService.getProductsQuantityZero();
+//    }
+//
+//    @Operation(summary = "Lấy danh sách món ăn có phân trang", description = "Lấy tất cả danh sách món ăn ")
+//    @GetMapping("/api/products/pagination")
+//    public ResponseEntity<APIResponse> getAllProducts(
+//            @RequestParam Integer pageNo,
+//            @RequestParam Integer pageSize,
+//            @RequestParam(value = "sortBy",required = false) String sortBy
+//    ) {
+//        return productService.getAll_pagination(pageNo, pageSize, sortBy);
+//    }
+//
+//    @PreAuthorize("hasAuthority('product.view')")
+//    @Operation(summary = "Tìm kiếm món ăn theo tiêu chí", description = "Tìm kiếm món ăn theo tiêu chí cụ thể {name, price, ...}")
+//    @GetMapping("/api/products/search")
+//    public ResponseEntity<APIResponse> findProducts(@RequestParam Map<String, String> params) {
+//        return productService.getByName(params.get("name"));
+//    }
+//
+//    //Phần Create trong CRUD
+//    @PreAuthorize("hasAuthority('product.create')")
+//    @Operation(summary = "Thêm sản phẩm",description = "Thêm món ăn sau khi nhập đầy đủ thông tin")
+//    @PostMapping("/api/products")
+//    public ResponseEntity<APIResponse> CreateProduct(@RequestParam Map<String, String> map, @RequestParam(value = "img", required = false) MultipartFile img) throws IOException {
+////        if( ProductDTO == null){
+////            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_CREATE_FAILED ));
+////        }
+//        ProductDTO ProductDTO = new ProductDTO();
+//        try {
+//            BeanUtils.populate(ProductDTO, map);
+//            ProductDTO.setQuantity(0L);
+//        } catch (Exception e) {
+//            e.printStackTrace();
 //        }
-        ProductDTO ProductDTO = new ProductDTO();
-        try {
-            BeanUtils.populate(ProductDTO, map);
-            ProductDTO.setQuantity(0L);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return productService.createProducts(ProductDTO, img);
-    }
-
-    @PreAuthorize("hasAuthority('product.delete')")
-    @Operation(summary = "Xóa sản phẩm",description = "Xóa món ăn theo mã món ăn")
-    @DeleteMapping("/api/products/{id}")
-    public ResponseEntity<APIResponse> deleteProduct(@PathVariable("id") Long id){
-        if (id == null){
-            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_DELETE_FAILED));
-        }
-        return productService.deleteProducts(id);
-    }
-    @PreAuthorize("hasAuthority('product.update')")
-    @Operation(summary = "Sửa sản phẩm ",description = "Sửa sản phẩm theo thông tin nhập ")
-    @PutMapping("/api/products/{id}")
-    public ResponseEntity<APIResponse> updateProduct(
-            @RequestParam Map<String, String> map, @RequestParam(value = "img", required = false) MultipartFile img
-            ,@PathVariable("id") Long id){
-        ProductDTO ProductDTO = new ProductDTO();
-        try {
-            BeanUtils.populate(ProductDTO, map);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        Long id = ProductDTO.getId();
-//        productService.SkipNullFields(ProductDTO);
-        return productService.updateProducts(id,ProductDTO,img);
-    }
+//        return productService.createProducts(ProductDTO, img);
+//    }
+//
+//    @PreAuthorize("hasAuthority('product.delete')")
+//    @Operation(summary = "Xóa sản phẩm",description = "Xóa món ăn theo mã món ăn")
+//    @DeleteMapping("/api/products/{id}")
+//    public ResponseEntity<APIResponse> deleteProduct(@PathVariable("id") Long id){
+//        if (id == null){
+//            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_DELETE_FAILED));
+//        }
+//        return productService.deleteProducts(id);
+//    }
+//    @PreAuthorize("hasAuthority('product.update')")
+//    @Operation(summary = "Sửa sản phẩm ",description = "Sửa sản phẩm theo thông tin nhập ")
+//    @PutMapping("/api/products/{id}")
+//    public ResponseEntity<APIResponse> updateProduct(
+//            @RequestParam Map<String, String> map, @RequestParam(value = "img", required = false) MultipartFile img
+//            ,@PathVariable("id") Long id){
+//        ProductDTO ProductDTO = new ProductDTO();
+//        try {
+//            BeanUtils.populate(ProductDTO, map);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+////        Long id = ProductDTO.getId();
+////        productService.SkipNullFields(ProductDTO);
+//        return productService.updateProducts(id,ProductDTO,img);
+//    }
 }
     
