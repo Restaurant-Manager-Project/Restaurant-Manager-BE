@@ -108,10 +108,13 @@ public class MessageKeys {
 
     // IMPORT
     public static final String IMPORT_CREATE_SUCCESS = "import.create_success";
+    public static final String IMPORT_CREATE_FAILED = "import.create_failed";
     public static final String IMPORT_NOT_EXISTED = "import.not_existed";
     public static final String IMPORT_GET_SUCCESS = "import.get_success";
+    public static final String IMPORT_GET_FAILED = "import.get_failed";
     public static final String IMPORT_GET_ALL_SUCCESS = "import.get_all_success";
     public static final String IMPORT_UPDATE_SUCCESS = "import.update_success";
+    public static final String IMPORT_UPDATE_FAILED = "import.update_failed";
 
     //UPLOAD IMAGE
     public static final String UPLOAD_IMG_INVALID = "upload_image_invalid";

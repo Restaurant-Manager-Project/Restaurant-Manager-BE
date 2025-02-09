@@ -1,24 +1,17 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.ArrayList;
 
 import com.example.Restaurant_Manager_BE.dto.request.SupplierRequest;
 import com.example.Restaurant_Manager_BE.dto.response.SupplierResponse;
 import com.example.Restaurant_Manager_BE.mapper.request.SupplierRequestMapper;
 import com.example.Restaurant_Manager_BE.mapper.response.SupplierResponseMapper;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
-import com.example.Restaurant_Manager_BE.dto.SupplierDTO;
 import com.example.Restaurant_Manager_BE.entities.SupplierEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.repositories.SupplierRepository;
-import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.SupplierService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 
