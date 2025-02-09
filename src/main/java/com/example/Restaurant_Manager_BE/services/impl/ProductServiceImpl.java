@@ -22,7 +22,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    private final ConverterProducts converterProducts;
     private final ProductRepository productRepository;
     private final DetailImportRepository importRepository;
     private final LocalizationUtils localizationUtils;
