@@ -1,5 +1,7 @@
 package com.example.Restaurant_Manager_BE.services;
 
+import com.example.Restaurant_Manager_BE.dto.request.SupplierRequest;
+import com.example.Restaurant_Manager_BE.dto.response.SupplierResponse;
 import org.springframework.http.ResponseEntity;
 
 import com.example.Restaurant_Manager_BE.dto.SupplierDTO;
@@ -7,16 +9,18 @@ import com.example.Restaurant_Manager_BE.responses.APIResponse;
 
 import io.micrometer.core.ipc.http.HttpSender.Response;
 
+import java.util.List;
+
 public interface SupplierService {
-    ResponseEntity<APIResponse> getAll();
+    List<SupplierResponse> getAll();
 
-    ResponseEntity<APIResponse> getByName(String name);
+    List<SupplierResponse> getByName(String name);
 
-    ResponseEntity<APIResponse> getById(Long id);
+    SupplierResponse getById(Long id);
 
-    ResponseEntity<APIResponse> createSupplier(SupplierDTO supplierDTO);
+    boolean createSupplier(SupplierRequest supplierRequest);
 
-    ResponseEntity<APIResponse> deleteSupplier(Long supplierId);
+    boolean deleteSupplier(Long supplierId);
 
-    ResponseEntity<APIResponse> updateSupplier(SupplierDTO supplierDTO);
+    boolean updateSupplier(Long id, SupplierRequest supplierRequest);
 }

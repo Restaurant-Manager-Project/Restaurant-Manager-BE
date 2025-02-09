@@ -68,10 +68,13 @@ public class MessageKeys {
     public static final String TABLE_DELETE_SUCCESS = "table_delete_success";
     // SUPPLIER
     public static final String SUPPLIER_CREATE_SUCCESS = "supplier.create_success";
+    public static final String SUPPLIER_CREATE_FAILED = "supplier.create_failed";
     public static final String SUPPLIER_DELETE_SUCCESS = "supplier.delete_success";
+    public static final String SUPPLIER_DELETE_FAILED = "supplier.delete_failed";
     public static final String SUPPLIER_LIST_GET_SUCCESS = "supplier_list.get_success";
     public static final String SUPPLIER_GET_SUCCESS = "supplier.get_success";
     public static final String SUPPLIER_UPDATE_SUCCESS = "supplier.update_success";
+    public static final String SUPPLIER_UPDATE_FAILED = "supplier.update_failed";
     public static final String SUPPLIER_NOT_EXISTED = "supplier.not_existed";
 
     // STATUS PRODUCT
