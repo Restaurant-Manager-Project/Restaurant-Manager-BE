@@ -1,6 +1,5 @@
 package com.example.Restaurant_Manager_BE.repositories.Custom.impl;
 
-import com.example.Restaurant_Manager_BE.dto.ProductDTO;
 import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import com.example.Restaurant_Manager_BE.repositories.Custom.CustomProductRepository;
 import jakarta.persistence.EntityManager;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CustomProductRepositoryImpl implements CustomProductRepository {

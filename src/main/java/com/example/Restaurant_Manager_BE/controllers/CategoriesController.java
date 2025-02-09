@@ -1,8 +1,4 @@
 package com.example.Restaurant_Manager_BE.controllers;
-import com.example.Restaurant_Manager_BE.constants.MessageKeys;
-import com.example.Restaurant_Manager_BE.dto.ProductDTO;
-import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
-import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.CategoriesService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
@@ -10,7 +6,6 @@ import com.example.Restaurant_Manager_BE.dto.CategoriesDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,6 +1,5 @@
 package com.example.Restaurant_Manager_BE.repositories.Custom;
 
-import com.example.Restaurant_Manager_BE.dto.ProductDTO;
 import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

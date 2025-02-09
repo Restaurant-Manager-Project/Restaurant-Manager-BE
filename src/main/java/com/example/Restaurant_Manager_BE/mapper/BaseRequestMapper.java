@@ -1,6 +1,8 @@
 package com.example.Restaurant_Manager_BE.mapper;
 
+import com.example.Restaurant_Manager_BE.services.CloudinaryService;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.Context;
 import org.mapstruct.MappingTarget;
 
 import java.util.List;

@@ -1,29 +1,20 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
-import com.example.Restaurant_Manager_BE.converters.ConverterProducts;
 import com.example.Restaurant_Manager_BE.converters.ConverterStatistic;
-import com.example.Restaurant_Manager_BE.dto.StatisticDTO.ProductStatisticDTO;
+import com.example.Restaurant_Manager_BE.dto.request.ProductRequest;
 import com.example.Restaurant_Manager_BE.dto.response.ProductRespose;
 import com.example.Restaurant_Manager_BE.entities.ProductEntity;
-import com.example.Restaurant_Manager_BE.dto.ProductDTO;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
+import com.example.Restaurant_Manager_BE.mapper.request.ProductRequestMapper;
 import com.example.Restaurant_Manager_BE.mapper.response.ProductResponseMapper;
 import com.example.Restaurant_Manager_BE.repositories.ProductRepository;
-import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.ProductService;
 import com.example.Restaurant_Manager_BE.services.CloudinaryService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import com.example.Restaurant_Manager_BE.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.Restaurant_Manager_BE.repositories.DetailImportRepository;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -37,8 +28,9 @@ public class ProductServiceImpl implements ProductService {
     private final LocalizationUtils localizationUtils;
     private final CategoryRepository categoryRepository;
     private final ConverterStatistic converterStatistic;
-    private final CloudinaryService uploadImgFile;
+    private final CloudinaryService cloudinaryService;
     private final ProductResponseMapper productResponseMapper;
+    private final ProductRequestMapper productRequestMapper;
 
     @Override
     public List<ProductRespose> getAll() {
@@ -83,40 +75,28 @@ public class ProductServiceImpl implements ProductService {
     public ProductRespose getById(Long id) {
         ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
-//        ProductDTO product = modelMapper.map(productEntity, ProductDTO.class);
-////        product.setCategoryName(productEntity.getCategory().getName());
-//        APIResponse APIResponse = new APIResponse();
-//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_GET_SUCCESS));
-//        APIResponse.setResult(product);
-//        return ResponseEntity.ok(APIResponse);
         return productResponseMapper.toDto(productEntity);
     }
     //create new product
     @Override
-    public boolean createProducts(ProductDTO productDTO, MultipartFile img) {
-        ProductEntity productEntity = converterProducts.toEntity(productDTO);
-        productEntity.setImg(uploadImgFile.uploadImg(img));
-        productRepository.save(productEntity);
+    public boolean createProducts(ProductRequest productRequest) {
+        ProductEntity productEntity = productRequestMapper.toEntity(productRequest);
+        productEntity.setImg(cloudinaryService.uploadImg(productRequest.getImg()));
         return productRepository.save(productEntity) != null ? true : false;
-//        APIResponse APIResponse = new APIResponse();
-//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_CREATE_SUCCESS));
-//        return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
+
 
     }
 
     //update product
     @Override
-    public boolean updateProducts(Long id , ProductDTO productDTO,MultipartFile img){
-//        ProductEntity productEntity = productRepository.findById(id)
-//                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
-//        ProductEntity productEntityUpdate = converterProducts.toEntity(productDTO);
-//        productEntityUpdate.setImg(uploadImgFile.uploadImg(img));
-//        converterProducts.mergeNonNullFieldsProduct(productEntity, productEntityUpdate);
-//        productRepository.save(productEntity);
-//        APIResponse APIResponse = new APIResponse();
-//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_UPDATE_SUCCESS));
-//        return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
-        return true;
+    public boolean updateProducts(Long id , ProductRequest productRequest){
+        ProductEntity productEntity = productRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
+        productRequestMapper.update(productEntity, productRequest);
+        if (productRequest.getImg() != null) {
+            productEntity.setImg(cloudinaryService.uploadImg(productRequest.getImg()));
+        }
+        return productRepository.save(productEntity) != null ? true : false;
     }
 
     //delete product
