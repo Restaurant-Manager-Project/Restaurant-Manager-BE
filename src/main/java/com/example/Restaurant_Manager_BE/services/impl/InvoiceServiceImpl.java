@@ -4,11 +4,15 @@ import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.converters.ConverterStatistic;
 import com.example.Restaurant_Manager_BE.dto.InvoiceDTO;
 import com.example.Restaurant_Manager_BE.dto.StatisticDTO.RevenueStatisticDTO;
+import com.example.Restaurant_Manager_BE.dto.request.InvoiceRequest;
+import com.example.Restaurant_Manager_BE.dto.response.InvoiceResponse;
 import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.entities.InvoiceEntity;
 import com.example.Restaurant_Manager_BE.entities.RankEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
+import com.example.Restaurant_Manager_BE.mapper.request.InvoiceRequestMapper;
+import com.example.Restaurant_Manager_BE.mapper.response.InvoiceResponseMapper;
 import com.example.Restaurant_Manager_BE.repositories.ClientRepository;
 import com.example.Restaurant_Manager_BE.repositories.InvoiceRepository;
 import com.example.Restaurant_Manager_BE.repositories.OrderRepository;
@@ -31,13 +35,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
-//    private final ModelMapper modelMapper;
     private final LocalizationUtils localizationUtils;
     private final ClientRepository ClientRepository;
     private final ClientRepository clientRepository;
     private final RankRepository rankRepository;
     private final ConverterStatistic converterStatistic;
     private final OrderRepository orderRepository;
+    private final InvoiceRequestMapper invoiceRequestMapper;
+    private final InvoiceResponseMapper invoiceResponseMapper;
 
     private final TableService tableService;
 
@@ -61,7 +66,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional
-    public ResponseEntity<APIResponse> createInvoice(InvoiceDTO invoiceDTO) {
+    public boolean createInvoice(InvoiceRequest invoiceRequest) {
 //        if (invoiceDTO == null || invoiceDTO.getTotal() == null || invoiceDTO.getTimeCreate() == null) {
 //            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
 //        }
@@ -107,64 +112,58 @@ public class InvoiceServiceImpl implements InvoiceService {
 //        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
 //        apiResponse.setResult(invoiceEntity);
 //        return ResponseEntity.ok(apiResponse);
-        return null;
+        return true;
     }
 
     @Override
-    public ResponseEntity<APIResponse> updateInvoice(InvoiceDTO invoiceDTO) {
-        if (invoiceDTO == null || invoiceDTO.getTotal() == null || invoiceDTO.getTimeCreate() == null) {
-            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
-        }
-        InvoiceEntity invoiceEntity = invoiceRepository.findById(invoiceDTO.getId())
-                .orElseThrow(() -> new DataNotFoundException(
-                        localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_NOT_EXISTED)));
-        invoiceEntity.setTotal(invoiceDTO.getTotal());
-        invoiceEntity.setTimeCreate(invoiceDTO.getTimeCreate());
-        try {
-            invoiceRepository.save(invoiceEntity);
-        } catch (Exception e) {
-            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_FAILED));
-        }
-        APIResponse apiResponse = new APIResponse();
-        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_UPDATE_SUCCESS));
-        apiResponse.setResult(invoiceEntity);
-        return ResponseEntity.ok(apiResponse);
-    }
-
-    @Override
-    public ResponseEntity<APIResponse> deleteInvoice(Long id) {
-        Optional<InvoiceEntity> invoiceOptional = invoiceRepository.findById(id);
-        if (invoiceOptional.isPresent()) {
-            InvoiceEntity invoiceEntity = invoiceOptional.get();
-            invoiceEntity.setIsDeleted(true);
-            invoiceRepository.save(invoiceEntity);
-            APIResponse apiResponse = new APIResponse();
-            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_DELETE_SUCCESS));
-            apiResponse.setResult(invoiceEntity);
-            return ResponseEntity.ok(apiResponse);
-        } else {
-            APIResponse apiResponse = new APIResponse();
-            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_DELETE_FAILED));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
-        }
-    }
-
-    @Override
-    public ResponseEntity<APIResponse> getAll() {
-//        List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
-//        List<InvoiceDTO> invoiceDTOList = invoiceEntityList.stream()
-//                .map(entity -> modelMapper.map(entity, InvoiceDTO.class))
-//                .collect(Collectors.toList());
+    public boolean updateInvoice(Long id, InvoiceRequest invoiceRequest) {
+//        if (invoiceDTO == null || invoiceDTO.getTotal() == null || invoiceDTO.getTimeCreate() == null) {
+//            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
+//        }
+//        InvoiceEntity invoiceEntity = invoiceRepository.findById(invoiceDTO.getId())
+//                .orElseThrow(() -> new DataNotFoundException(
+//                        localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_NOT_EXISTED)));
+//        invoiceEntity.setTotal(invoiceDTO.getTotal());
+//        invoiceEntity.setTimeCreate(invoiceDTO.getTimeCreate());
+//        try {
+//            invoiceRepository.save(invoiceEntity);
+//        } catch (Exception e) {
+//            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_FAILED));
+//        }
 //        APIResponse apiResponse = new APIResponse();
-//        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_LIST_GET_SUCCESS));
-//        apiResponse.setResult(invoiceDTOList);
-//
+//        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_UPDATE_SUCCESS));
+//        apiResponse.setResult(invoiceEntity);
 //        return ResponseEntity.ok(apiResponse);
-        return null;
+        return false;
     }
 
     @Override
-    public ResponseEntity<APIResponse> findByTimeCreate(Date timeCreate) {
+    public boolean deleteInvoice(Long id) {
+//        Optional<InvoiceEntity> invoiceOptional = invoiceRepository.findById(id);
+//        if (invoiceOptional.isPresent()) {
+//            InvoiceEntity invoiceEntity = invoiceOptional.get();
+//            invoiceEntity.setIsDeleted(true);
+//            invoiceRepository.save(invoiceEntity);
+//            APIResponse apiResponse = new APIResponse();
+//            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_DELETE_SUCCESS));
+//            apiResponse.setResult(invoiceEntity);
+//            return ResponseEntity.ok(apiResponse);
+//        } else {
+//            APIResponse apiResponse = new APIResponse();
+//            apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_DELETE_FAILED));
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+//        }
+        return true;
+    }
+
+    @Override
+    public List<InvoiceResponse> getAll() {
+        List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
+        return invoiceResponseMapper.toListDto(invoiceEntityList);
+    }
+
+    @Override
+    public List<InvoiceResponse> findByTimeCreate(Date timeCreate) {
 //        InvoiceEntity invoiceEntity = invoiceRepository.findByTimeCreate(timeCreate)
 //                .orElseThrow(() -> new DataNotFoundException(
 //                        localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_NOT_EXISTED)));
@@ -176,13 +175,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         return null;
     }
 
-    @Override
-    public ResponseEntity<APIResponse> getStatisticRevenue(int year) {
-        List<Object[]> invoiceEntity=invoiceRepository.RevenueStatisticByYear(year);
-        List<RevenueStatisticDTO> result = converterStatistic.RevenueStatisticDTO_List(invoiceEntity);
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_GET_SUCCESS));
-        APIResponse.setResult(result);
-        return ResponseEntity.ok(APIResponse);
-    }
+//    @Override
+//    public ResponseEntity<APIResponse> getStatisticRevenue(int year) {
+//        List<Object[]> invoiceEntity=invoiceRepository.RevenueStatisticByYear(year);
+//        List<RevenueStatisticDTO> result = converterStatistic.RevenueStatisticDTO_List(invoiceEntity);
+//        APIResponse APIResponse = new APIResponse();
+//        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_GET_SUCCESS));
+//        APIResponse.setResult(result);
+//        return ResponseEntity.ok(APIResponse);
+//    }
 }
