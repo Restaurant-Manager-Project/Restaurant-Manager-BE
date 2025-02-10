@@ -9,6 +9,7 @@ import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.OutOfStockException;
 import com.example.Restaurant_Manager_BE.mapper.request.OrderRequestMapper;
 import com.example.Restaurant_Manager_BE.mapper.response.OrderResponseMapper;
+
 import com.example.Restaurant_Manager_BE.repositories.*;
 import com.example.Restaurant_Manager_BE.repositories.Custom.ProcessRepository;
 import com.example.Restaurant_Manager_BE.services.OrderService;
@@ -79,6 +80,7 @@ public class OrderServiceImpl implements OrderService {
         if (listOrder.isEmpty()) {
             throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND));
         }
+        List<OrderResponse> test = orderResponseMapper.toListDto(listOrder);
         return orderResponseMapper.toListDto(listOrder);
     }
 
