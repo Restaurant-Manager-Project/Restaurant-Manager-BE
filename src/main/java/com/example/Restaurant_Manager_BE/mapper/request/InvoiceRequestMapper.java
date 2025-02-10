@@ -4,6 +4,7 @@ import com.example.Restaurant_Manager_BE.dto.request.InvoiceRequest;
 import com.example.Restaurant_Manager_BE.entities.InvoiceEntity;
 import com.example.Restaurant_Manager_BE.mapper.BaseRequestMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface InvoiceRequestMapper extends BaseRequestMapper<InvoiceRequest, InvoiceEntity> {

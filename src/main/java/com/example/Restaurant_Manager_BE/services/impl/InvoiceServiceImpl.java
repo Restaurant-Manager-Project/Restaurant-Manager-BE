@@ -2,34 +2,28 @@ package com.example.Restaurant_Manager_BE.services.impl;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.converters.ConverterStatistic;
-import com.example.Restaurant_Manager_BE.dto.InvoiceDTO;
-import com.example.Restaurant_Manager_BE.dto.StatisticDTO.RevenueStatisticDTO;
 import com.example.Restaurant_Manager_BE.dto.request.InvoiceRequest;
 import com.example.Restaurant_Manager_BE.dto.response.InvoiceResponse;
 import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.entities.InvoiceEntity;
+import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 import com.example.Restaurant_Manager_BE.entities.RankEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
-import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
 import com.example.Restaurant_Manager_BE.mapper.request.InvoiceRequestMapper;
 import com.example.Restaurant_Manager_BE.mapper.response.InvoiceResponseMapper;
 import com.example.Restaurant_Manager_BE.repositories.ClientRepository;
 import com.example.Restaurant_Manager_BE.repositories.InvoiceRepository;
 import com.example.Restaurant_Manager_BE.repositories.OrderRepository;
 import com.example.Restaurant_Manager_BE.repositories.RankRepository;
-import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.InvoiceService;
 import com.example.Restaurant_Manager_BE.services.TableService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,12 +61,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     @Transactional
     public boolean createInvoice(InvoiceRequest invoiceRequest) {
-//        if (invoiceDTO == null || invoiceDTO.getTotal() == null || invoiceDTO.getTimeCreate() == null) {
-//            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
-//        }
-//        InvoiceEntity invoiceEntity = modelMapper.map(invoiceDTO, InvoiceEntity.class);
-//        invoiceEntity.setIsDeleted(false);
-//
+        InvoiceEntity invoiceEntity = invoiceRequestMapper.toEntity(invoiceRequest);
+        invoiceEntity.setIsDeleted(false);
+        List<OrderEntity> orderEntityList = orderRepository.getAllOrderWithDetailsByDirectionTable(invoiceRequest.getDirection());
+        for (OrderEntity orderEntity : orderEntityList) {
+            orderEntity.setInvoice(invoiceEntity);
+        }
+        invoiceEntity.setOrderEntityList(orderEntityList);
+        return invoiceRepository.save(invoiceEntity) != null ? true : false;
 //        List<OrderDTO> ordersListDTO = invoiceDTO.getOrderDTOList();
 //        if(ordersListDTO == null || ordersListDTO.size() == 0) {
 //            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
@@ -112,7 +108,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 //        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
 //        apiResponse.setResult(invoiceEntity);
 //        return ResponseEntity.ok(apiResponse);
-        return true;
+
     }
 
     @Override

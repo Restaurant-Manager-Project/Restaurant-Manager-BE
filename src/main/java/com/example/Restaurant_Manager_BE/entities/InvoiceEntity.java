@@ -39,7 +39,7 @@ public class InvoiceEntity {
     @JoinColumn(name = "client_id")
     private ClientEntity client;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
 }

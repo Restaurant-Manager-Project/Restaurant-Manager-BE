@@ -64,11 +64,9 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public OrderResponse getOrdersByDirection(String direction) {
-        OrderEntity orderEntity = orderRepository.getAllOrderWithDetailsByDirectionTable(direction)
-                .orElseThrow(() -> new DataNotFoundException(
-                        localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
-        return orderResponseMapper.toDto(orderEntity);
+    public List<OrderResponse> getOrdersByDirection(String direction) {
+        List<OrderEntity> orderEntity = orderRepository.getAllOrderWithDetailsByDirectionTable(direction);
+        return orderResponseMapper.toListDto(orderEntity);
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.util.List;
 public interface OrderService {
     boolean createOrder(OrderRequest orderRequest);
 
-    OrderResponse getOrdersByDirection(String direction);
+    List<OrderResponse> getOrdersByDirection(String direction);
 
     List<OrderResponse> getAllOrders();
 

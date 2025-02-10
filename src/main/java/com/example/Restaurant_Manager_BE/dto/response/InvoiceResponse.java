@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 public class InvoiceResponse {
     private String employeeName;
-    private String clientId;
+    private String clientName;
     private String timeCreate;
     private Long total;
 }

@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomOrderRepository {
-    Optional<OrderEntity> getAllOrderWithDetailsByDirectionTable(String directionTable);
+    List<OrderEntity> getAllOrderWithDetailsByDirectionTable(String directionTable);
     List<OrderEntity> getAllOrderWithTableAndProcess();
 }

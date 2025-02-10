@@ -89,6 +89,7 @@ public class MessageKeys {
     public static final String INVOICE_NOT_EXISTED = "invoice.not_existed";
     public static final String INVOICE_DELETE_SUCCESS = "invoice.delete_success";
     public static final String INVOICE_UPDATE_SUCCESS = "invoice.update_success";
+    public static final String INVOICE_UPDATE_FAILED = "invoice.update_failed";
     public static final String INVOICE_CREATE_SUCCESS = "invoice.create_success";
     public static final String INVOICE_CREATE_FAILED = "invoice.create_failed";
     public static final String INVOICE_DELETE_FAILED = "invoice.delete_failed";
