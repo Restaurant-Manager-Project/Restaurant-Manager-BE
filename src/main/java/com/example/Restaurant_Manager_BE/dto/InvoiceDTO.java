@@ -17,7 +17,7 @@ public class InvoiceDTO {
     private Long clientId;
     private Date timeCreate;
     private Long total;
-    @JsonProperty("orderList")
-        private List<OrderDTO> OrderDTOList;
+//    @JsonProperty("orderList")
+//    private List<Order> OrderDTOList;
 
 }

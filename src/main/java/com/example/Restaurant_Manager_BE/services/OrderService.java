@@ -1,18 +1,19 @@
 package com.example.Restaurant_Manager_BE.services;
 
-import com.example.Restaurant_Manager_BE.dto.OrderDTO;
-import com.example.Restaurant_Manager_BE.responses.APIResponse;
-import org.springframework.http.ResponseEntity;
+import com.example.Restaurant_Manager_BE.dto.request.OrderRequest;
+import com.example.Restaurant_Manager_BE.dto.response.OrderResponse;
+
+import java.util.List;
 
 public interface OrderService {
-    ResponseEntity<APIResponse> createOrder(OrderDTO orderDTO);
+    boolean createOrder(OrderRequest orderRequest);
 
-    ResponseEntity<APIResponse> getOrdersByDirection(String direction);
+    OrderResponse getOrdersByDirection(String direction);
 
-    ResponseEntity<APIResponse> getAllOrders();
+    List<OrderResponse> getAllOrders();
 
-    ResponseEntity<APIResponse> getOrderById(Long id);
+    OrderResponse getOrderById(Long id);
 
-    ResponseEntity<APIResponse> updateOrder(Long id, OrderDTO orderDTO);
+    boolean updateOrder(Long id, OrderRequest orderRequest);
 
 }

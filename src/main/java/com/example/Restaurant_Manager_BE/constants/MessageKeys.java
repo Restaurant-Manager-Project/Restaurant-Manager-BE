@@ -53,6 +53,7 @@ public class MessageKeys {
     public static final String ORDER_DELETE_SUCCESS = "order.delete_success";
     public static final String ORDER_NOT_FOUND = "order.not_found";
     public static final String ORDER_UPDATE_SUCCESS = "order.update_success";
+    public static final String ORDER_UPDATE_FAILED = "order.update_failed";
 
     // DETAILS ORDER
     public static final String DETAILS_ORDER_CREATE_SUCCESS = "details_order.get_success";

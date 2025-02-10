@@ -1,27 +1,22 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
-import com.example.Restaurant_Manager_BE.converters.ConverterOrder;
-import com.example.Restaurant_Manager_BE.dto.DetailsOrderDTO;
+import com.example.Restaurant_Manager_BE.dto.request.OrderRequest;
+import com.example.Restaurant_Manager_BE.dto.response.OrderResponse;
 import com.example.Restaurant_Manager_BE.entities.*;
-import com.example.Restaurant_Manager_BE.dto.OrderDTO;
-import com.example.Restaurant_Manager_BE.enums.StatusOrder;
 import com.example.Restaurant_Manager_BE.enums.StatusTable;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.OutOfStockException;
+import com.example.Restaurant_Manager_BE.mapper.request.OrderRequestMapper;
+import com.example.Restaurant_Manager_BE.mapper.response.OrderResponseMapper;
 import com.example.Restaurant_Manager_BE.repositories.*;
 import com.example.Restaurant_Manager_BE.repositories.Custom.ProcessRepository;
-import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.OrderService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,9 +27,10 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final TableRepository tableRepository;
     private final LocalizationUtils localizationUtils;
-    private final ConverterOrder converterOrder;
     private final ProcessRepository processRepository;
     private final StatusTableRepository statusTableRepository;
+    private final OrderResponseMapper orderResponseMapper;
+    private final OrderRequestMapper orderRequestMapper;
 
 
     private void updateStockProduct(List<DetailsOrderEntity> listDetail) {
@@ -53,9 +49,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public ResponseEntity<APIResponse> createOrder(OrderDTO orderDTO) {
-        OrderEntity orderEntity = converterOrder.toEntity(orderDTO);
-        orderEntity.setProcess(processRepository.getById(StatusOrder.RECEIVED.getId()));
+    public boolean createOrder(OrderRequest orderRequest) {
+        OrderEntity orderEntity = orderRequestMapper.toEntity(orderRequest);
         TableEntity tableEntity = tableRepository.findById(orderEntity.getTable().getId())
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
         StatusTableEntity statusTableEntity = statusTableRepository.findById(StatusTable.OCCUPIED.getId())
@@ -63,29 +58,20 @@ public class OrderServiceImpl implements OrderService {
         tableEntity.setStatusTable(statusTableEntity);
         tableRepository.save(tableEntity);
         updateStockProduct(orderEntity.getDetailsOrderList());
-        orderRepository.save(orderEntity);
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_CREATE_SUCCESS));
-        return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
+        return orderRepository.save(orderEntity) != null ? true : false;
     }
 
 
     @Override
-    public ResponseEntity<APIResponse> getOrdersByDirection(String direction) {
-    List<OrderEntity> orderList = orderRepository.getAllOrderWithDetailsByDirectionTable(direction);
-    if (orderList.isEmpty()) {
-        throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND));
+    public OrderResponse getOrdersByDirection(String direction) {
+        OrderEntity orderEntity = orderRepository.getAllOrderWithDetailsByDirectionTable(direction)
+                .orElseThrow(() -> new DataNotFoundException(
+                        localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
+        return orderResponseMapper.toDto(orderEntity);
     }
-    List<OrderDTO> orderDTOList = converterOrder.toDTOList(orderList);
-    APIResponse APIResponse = new APIResponse();
-    APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_LIST_GET_SUCCESS));
-    APIResponse.setResult(orderDTOList);
-    return ResponseEntity.status(HttpStatus.OK).body(APIResponse);
-
-}
 
     @Override
-    public ResponseEntity<APIResponse> getAllOrders() {
+    public List<OrderResponse> getAllOrders() {
         List<OrderEntity> listOrder = orderRepository.getAllOrderWithTableAndProcess();
         listOrder.forEach(orderEntity -> {
             orderEntity.setDetailsOrderList(null);
@@ -93,32 +79,21 @@ public class OrderServiceImpl implements OrderService {
         if (listOrder.isEmpty()) {
             throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND));
         }
-        List<OrderDTO> orderDTOList = converterOrder.toDTOList(listOrder);
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_LIST_GET_SUCCESS));
-        APIResponse.setResult(orderDTOList);
-        return ResponseEntity.ok(APIResponse);
+        return orderResponseMapper.toListDto(listOrder);
     }
 
     @Override
-    public ResponseEntity<APIResponse> getOrderById(Long id) {
+    public OrderResponse getOrderById(Long id) {
         OrderEntity orderEntity = orderRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
-        OrderDTO orderDTO = converterOrder.toDTO(orderEntity);
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_GET_SUCCESS));
-        APIResponse.setResult(orderDTO);
-        return ResponseEntity.ok(APIResponse);
+        return orderResponseMapper.toDto(orderEntity);
     }
 
     @Override
-    public ResponseEntity<APIResponse> updateOrder(Long id, OrderDTO orderDTO) {
+    public boolean updateOrder(Long id, OrderRequest orderRequest) {
         OrderEntity orderEntity = orderRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
-        orderEntity.setProcess(processRepository.getById(orderDTO.getProcessId()));
-        orderRepository.save(orderEntity);
-        APIResponse APIResponse = new APIResponse();
-        APIResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_UPDATE_SUCCESS));
-        return ResponseEntity.ok(APIResponse);
+        orderEntity.setProcess(processRepository.getById(orderRequest.getProcessId()));
+        return orderRepository.save(orderEntity) != null ? true : false;
     }
 }
