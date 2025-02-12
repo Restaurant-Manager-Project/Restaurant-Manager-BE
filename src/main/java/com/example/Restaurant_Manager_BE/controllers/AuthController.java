@@ -32,21 +32,20 @@ public class AuthController {
         return ResponseEntity.ok(authenService.authenticate(signInRequest));
     }
 
-    @GetMapping("/role/{id}")
-    public ResponseEntity<APIResponse> role(@PathVariable Long id) {
-        List<String> listKey = roleService.getPermissionKey(id);
-
-        APIResponse apiResponse = new APIResponse();
-        apiResponse.setResult(listKey);
-        return ResponseEntity.ok(apiResponse);
-    }
-
-    @GetMapping("/roles/{username}")
-    public ResponseEntity<APIResponse> roles(@PathVariable String username) {
-        AccountEntity listRole = accountRepository.findByUsername(username).get();
-
-        APIResponse apiResponse = new APIResponse();
-        apiResponse.setResult(listRole);
-        return ResponseEntity.ok(apiResponse);
-    }
+//    @GetMapping("/role/{id}")
+//    public ResponseEntity<APIResponse> role(@PathVariable Long id) {
+//        List<String> listKey = roleService.getPermissionKey(id);
+//
+//        APIResponse apiResponse = new APIResponse();
+//        apiResponse.setResult(listKey);
+//        return ResponseEntity.ok(apiResponse);
+//    }
+//
+//    @GetMapping("/roles/{username}")
+//    public ResponseEntity<APIResponse> roles(@PathVariable String username) {
+//        AccountEntity listRole = accountRepository.findByUsername(username).get();
+//        APIResponse apiResponse = new APIResponse();
+//        apiResponse.setResult(listRole);
+//        return ResponseEntity.ok(apiResponse);
+//    }
 }

@@ -27,15 +27,18 @@ import java.io.IOException;
 public class PreFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final AccountService accountService;
+
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("Pre Filter is working...");
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        log.info("Request: {}", request.getRequestURI());
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-
         String jwt = authHeader.substring(7);
         String userName = jwtService.extractToken(jwt);
         if (StringUtils.isNotEmpty(userName) && SecurityContextHolder.getContext().getAuthentication() == null) {

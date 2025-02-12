@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -51,26 +52,15 @@ public class GlobalExceptionHandler{
         apiResponse.setMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<APIResponse> handleMethodArgException(MethodArgumentNotValidException ex){
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setSuccess(false);
+        apiResponse.setCode(400);
+        apiResponse.setMessage(ex.getBindingResult().getFieldError().getDefaultMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+    }
 
-//        @ExceptionHandler(UsernameNotFoundException.class)
-//    public ResponseEntity<APIResponse> handleUsernameNotFoundException(UsernameNotFoundException ex){
-//        log.info("Username not found");
-//        APIResponse apiResponse = new APIResponse();
-//        apiResponse.setSuccess(false);
-//        apiResponse.setCode(404);
-//        apiResponse.setMessage(ex.getMessage());
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
-//    }
-//
-//    @ExceptionHandler(BadCredentialsException.class)
-//    public ResponseEntity<APIResponse> handleBadCredentialsException(BadCredentialsException ex){
-//        log.info("Bad credentials");
-//        APIResponse apiResponse = new APIResponse();
-//        apiResponse.setSuccess(false);
-//        apiResponse.setCode(401);
-//        apiResponse.setMessage(ex.getMessage());
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
-//    }
 
 
 }

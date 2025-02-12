@@ -30,7 +30,7 @@ public class AccountEntity implements UserDetails {
     private RoleEntity role;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted = false;
+    private Boolean isDeleted;
 
     @OneToOne(mappedBy = "account")
     private EmployeeEntity employee;

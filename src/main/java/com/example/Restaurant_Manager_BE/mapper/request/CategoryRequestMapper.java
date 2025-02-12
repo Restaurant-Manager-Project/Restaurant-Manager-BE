@@ -5,12 +5,11 @@ import com.example.Restaurant_Manager_BE.dto.request.ProductRequest;
 import com.example.Restaurant_Manager_BE.entities.CategoryEntity;
 import com.example.Restaurant_Manager_BE.entities.ProductEntity;
 import com.example.Restaurant_Manager_BE.mapper.BaseRequestMapper;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface CategoryRequestMapper extends BaseRequestMapper<CategoryRequest, CategoryEntity> {
+
     @Mapping(target = "img", ignore = true)
     CategoryEntity toEntity(CategoryRequest dto);
 

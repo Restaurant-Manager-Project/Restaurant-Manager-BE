@@ -77,7 +77,7 @@ public class SupplierController {
     }
 
     @Operation(summary = "Chỉnh sửa thông tin nhà cung cấp")
-    @PutMapping("/api/supplier/{}id")
+    @PutMapping("/api/supplier/{id}")
     @PreAuthorize("hasAuthority('supplier.update')")
     public ResponseEntity<APIResponse> updateSupplier(
             @PathVariable("id") Long supplierId,
