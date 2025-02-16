@@ -11,5 +11,6 @@ public class ProductRequest {
     private String name;
     private String description;
     private String categoryName;
+    private Long price;
     private MultipartFile img;
 }

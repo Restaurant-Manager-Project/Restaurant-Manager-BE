@@ -29,8 +29,8 @@ public class ProductEntity {
     @Column(name = "description")
     private String description;
 
-//    @Column(name = "price")
-//    private Long price;
+    @Column(name = "price")
+    private Long price;
     @Column(name = "quantity")
     private Long quantity;
     @Column(name = "is_deleted")

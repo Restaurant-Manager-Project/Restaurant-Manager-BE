@@ -32,9 +32,6 @@ public class DetailsImportEntity {
     @Column(name = "import_price")
     private Long importPrice;
 
-    @Column(name = "sell_price")
-    private Long Price;
-
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
