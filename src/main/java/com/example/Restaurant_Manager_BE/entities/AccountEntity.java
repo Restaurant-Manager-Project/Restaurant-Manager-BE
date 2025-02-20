@@ -24,10 +24,12 @@ public class AccountEntity implements UserDetails {
     @Column(name = "password")
     private String password;
 
-
     @ManyToOne
     @JoinColumn(name = "role_id")
     private RoleEntity role;
+
+    @Column(name = "refresh_token")
+    private String refreshToken;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;

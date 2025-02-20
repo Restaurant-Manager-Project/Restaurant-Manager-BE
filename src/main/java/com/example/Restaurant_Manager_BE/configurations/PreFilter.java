@@ -2,6 +2,7 @@ package com.example.Restaurant_Manager_BE.configurations;
 
 import com.example.Restaurant_Manager_BE.services.AccountService;
 import com.example.Restaurant_Manager_BE.services.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,18 +41,25 @@ public class PreFilter extends OncePerRequestFilter {
             return;
         }
         String jwt = authHeader.substring(7);
-        String userName = jwtService.extractToken(jwt);
-        if (StringUtils.isNotEmpty(userName) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = accountService.userDetailsService().loadUserByUsername(userName);
-            if (jwtService.isValidateToken(jwt, userDetails)) {
-                SecurityContext context = SecurityContextHolder.createEmptyContext();
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                context.setAuthentication(authToken);
-                log.info("Authen: {}" ,authToken.getAuthorities());
-                SecurityContextHolder.setContext(context);
+        try {
+            String userName = jwtService.extractToken(jwt);
+            if (StringUtils.isNotEmpty(userName) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = accountService.userDetailsService().loadUserByUsername(userName);
+
+
+                if (jwtService.isValidateToken(jwt, userDetails)) {
+                    SecurityContext context = SecurityContextHolder.createEmptyContext();
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    context.setAuthentication(authToken);
+                    log.info("Authen: {}" ,authToken.getAuthorities());
+                    SecurityContextHolder.setContext(context);
+                }
             }
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
+        catch (ExpiredJwtException e) {
+            log.error("Token is expired");
+        }
     }
 }

@@ -31,8 +31,8 @@ public class SecurityUtil {
 
 //    @Value("${secretKey}")
 //    private String secretKey;
-    @Value("${expiration}")
-    private long expiration;
+//    @Value("${expiration}")
+//    private long expiration;
 //    public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS256;
 //    private final JwtEncoder jwtEncoder;
 

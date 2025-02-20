@@ -25,9 +25,12 @@ public class AuthenService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword() ));
 
         String accessToken = jwtService.generateToken(accountEntity);
+        String refreshToken = jwtService.generateRefeshToken(accountEntity);
+        accountEntity.setRefreshToken(refreshToken);
+        accountRepository.save(accountEntity);
         return TokenResponse.builder()
                 .accessToken(accessToken)
-                .refreshToken("refresh")
+                .refreshToken(refreshToken)
                 .username(accountEntity.getUsername())
                 .build();
     }

@@ -3,6 +3,7 @@ package com.example.Restaurant_Manager_BE.services.impl;
 import com.example.Restaurant_Manager_BE.services.JwtService;
 import com.nimbusds.jose.util.Base64;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -26,10 +27,14 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class JwtServiceImpl implements JwtService {
-    @Value("${expiration}")
-    private long expiration;
-    @Value("${secretKey}")
+    @Value("${jwt.accessToken.expiration}")
+    private long accessTokenExpire;
+    @Value("${jwt.refreshToken.expiration}")
+    private long refeshTokenExpire;
+    @Value("${jwt.secretKey}")
     private String secretKey;
+
+
 
 
     // Extract token - get the username from the token
@@ -48,7 +53,6 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-
         List<String> permissions = userDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
@@ -65,18 +69,31 @@ public class JwtServiceImpl implements JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + (accessTokenExpire * 60 * 1000)))
                 .signWith(SignatureAlgorithm.HS256, getKey())
                 .compact();
     }
 
+    @Override
+    public String generateRefeshToken(UserDetails userDetails) {
+        log.info("Permission: {}", userDetails.getAuthorities());
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + (refeshTokenExpire * 60 * 60 * 24 * 1000)))
+                .signWith(SignatureAlgorithm.HS256, getKey())
+                .compact();
+    }
 
     private <T> T extractClaims(String token, Function<Claims, T> claimsResolvers) {
         Claims claims = extractAllClaims(token);
         return claimsResolvers.apply(claims);
     }
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(getKey()).build().parseClaimsJws(token)
+        return Jwts.parser()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token)
                 .getBody();
     }
 
