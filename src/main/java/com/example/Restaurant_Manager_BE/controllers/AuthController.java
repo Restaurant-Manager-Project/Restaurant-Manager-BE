@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.controllers;
 
 
+import com.example.Restaurant_Manager_BE.dto.request.RefreshTokenRequest;
 import com.example.Restaurant_Manager_BE.dto.request.SignInRequest;
 import com.example.Restaurant_Manager_BE.dto.response.TokenResponse;
 import com.example.Restaurant_Manager_BE.entities.AccountEntity;
@@ -27,9 +28,14 @@ public class AuthController {
     private final AuthenService authenService;
     private final SecurityUtil securityUtil;
     private final EmployeeService employeeService;
-    @PostMapping("/access")
+    @PostMapping("/login")
     public ResponseEntity<TokenResponse> access(@RequestBody SignInRequest signInRequest){
         return ResponseEntity.ok(authenService.authenticate(signInRequest));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest){
+        return ResponseEntity.ok(authenService.refresh(refreshTokenRequest));
     }
 
 //    @GetMapping("/role/{id}")

@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
                                 .requestMatchers("/",
-                                        "/api/auth/access",
+                                        "/api/auth/**",
                                         "/swagger-ui/**",
                                         "/swagger-resources/*",
                                         "/v3/api-docs/**",
@@ -65,6 +65,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Khong luu token o phia server
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(filterJwtConfig, UsernamePasswordAuthenticationFilter.class);
+//                .exceptionHandling(ex -> ex.authenticationEntryPoint(new AuthJwtEntryPoint()));
+
 
 
         return http.build();

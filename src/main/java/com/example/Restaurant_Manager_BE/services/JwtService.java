@@ -10,7 +10,7 @@ public interface JwtService {
 
     String generateRefeshToken(UserDetails userDetails);
 
-    String extractToken(String token);
+    String extractUsername(String token);
 
     boolean isValidateToken(String token, UserDetails userDetails);
 }

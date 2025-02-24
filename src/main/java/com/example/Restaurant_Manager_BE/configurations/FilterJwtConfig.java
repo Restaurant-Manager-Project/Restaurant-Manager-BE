@@ -1,5 +1,7 @@
 package com.example.Restaurant_Manager_BE.configurations;
 
+import com.example.Restaurant_Manager_BE.exceptions.InvalidTokenException;
+import com.example.Restaurant_Manager_BE.exceptions.TokenExpiredException;
 import com.example.Restaurant_Manager_BE.services.AccountService;
 import com.example.Restaurant_Manager_BE.services.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,11 +44,9 @@ public class FilterJwtConfig extends OncePerRequestFilter {
         }
         String jwt = authHeader.substring(7);
         try {
-            String userName = jwtService.extractToken(jwt);
-            if (StringUtils.isNotEmpty(userName) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = accountService.userDetailsService().loadUserByUsername(userName);
-
-
+            String username = jwtService.extractUsername(jwt);
+            if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = accountService.userDetailsService().loadUserByUsername(username);
                 if (jwtService.isValidateToken(jwt, userDetails)) {
                     SecurityContext context = SecurityContextHolder.createEmptyContext();
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -54,11 +55,23 @@ public class FilterJwtConfig extends OncePerRequestFilter {
                     log.info("Authen: {}" ,authToken.getAuthorities());
                     SecurityContextHolder.setContext(context);
                 }
+
             }
             filterChain.doFilter(request, response);
         }
         catch (ExpiredJwtException e) {
-            log.error("Token is expired");
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("{\"error\": \"Token expired\"}");
+            return;
         }
+        catch (Exception e) {
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("{\"error\": \"Invalid token\"}");
+            return;
+        }
+
+
     }
 }

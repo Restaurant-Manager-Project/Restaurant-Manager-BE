@@ -1,9 +1,6 @@
 package com.example.Restaurant_Manager_BE.advices;
 
-import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
-import com.example.Restaurant_Manager_BE.exceptions.InvalidInputException;
-import com.example.Restaurant_Manager_BE.exceptions.InvalidParamException;
-import com.example.Restaurant_Manager_BE.exceptions.OutOfStockException;
+import com.example.Restaurant_Manager_BE.exceptions.*;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -62,13 +59,21 @@ public class GlobalExceptionHandler{
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
 
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<APIResponse> handleExpiredJwtException(ExpiredJwtException ex){
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<APIResponse> handleInvalidTokenException(InvalidTokenException ex){
         APIResponse apiResponse = new APIResponse();
         apiResponse.setSuccess(false);
         apiResponse.setCode(401);
-        apiResponse.setMessage("Token is expired");
+        apiResponse.setMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
     }
 
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<APIResponse> handleTokenExpiredException(TokenExpiredException ex){
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setSuccess(false);
+        apiResponse.setCode(401);
+        apiResponse.setMessage(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
+    }
 }

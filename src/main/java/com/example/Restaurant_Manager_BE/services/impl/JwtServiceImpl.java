@@ -1,5 +1,7 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 
+import com.example.Restaurant_Manager_BE.exceptions.InvalidTokenException;
+import com.example.Restaurant_Manager_BE.exceptions.TokenExpiredException;
 import com.example.Restaurant_Manager_BE.services.JwtService;
 import com.nimbusds.jose.util.Base64;
 import io.jsonwebtoken.Claims;
@@ -10,6 +12,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -39,14 +42,19 @@ public class JwtServiceImpl implements JwtService {
 
     // Extract token - get the username from the token
     @Override
-    public String extractToken(String token) {
+    public String extractUsername(String token) {
         return extractClaims(token, Claims::getSubject);
     }
 
     @Override
     public boolean isValidateToken(String token, UserDetails userDetails) {
-        String username = extractToken(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        try {
+            String username = extractUsername(token);
+            return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 
 
