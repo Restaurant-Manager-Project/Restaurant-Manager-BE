@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.controllers;
 
 
+import com.example.Restaurant_Manager_BE.dto.request.LogoutRequest;
 import com.example.Restaurant_Manager_BE.dto.request.RefreshTokenRequest;
 import com.example.Restaurant_Manager_BE.dto.request.SignInRequest;
 import com.example.Restaurant_Manager_BE.dto.response.TokenResponse;
@@ -11,6 +12,8 @@ import com.example.Restaurant_Manager_BE.services.AuthenService;
 import com.example.Restaurant_Manager_BE.services.EmployeeService;
 import com.example.Restaurant_Manager_BE.services.RoleService;
 import com.example.Restaurant_Manager_BE.utils.SecurityUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +32,19 @@ public class AuthController {
     private final SecurityUtil securityUtil;
     private final EmployeeService employeeService;
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> access(@RequestBody SignInRequest signInRequest){
+    public ResponseEntity<TokenResponse> access(@Valid @RequestBody SignInRequest signInRequest){
         return ResponseEntity.ok(authenService.authenticate(signInRequest));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest){
+    public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest){
         return ResponseEntity.ok(authenService.refresh(refreshTokenRequest));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<APIResponse> logout(HttpServletRequest request){
+        authenService.logout(request);
+        return null;
     }
 
 //    @GetMapping("/role/{id}")

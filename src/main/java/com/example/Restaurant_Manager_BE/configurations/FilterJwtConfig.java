@@ -4,6 +4,7 @@ import com.example.Restaurant_Manager_BE.exceptions.InvalidTokenException;
 import com.example.Restaurant_Manager_BE.exceptions.TokenExpiredException;
 import com.example.Restaurant_Manager_BE.services.AccountService;
 import com.example.Restaurant_Manager_BE.services.JwtService;
+import com.example.Restaurant_Manager_BE.services.RedisService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,6 +31,7 @@ import java.io.IOException;
 public class FilterJwtConfig extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final AccountService accountService;
+    private final RedisService redisService;
 
 
 
@@ -42,8 +44,11 @@ public class FilterJwtConfig extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String jwt = authHeader.substring(7);
         try {
+            String jwt = authHeader.substring(7);
+            if (redisService.exists(jwt)) {
+                throw new ExpiredJwtException(null, null, "Token expired");
+            }
             String username = jwtService.extractUsername(jwt);
             if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = accountService.userDetailsService().loadUserByUsername(username);

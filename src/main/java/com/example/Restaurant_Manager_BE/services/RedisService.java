@@ -16,8 +16,8 @@ public class RedisService {
         redisTemplate.opsForValue().set(key, value);
     }
 
-    public void exists(String key) {
-        redisTemplate.hasKey(key);
+    public boolean exists(String key) {
+        return redisTemplate.hasKey(key);
     }
 
     public void setTimeToLive(String key, long expire) {

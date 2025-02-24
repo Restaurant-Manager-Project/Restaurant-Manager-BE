@@ -1,18 +1,20 @@
 package com.example.Restaurant_Manager_BE.services;
 
+import com.example.Restaurant_Manager_BE.dto.request.LogoutRequest;
 import com.example.Restaurant_Manager_BE.dto.request.RefreshTokenRequest;
 import com.example.Restaurant_Manager_BE.dto.request.SignInRequest;
 import com.example.Restaurant_Manager_BE.dto.response.TokenResponse;
 import com.example.Restaurant_Manager_BE.entities.AccountEntity;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
-import com.example.Restaurant_Manager_BE.exceptions.InvalidTokenException;
 import com.example.Restaurant_Manager_BE.exceptions.TokenExpiredException;
 import com.example.Restaurant_Manager_BE.repositories.AccountRepository;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +29,7 @@ public class AuthenService {
     private final AccountRepository accountRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final RedisService redisService;
 
     public TokenResponse authenticate(SignInRequest signInRequest) {
         AccountEntity accountEntity = accountRepository.findByUsername(signInRequest.getUsername())
@@ -57,7 +60,7 @@ public class AuthenService {
                 .build();
     }
 
-    public TokenResponse refresh(@Valid RefreshTokenRequest refreshTokenRequest) {
+    public TokenResponse refresh(RefreshTokenRequest refreshTokenRequest) {
         AccountEntity accountEntity = accountRepository.findByRefreshToken(refreshTokenRequest.getRefreshToken())
                 .orElseThrow(() -> new DataNotFoundException("Refresh token không tồn tại"));
         if (jwtService.isValidateToken(refreshTokenRequest.getRefreshToken(), accountEntity)) {
@@ -74,6 +77,22 @@ public class AuthenService {
         catch (ExpiredJwtException e) {
             throw new TokenExpiredException("Refresh token đã hết hạn");
         }
+    }
+
+    public boolean logout(HttpServletRequest request) {
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String accessToken = authHeader.substring(7);
+        String username = jwtService.extractUsername(accessToken);
+        if (!accountRepository.deleteRefreshTokenByUsername(username)) {
+            log.info("Khong the delete refreshToken");
+            return false;
+        }
+        log.info("Date: {}", jwtService.extractExpiration(accessToken).getTime());
+        long ttl = jwtService.extractExpiration(accessToken).getTime() - System.currentTimeMillis(); // miliseconds
+        redisService.set(accessToken, ttl + "");
+        redisService.setTimeToLive(accessToken, ttl / 1000); // seconds
+
+        return true;
     }
 
 }
