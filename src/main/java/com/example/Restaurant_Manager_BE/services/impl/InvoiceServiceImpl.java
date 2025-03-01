@@ -60,15 +60,22 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional
-    public boolean createInvoice(InvoiceRequest invoiceRequest) {
+    public InvoiceResponse createInvoice(InvoiceRequest invoiceRequest) {
         InvoiceEntity invoiceEntity = invoiceRequestMapper.toEntity(invoiceRequest);
-        invoiceEntity.setIsDeleted(false);
+        ClientEntity clientEntity = null;
+        if (invoiceRequest.getClientId() != null) {
+            clientEntity = clientRepository.findById(invoiceRequest.getClientId())
+                    .orElseThrow(() -> new DataNotFoundException(
+                            localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_NOT_EXISTS)));
+        }
         List<OrderEntity> orderEntityList = orderRepository.getAllOrderWithDetailsByDirectionTable(invoiceRequest.getDirection());
         for (OrderEntity orderEntity : orderEntityList) {
             orderEntity.setInvoice(invoiceEntity);
         }
+        invoiceEntity.setClient(clientEntity);
         invoiceEntity.setOrderEntityList(orderEntityList);
-        return invoiceRepository.save(invoiceEntity) != null ? true : false;
+        invoiceRepository.save(invoiceEntity);
+        return invoiceResponseMapper.toDto(invoiceEntity);
 //        List<OrderDTO> ordersListDTO = invoiceDTO.getOrderDTOList();
 //        if(ordersListDTO == null || ordersListDTO.size() == 0) {
 //            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));

@@ -43,8 +43,11 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<APIResponse> logout(HttpServletRequest request){
-        authenService.logout(request);
-        return null;
+        boolean isLogout = authenService.logout(request);
+        return ResponseEntity.ok(APIResponse.builder()
+                        .success(true)
+                        .message(isLogout ? "Đăng xuất thành công !" : "Đăng xuất thất bại !")
+                        .build());
     }
 
 //    @GetMapping("/role/{id}")

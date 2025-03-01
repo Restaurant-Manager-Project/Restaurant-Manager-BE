@@ -22,7 +22,8 @@ public class InvoiceController {
     @PreAuthorize("hasAuthority('invoice.create')")
     @PostMapping("/api/invoices")
     public ResponseEntity<APIResponse> createInvoice(@RequestBody InvoiceRequest invoiceRequest) {
-        String message = invoiceService.createInvoice(invoiceRequest) ?
+
+        String message = invoiceService.createInvoice(invoiceRequest) != null ?
                 localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS) :
                 localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_FAILED);
         return ResponseEntity.ok(APIResponse.builder()

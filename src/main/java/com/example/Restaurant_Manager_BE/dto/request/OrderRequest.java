@@ -10,8 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class OrderRequest {
-
-    private Long tableId;
     private String directionTable;
     private Date dateCreate;
     private Long total;

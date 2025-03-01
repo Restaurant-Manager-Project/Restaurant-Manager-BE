@@ -4,6 +4,7 @@ import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.dto.request.OrderRequest;
 import com.example.Restaurant_Manager_BE.dto.response.OrderResponse;
 import com.example.Restaurant_Manager_BE.entities.*;
+import com.example.Restaurant_Manager_BE.enums.StatusOrder;
 import com.example.Restaurant_Manager_BE.enums.StatusTable;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.exceptions.OutOfStockException;
@@ -52,13 +53,19 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public boolean createOrder(OrderRequest orderRequest) {
         OrderEntity orderEntity = orderRequestMapper.toEntity(orderRequest);
-        TableEntity tableEntity = tableRepository.findById(orderEntity.getTable().getId())
+        TableEntity tableEntity = tableRepository.findByDirection(orderEntity.getDirectionTable())
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
         StatusTableEntity statusTableEntity = statusTableRepository.findById(StatusTable.OCCUPIED.getId())
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.STATUS_TABLE_NOT_FOUND)));
         tableEntity.setStatusTable(statusTableEntity);
+        orderEntity.setTable(tableEntity);
+
         tableRepository.save(tableEntity);
-        updateStockProduct(orderEntity.getDetailsOrderList());
+        List<DetailsOrderEntity> listDetails = orderEntity.getDetailsOrderList();
+        for (DetailsOrderEntity detail : listDetails) {
+            detail.setOrder(orderEntity);
+        }
+        updateStockProduct(listDetails);
         return orderRepository.save(orderEntity) != null ? true : false;
     }
 

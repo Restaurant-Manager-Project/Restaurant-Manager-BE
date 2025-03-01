@@ -83,7 +83,7 @@ public class AuthenService {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         String accessToken = authHeader.substring(7);
         String username = jwtService.extractUsername(accessToken);
-        if (!accountRepository.deleteRefreshTokenByUsername(username)) {
+        if (accountRepository.deleteRefreshTokenByUsername(username) == 0) {
             log.info("Khong the delete refreshToken");
             return false;
         }

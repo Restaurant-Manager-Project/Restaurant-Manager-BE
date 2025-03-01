@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Setter
@@ -11,6 +12,7 @@ import java.util.Date;
 public class InvoiceResponse {
     private String employeeName;
     private String clientName;
+    private List<DetailOrderResponse> listOrder;
     private String timeCreate;
     private Long total;
 }

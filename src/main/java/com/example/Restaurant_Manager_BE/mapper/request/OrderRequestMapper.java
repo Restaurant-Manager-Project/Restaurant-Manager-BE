@@ -5,6 +5,8 @@ import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 import com.example.Restaurant_Manager_BE.mapper.BaseRequestMapper;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        uses = DetailOrderRequestMapper.class)
 public interface OrderRequestMapper extends BaseRequestMapper<OrderRequest, OrderEntity> {
+
 }

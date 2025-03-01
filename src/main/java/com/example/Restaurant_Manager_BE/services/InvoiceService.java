@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface InvoiceService {
-    boolean createInvoice(InvoiceRequest invoiceRequest);
+    InvoiceResponse createInvoice(InvoiceRequest invoiceRequest);
     List<InvoiceResponse> findByTimeCreate(Date timeCreate);
     List<InvoiceResponse> getAll();
     boolean deleteInvoice(Long id);
