@@ -1,5 +1,6 @@
 package com.example.Restaurant_Manager_BE.entities;
 
+import com.example.Restaurant_Manager_BE.enums.StatusTable;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Where;
@@ -27,9 +28,9 @@ public class TableEntity {
     @Column(name = "direction")
     private String direction;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id")
-    private StatusTableEntity statusTable;
+    @JoinColumn(name = "status")
+    @Enumerated(EnumType.STRING)
+    private StatusTable statusTable;
 
     @OneToMany(mappedBy = "table")
     private List<OrderEntity> orderList;

@@ -1,13 +1,12 @@
 package com.example.Restaurant_Manager_BE.enums;
 
-public enum StatusTable {
-    AVAILABLE("Còn trống"),
-    OCCUPIED("Đang sử dụng"),
-    RESERVED("Đã đặt trước");
+public enum StatusProduct {
+    AVAILABLE("Còn hàng"),
+    OUT_OF_STOCK("Hết hàng");
 
     private String desc;
 
-    StatusTable(String desc) {
+    StatusProduct(String desc) {
         this.desc = desc;
     }
 

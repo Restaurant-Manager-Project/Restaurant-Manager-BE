@@ -16,7 +16,6 @@ import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.dto.StatusProductDTO;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
-import com.example.Restaurant_Manager_BE.services.StatusProductService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 
 import io.swagger.v3.oas.annotations.Operation;

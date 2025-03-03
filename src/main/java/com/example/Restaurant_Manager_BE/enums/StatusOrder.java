@@ -1,19 +1,18 @@
 package com.example.Restaurant_Manager_BE.enums;
 
 public enum StatusOrder {
-    RECEIVED(1, "Đã tiếp nhận order"),
-    PREPARED(2, "Đã chế biến"),
-    SERVED(3, "Đã phục vụ");
+    RECEIVED("Đã tiếp nhận"),
+    PREPARED("Đã chế biến"),
+    SERVED("Đã phục vụ"),;
 
-    private long id;
-    private String description;
 
-    StatusOrder(int id, String description) {
-        this.id = id;
-        this.description = description;
+    private String desc;
+
+    public String getDesc() {
+        return desc;
     }
 
-    public long getId() {
-        return id;
+    StatusOrder(String desc) {
+        this.desc = desc;
     }
 }

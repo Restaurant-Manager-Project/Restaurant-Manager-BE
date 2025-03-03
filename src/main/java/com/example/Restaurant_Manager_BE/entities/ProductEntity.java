@@ -1,5 +1,6 @@
 package com.example.Restaurant_Manager_BE.entities;
 
+import com.example.Restaurant_Manager_BE.enums.StatusProduct;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
@@ -36,21 +37,18 @@ public class ProductEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
     private List<DetailsImportEntity> detailsImportList;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<DetailsOrderEntity> detailsOrderList;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id")
-    private StatusProductEntity statusProduct;
+    @JoinColumn(name = "status")
+    @Enumerated(EnumType.STRING)
+    private StatusProduct statusProduct;
 
 }

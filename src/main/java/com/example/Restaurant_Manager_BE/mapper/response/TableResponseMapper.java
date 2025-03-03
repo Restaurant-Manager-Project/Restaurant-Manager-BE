@@ -1,8 +1,8 @@
 package com.example.Restaurant_Manager_BE.mapper.response;
 
 import com.example.Restaurant_Manager_BE.dto.response.TableResponse;
-import com.example.Restaurant_Manager_BE.entities.StatusTableEntity;
 import com.example.Restaurant_Manager_BE.entities.TableEntity;
+import com.example.Restaurant_Manager_BE.enums.StatusTable;
 import com.example.Restaurant_Manager_BE.mapper.BaseResponseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,7 +13,7 @@ public interface TableResponseMapper extends BaseResponseMapper<TableResponse, T
     TableResponse toDto(TableEntity entity);
 
     @Named("mapStatusTable")
-    default String mapStatusTable(StatusTableEntity statusTableEntity) {
-        return statusTableEntity.getName();
+    default String mapStatusTable(StatusTable status) {
+        return status.getDesc();
     }
 }

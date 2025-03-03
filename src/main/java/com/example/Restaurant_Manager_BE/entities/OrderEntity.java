@@ -1,5 +1,6 @@
 package com.example.Restaurant_Manager_BE.entities;
 
+import com.example.Restaurant_Manager_BE.enums.StatusOrder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,15 +38,13 @@ public class OrderEntity {
     @JoinColumn(name = "invoice_id")
     private InvoiceEntity invoice;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id")
     private TableEntity table;
 
-    @JsonIgnore
-    @JoinColumn(name = "process_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ProcessEntity process;
+    @JoinColumn(name = "process")
+    @Enumerated(EnumType.STRING)
+    private StatusOrder process;
 
 
 }

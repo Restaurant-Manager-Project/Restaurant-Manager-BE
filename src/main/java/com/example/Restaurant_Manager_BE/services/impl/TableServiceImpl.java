@@ -14,7 +14,6 @@ import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.example.Restaurant_Manager_BE.repositories.StatusTableRepository;
 import com.example.Restaurant_Manager_BE.entities.StatusTableEntity;
 import com.example.Restaurant_Manager_BE.dto.response.TableResponse;
 
@@ -24,7 +23,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TableServiceImpl implements TableService {
-    private final StatusTableRepository statusTableRepository;
     private final TableRepository tableRepository;
     private final DetailsOrderRepository detailsOrderRepository;
     private final OrderRepository orderRepository;
@@ -96,16 +94,14 @@ public class TableServiceImpl implements TableService {
     public TableResponse updateStatusOfTableByName(Long id, String status_name){
         TableEntity tableEntity = tableRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        StatusTableEntity statusTableEntity= statusTableRepository.findByName(status_name)
-                        .orElseThrow(()->new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.STATUS_TABLE_NOT_FOUND)));
-        
-        tableEntity.setStatusTable(statusTableEntity);
+
+//        tableEntity.setStatusTable(statusTableEntity);
         TableEntity result = tableRepository.save(tableEntity);
         return TableResponse.builder()
             .id(result.getId())
             .direction(result.getDirection())
             .name(result.getName())
-            .statusName(result.getStatusTable().getName())
+//            .statusName(result.getStatusTable().getName())
         .build();
     }
 

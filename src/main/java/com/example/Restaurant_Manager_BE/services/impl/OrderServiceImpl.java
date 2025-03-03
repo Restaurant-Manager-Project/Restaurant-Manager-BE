@@ -12,7 +12,6 @@ import com.example.Restaurant_Manager_BE.mapper.request.OrderRequestMapper;
 import com.example.Restaurant_Manager_BE.mapper.response.OrderResponseMapper;
 
 import com.example.Restaurant_Manager_BE.repositories.*;
-import com.example.Restaurant_Manager_BE.repositories.Custom.ProcessRepository;
 import com.example.Restaurant_Manager_BE.services.OrderService;
 import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +28,6 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final TableRepository tableRepository;
     private final LocalizationUtils localizationUtils;
-    private final ProcessRepository processRepository;
-    private final StatusTableRepository statusTableRepository;
     private final OrderResponseMapper orderResponseMapper;
     private final OrderRequestMapper orderRequestMapper;
 
@@ -55,11 +52,9 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntity = orderRequestMapper.toEntity(orderRequest);
         TableEntity tableEntity = tableRepository.findByDirection(orderEntity.getDirectionTable())
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        StatusTableEntity statusTableEntity = statusTableRepository.findById(StatusTable.OCCUPIED.getId())
-                .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.STATUS_TABLE_NOT_FOUND)));
-        tableEntity.setStatusTable(statusTableEntity);
+        tableEntity.setStatusTable(StatusTable.AVAILABLE);
         orderEntity.setTable(tableEntity);
-
+        orderEntity.setProcess(StatusOrder.RECEIVED);
         tableRepository.save(tableEntity);
         List<DetailsOrderEntity> listDetails = orderEntity.getDetailsOrderList();
         for (DetailsOrderEntity detail : listDetails) {
@@ -100,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
     public boolean updateOrder(Long id, OrderRequest orderRequest) {
         OrderEntity orderEntity = orderRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
-        orderEntity.setProcess(processRepository.getById(orderRequest.getProcessId()));
+//        orderEntity.setProcess(processRepository.getById(orderRequest.getProcessId()));
         return orderRepository.save(orderEntity) != null ? true : false;
     }
 }

@@ -13,7 +13,6 @@ public class OrderRequest {
     private String directionTable;
     private Date dateCreate;
     private Long total;
-    private Long processId;
     @JsonProperty("detailList")
     private List<DetailOrderRequest> detailsOrderList;
 }

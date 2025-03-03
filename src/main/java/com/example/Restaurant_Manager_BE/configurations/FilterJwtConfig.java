@@ -74,6 +74,7 @@ public class FilterJwtConfig extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("{\"error\": \"Invalid token\"}");
+            log.info("Error Filter: {}", e.getMessage());
             return;
         }
 
