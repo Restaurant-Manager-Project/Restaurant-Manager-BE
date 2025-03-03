@@ -13,9 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 public class TableRequest {
-    private Long id;
     private String name;
-    private Long statusid;
-    private String statusname;
+    private String status;
     private String direction;
 }

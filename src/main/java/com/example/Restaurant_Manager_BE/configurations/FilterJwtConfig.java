@@ -6,6 +6,7 @@ import com.example.Restaurant_Manager_BE.services.AccountService;
 import com.example.Restaurant_Manager_BE.services.JwtService;
 import com.example.Restaurant_Manager_BE.services.RedisService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,7 +71,7 @@ public class FilterJwtConfig extends OncePerRequestFilter {
             response.getWriter().write("{\"error\": \"Token expired\"}");
             return;
         }
-        catch (Exception e) {
+        catch (JwtException e) {
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("{\"error\": \"Invalid token\"}");

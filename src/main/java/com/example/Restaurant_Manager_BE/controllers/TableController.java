@@ -1,7 +1,9 @@
 package com.example.Restaurant_Manager_BE.controllers;
 
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.dto.request.TableRequest;
 import com.example.Restaurant_Manager_BE.dto.response.TableResponse;
+import com.example.Restaurant_Manager_BE.enums.StatusTable;
 import com.example.Restaurant_Manager_BE.responses.APIResponse;
 import com.example.Restaurant_Manager_BE.services.CloudinaryService;
 import com.example.Restaurant_Manager_BE.services.TableService;
@@ -36,10 +38,10 @@ public class TableController {
 
     @PreAuthorize("hasAuthority('table_status.update')")
     @Operation(summary = "Chỉnh sửa trạ ng thái của bàn")
-    @PutMapping("/api/table/{table_id}")
-    public ResponseEntity<APIResponse> updateStatusOfTable(@PathVariable Long table_id, @RequestBody String statusName) {
+    @PutMapping("/api/table/{tableId}")
+    public ResponseEntity<APIResponse> updateTable(@PathVariable Long tableId, @RequestBody TableRequest tableRequest) {
         
-        TableResponse response = tableService.updateStatusOfTableByName(table_id, statusName.trim());
+        TableResponse response = tableService.updateTable(tableId, tableRequest);
         APIResponse apiResponse = APIResponse.builder()
                 .success(true)
                 .message(localizationUtils.getLocalizedMessage(MessageKeys.STATUS_TABLE_UPDATED_SUCCESS))

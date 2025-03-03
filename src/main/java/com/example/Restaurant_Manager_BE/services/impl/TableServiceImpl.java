@@ -1,5 +1,6 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
+import com.example.Restaurant_Manager_BE.dto.request.TableRequest;
 import com.example.Restaurant_Manager_BE.entities.TableEntity;
 import com.example.Restaurant_Manager_BE.enums.StatusTable;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
@@ -92,18 +93,13 @@ public class TableServiceImpl implements TableService {
     //     return ResponseEntity.ok(APIResponse);
     // }
     @Override
-    public TableResponse updateStatusOfTableByName(Long id, String status_name){
+    public TableResponse updateTable(Long id, TableRequest tableRequest){
         TableEntity tableEntity = tableRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
+        TableEntity tableEntity1 = tableRequestMapper.toEntity(tableRequest);
+        tableRequestMapper.update(tableEntity, tableRequest);
+        return tableResponseMapper.toDto(tableRepository.save(tableEntity));
 
-        tableEntity.setStatusTable(StatusTable.OCCUPIED);
-        TableEntity result = tableRepository.save(tableEntity);
-        return TableResponse.builder()
-            .id(result.getId())
-            .direction(result.getDirection())
-            .name(result.getName())
-            .statusName(result.getStatusTable().getDesc())
-        .build();
     }
 
     @Override
@@ -121,7 +117,7 @@ public class TableServiceImpl implements TableService {
     }
     @Override
     public List<TableResponse> getALLTables(){
-       List<TableEntity> tableEntityList = tableRepository.findAllWithStatusTable();
+       List<TableEntity> tableEntityList = tableRepository.findAll();
        List<TableResponse> tableResponsesList = tableResponseMapper.toListDto(tableEntityList);
        
         return tableResponsesList;
