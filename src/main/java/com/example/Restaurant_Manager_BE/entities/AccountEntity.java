@@ -32,7 +32,7 @@ public class AccountEntity implements UserDetails {
     private String refreshToken;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @OneToOne(mappedBy = "account")
     private EmployeeEntity employee;

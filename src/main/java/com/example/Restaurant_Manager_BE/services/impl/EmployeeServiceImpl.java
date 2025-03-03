@@ -60,7 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeResponse deleteEmployee(Long id) {
         EmployeeEntity employeeEntity = employeeRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.EMPLOYEE_NOT_EXISTED)));
-        employeeEntity.setIsDeleted(true);
+        employeeEntity.setDeleted(true);
         EmployeeEntity result = employeeRepository.save(employeeEntity);
         return EmployeeResponse.builder()
                 .id(result.getId())

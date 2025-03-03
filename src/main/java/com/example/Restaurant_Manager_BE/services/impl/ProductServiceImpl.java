@@ -103,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
     public boolean deleteProducts(Long id){
         ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(()-> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.PRODUCT_NOT_EXISTED)));
-        productEntity.setIsDeleted(true);
+        productEntity.setDeleted(true);
         return productRepository.save(productEntity) != null ? true : false;
 
    }

@@ -8,6 +8,7 @@ import com.example.Restaurant_Manager_BE.entities.ClientEntity;
 import com.example.Restaurant_Manager_BE.entities.InvoiceEntity;
 import com.example.Restaurant_Manager_BE.entities.OrderEntity;
 import com.example.Restaurant_Manager_BE.entities.RankEntity;
+import com.example.Restaurant_Manager_BE.enums.StatusTable;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.mapper.request.InvoiceRequestMapper;
 import com.example.Restaurant_Manager_BE.mapper.response.InvoiceResponseMapper;
@@ -75,46 +76,18 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceEntity.setClient(clientEntity);
         invoiceEntity.setOrderEntityList(orderEntityList);
         invoiceRepository.save(invoiceEntity);
+
+        tableService.generateDirection(invoiceRequest.getDirection());
+
+        if (invoiceEntity.getClient() != null) {
+            ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId()).orElse(null);
+            client.setPaid(client.getPaid() + invoiceEntity.getTotal());
+            List<RankEntity> AllRank = rankRepository.findAll();
+            client.updateRank(AllRank);
+            ClientRepository.save(client);
+        }
+
         return invoiceResponseMapper.toDto(invoiceEntity);
-//        List<OrderDTO> ordersListDTO = invoiceDTO.getOrderDTOList();
-//        if(ordersListDTO == null || ordersListDTO.size() == 0) {
-//            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_INPUT));
-//        }
-//        try {
-//            invoiceRepository.save(invoiceEntity);
-//        } catch (Exception e) {
-//            throw new InvalidInputException(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_FAILED));
-//        }
-//        String direction = "";
-//        Long tableId = 0L;
-//        for(OrderDTO orderDTO : ordersListDTO) {
-//            OrderEntity orderEntity = orderRepository.findById(orderDTO.getOrderId())
-//                    .orElseThrow(()->new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ORDER_NOT_FOUND)));
-//            direction = orderEntity.getDirectionTable();
-//            orderEntity.setInvoice(invoiceEntity);
-//            tableId = orderEntity.getTable().getId();
-//            orderRepository.save(orderEntity);
-//        }
-//
-//        tableService.generateDirection(direction);
-//        tableService.updateStatusOfTableByID(tableId, StatusTable.AVAILABLE.getId());
-//
-//
-//
-//        if (invoiceEntity.getClient() != null) {
-//            ClientEntity client = clientRepository.findById(invoiceEntity.getClient().getId()).orElse(null);
-//            client.setPaid(client.getPaid() + invoiceEntity.getTotal());
-//            List<RankEntity> AllRank = rankRepository.findAll();
-//            client.updateRank(AllRank);
-//            ClientRepository.save(client);
-//        }
-//
-//
-//        APIResponse apiResponse = new APIResponse();
-//        updateClientPaid(invoiceEntity);
-//        apiResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.INVOICE_CREATE_SUCCESS));
-//        apiResponse.setResult(invoiceEntity);
-//        return ResponseEntity.ok(apiResponse);
 
     }
 

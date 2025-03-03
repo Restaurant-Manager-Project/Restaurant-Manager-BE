@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntity = orderRequestMapper.toEntity(orderRequest);
         TableEntity tableEntity = tableRepository.findByDirection(orderEntity.getDirectionTable())
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        tableEntity.setStatusTable(StatusTable.AVAILABLE);
+        tableEntity.setStatusTable(StatusTable.OCCUPIED);
         orderEntity.setTable(tableEntity);
         orderEntity.setProcess(StatusOrder.RECEIVED);
         tableRepository.save(tableEntity);

@@ -35,7 +35,7 @@ public class CategoriesImpl implements CategoriesService {
         CategoryEntity categoryEntity = categoryRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(
                         localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_DELETE_FAILED)));
-        categoryEntity.setIsDeleted(true);
+        categoryEntity.setDeleted(true);
         return categoryRepository.save(categoryEntity) != null ? true : false;
     }
 

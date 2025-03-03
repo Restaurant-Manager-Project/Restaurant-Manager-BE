@@ -43,6 +43,6 @@ public class ImportEntity  {
     private Long total;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
 }

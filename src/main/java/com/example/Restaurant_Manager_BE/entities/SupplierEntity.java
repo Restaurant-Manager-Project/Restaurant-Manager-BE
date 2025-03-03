@@ -27,7 +27,7 @@ public class SupplierEntity {
     @Column(name = "phone")
     private String phone;
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @JsonIgnore
     @OneToMany(mappedBy = "supplier")

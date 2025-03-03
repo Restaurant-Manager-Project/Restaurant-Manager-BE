@@ -35,7 +35,7 @@ public class ImportServiceImpl implements ImportService {
     @Override
     public boolean createImport(ImportRequest importRequest) {
         ImportEntity importEntity = importRequestMapper.toEntity(importRequest);
-        importEntity.setIsDeleted(false);
+        importEntity.setDeleted(false);
 //        if (importEntity == null) {
 //            throw new InvalidInputException(MessageKeys.INVALID_INPUT);
 //        }

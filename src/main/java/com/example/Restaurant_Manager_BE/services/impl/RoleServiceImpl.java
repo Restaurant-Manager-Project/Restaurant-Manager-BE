@@ -80,7 +80,7 @@ public class RoleServiceImpl implements RoleService {
     public ResponseEntity<APIResponse> deleteRole(Long id) {
         RoleEntity role = roleRepository.findById(id)
                 .orElseThrow(()->new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ROLE_NOT_EXISTED)));
-        role.setIsDeleted(true);
+        role.setDeleted(true);
         roleRepository.save(role);
         APIResponse apiResponse = APIResponse.builder()
                 .message(localizationUtils.getLocalizedMessage(MessageKeys.ROlE_UPDATED_SUCCESS))

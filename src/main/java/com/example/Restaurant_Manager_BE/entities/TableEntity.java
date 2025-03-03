@@ -23,12 +23,12 @@ public class TableEntity {
     private String name;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @Column(name = "direction")
     private String direction;
 
-    @JoinColumn(name = "status")
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusTable statusTable;
 

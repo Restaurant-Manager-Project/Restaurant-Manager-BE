@@ -26,7 +26,7 @@ public class CategoryEntity {
     private String name;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @Column(name = "img")
     private String img;

@@ -14,7 +14,7 @@ public interface OrderResponseMapper extends BaseResponseMapper<OrderResponse, O
     @Override
     @Mapping(target = "tableId", expression = "java(entity.getTable().getId())")
     @Mapping(target = "nameTable", expression = "java(entity.getTable().getName())")
-    @Mapping(target = "processName", expression = "java(entity.getProcess().getName())")
+    @Mapping(target = "processName", expression = "java(entity.getProcess().getDesc())")
     @Mapping(target = "dateCreate", source = "dateCreate")
     @Mapping(target = "detailsOrderList", source = "entity.detailsOrderList")
     OrderResponse toDto(OrderEntity entity);

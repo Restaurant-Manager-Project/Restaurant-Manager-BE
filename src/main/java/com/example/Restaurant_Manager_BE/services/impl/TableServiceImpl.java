@@ -1,6 +1,7 @@
 package com.example.Restaurant_Manager_BE.services.impl;
 import com.example.Restaurant_Manager_BE.constants.MessageKeys;
 import com.example.Restaurant_Manager_BE.entities.TableEntity;
+import com.example.Restaurant_Manager_BE.enums.StatusTable;
 import com.example.Restaurant_Manager_BE.exceptions.DataNotFoundException;
 import com.example.Restaurant_Manager_BE.mapper.request.TableRequestMapper;
 import com.example.Restaurant_Manager_BE.mapper.response.TableResponseMapper;
@@ -14,7 +15,6 @@ import com.example.Restaurant_Manager_BE.utils.LocalizationUtils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.example.Restaurant_Manager_BE.entities.StatusTableEntity;
 import com.example.Restaurant_Manager_BE.dto.response.TableResponse;
 
 import java.util.List;
@@ -52,6 +52,7 @@ public class TableServiceImpl implements TableService {
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
         String directionNew = zxingService.generatePassword(25);
         tableEntity.setDirection(directionNew);
+        tableEntity.setStatusTable(StatusTable.AVAILABLE);
         tableRepository.save(tableEntity);
     }
 
@@ -95,13 +96,13 @@ public class TableServiceImpl implements TableService {
         TableEntity tableEntity = tableRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
 
-//        tableEntity.setStatusTable(statusTableEntity);
+        tableEntity.setStatusTable(StatusTable.OCCUPIED);
         TableEntity result = tableRepository.save(tableEntity);
         return TableResponse.builder()
             .id(result.getId())
             .direction(result.getDirection())
             .name(result.getName())
-//            .statusName(result.getStatusTable().getName())
+            .statusName(result.getStatusTable().getDesc())
         .build();
     }
 
@@ -109,19 +110,18 @@ public class TableServiceImpl implements TableService {
     public TableResponse deleteTableByID(Long id){
         TableEntity tableEntity = tableRepository.findById(id)
                 .orElseThrow(()->new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.TABLE_NOT_FOUND)));
-        tableEntity.setIsDeleted(true);
+        tableEntity.setDeleted(true);
         TableEntity result = tableRepository.save(tableEntity);
         return TableResponse.builder()
             .id(result.getId())
             .direction(result.getDirection())
             .name(result.getName())
-            .statusName(result.getStatusTable().getName())
+            .statusName(result.getStatusTable().getDesc())
         .build();
     }
     @Override
     public List<TableResponse> getALLTables(){
        List<TableEntity> tableEntityList = tableRepository.findAllWithStatusTable();
-       System.out.println(tableEntityList.get(0).getStatusTable().getName());
        List<TableResponse> tableResponsesList = tableResponseMapper.toListDto(tableEntityList);
        
         return tableResponsesList;

@@ -27,7 +27,7 @@ public class ClientEntity {
     @Column(name = "phone")
     private String phone;
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
     @Column(name = "paid")
     private Long paid;
 

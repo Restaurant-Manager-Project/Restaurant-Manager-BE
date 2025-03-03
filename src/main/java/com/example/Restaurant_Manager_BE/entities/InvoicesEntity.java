@@ -27,7 +27,7 @@ public class InvoicesEntity {
     private Long total;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

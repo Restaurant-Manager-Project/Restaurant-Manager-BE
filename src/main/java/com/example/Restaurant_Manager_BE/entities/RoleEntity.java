@@ -29,7 +29,7 @@ public class RoleEntity {
     private String description;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted = false;
+    private boolean isDeleted;
 
     @JsonIgnore
     @OneToMany(mappedBy = "role")

@@ -35,7 +35,7 @@ public class ProductEntity {
     @Column(name = "quantity")
     private Long quantity;
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
     private List<DetailsImportEntity> detailsImportList;
@@ -47,7 +47,7 @@ public class ProductEntity {
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
-    @JoinColumn(name = "status")
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusProduct statusProduct;
 

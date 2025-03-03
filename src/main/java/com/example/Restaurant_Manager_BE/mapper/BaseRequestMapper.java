@@ -13,7 +13,6 @@ import java.util.List;
  * @param <E> Entity type
  */
 public interface BaseRequestMapper<D, E> {
-    @Mapping(target = "isDeleted", expression = "java(false)")
     E toEntity(D dto);
 
     List<E> toListEntity(List<D> dtoList);

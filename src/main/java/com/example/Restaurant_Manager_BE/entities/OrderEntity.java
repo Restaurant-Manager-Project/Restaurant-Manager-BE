@@ -26,7 +26,7 @@ public class OrderEntity {
     @Column(name = "date_create")
     private Date dateCreate;
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
     @Column(name = "direction_table")
     private String directionTable;
 
@@ -42,7 +42,7 @@ public class OrderEntity {
     @JoinColumn(name = "table_id")
     private TableEntity table;
 
-    @JoinColumn(name = "process")
+    @Column(name = "process")
     @Enumerated(EnumType.STRING)
     private StatusOrder process;
 

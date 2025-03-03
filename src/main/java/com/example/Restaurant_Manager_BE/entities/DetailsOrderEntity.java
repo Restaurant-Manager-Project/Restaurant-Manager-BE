@@ -25,7 +25,7 @@ public class DetailsOrderEntity {
     private Long price;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @JsonIgnore
     @ManyToOne

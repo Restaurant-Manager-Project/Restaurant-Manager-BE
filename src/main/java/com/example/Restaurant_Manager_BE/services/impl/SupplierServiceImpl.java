@@ -56,7 +56,7 @@ public class SupplierServiceImpl implements SupplierService {
         SupplierEntity supplierEntity = supplierRepository.findById(supplierId)
                 .orElseThrow(() -> new DataNotFoundException(
                         localizationUtils.getLocalizedMessage(MessageKeys.SUPPLIER_NOT_EXISTED)));
-        supplierEntity.setIsDeleted(true);
+        supplierEntity.setDeleted(true);
         return supplierRepository.save(supplierEntity) != null ? true : false;
     }
 

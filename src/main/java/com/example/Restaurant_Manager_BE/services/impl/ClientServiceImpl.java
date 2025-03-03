@@ -54,7 +54,7 @@ public class ClientServiceImpl implements ClientService {
     public boolean deleteClient(Long clientId) {
         ClientEntity clientEntity = clientRepository.findById(clientId)
                 .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.CLIENT_NOT_EXISTS)));
-        clientEntity.setIsDeleted(true);
+        clientEntity.setDeleted(true);
         return clientRepository.save(clientEntity) != null ? true : false;
     }
     @Override
